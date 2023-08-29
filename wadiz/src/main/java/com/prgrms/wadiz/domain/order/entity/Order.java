@@ -1,6 +1,6 @@
 package com.prgrms.wadiz.domain.order.entity;
 
-import com.prgrms.wadiz.domain.member.entity.Member;
+import com.prgrms.wadiz.domain.supporter.entity.Supporter;
 import com.prgrms.wadiz.domain.order.OrderStatus;
 import com.prgrms.wadiz.global.BaseEntity;
 import lombok.AccessLevel;
@@ -20,8 +20,8 @@ public class Order extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "supporter_id")
+    private Supporter supporter;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;

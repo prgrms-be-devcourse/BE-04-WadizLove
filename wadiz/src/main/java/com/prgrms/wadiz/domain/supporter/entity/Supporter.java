@@ -1,4 +1,4 @@
-package com.prgrms.wadiz.domain.member.entity;
+package com.prgrms.wadiz.domain.supporter.entity;
 
 import com.prgrms.wadiz.global.BaseEntity;
 import lombok.Getter;
@@ -7,10 +7,10 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Table(name = "members")
-public class Member extends BaseEntity {
+@Table(name = "supporters")
+public class Supporter extends BaseEntity {
     @Id
-    @Column(name="member_id")
+    @Column(name="supporter_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
