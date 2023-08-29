@@ -28,8 +28,8 @@ public class OrderItem extends BaseEntity {
     private Order order;
 
     @Column(nullable = false)
-    private int orderItemPrice;
+    private Integer orderItemPrice;
 
     @Column(nullable = false)
-    private int orderItemQuantity;
+    private Integer orderItemQuantity;
 }
