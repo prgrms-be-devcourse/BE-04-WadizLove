@@ -9,21 +9,21 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Table(name = "sellers")
+@Table(name = "makers")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Seller extends BaseEntity{
+public class Maker extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "seller_id")
-    private Long id;
+    @Column(name = "maker_id")
+    private Long makerId;
 
     @Column(nullable = false)
-    private String name;
+    private String makerName;
 
     @Column(nullable = false)
-    private String brand;
+    private String makerBrand;
 
     @Column(nullable = false)
-    private String email;
+    private String makerEmail;
 }

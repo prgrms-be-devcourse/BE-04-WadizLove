@@ -1,6 +1,6 @@
 package com.prgrms.wadiz.domain.orderitem.entity;
 
-import com.prgrms.wadiz.domain.item.entity.Item;
+import com.prgrms.wadiz.domain.Reward.entity.Reward;
 import com.prgrms.wadiz.domain.order.entity.Order;
 import com.prgrms.wadiz.global.BaseEntity;
 import lombok.AccessLevel;
@@ -20,8 +20,8 @@ public class OrderItem extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_id")
-    private Item item;
+    @JoinColumn(name = "reward_id")
+    private Reward reward;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
