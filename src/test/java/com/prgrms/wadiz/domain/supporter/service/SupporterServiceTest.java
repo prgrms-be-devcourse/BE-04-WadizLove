@@ -64,4 +64,20 @@ class SupporterServiceTest {
         assertThat(supporterResponseDTO.toEntity().getId()).isEqualTo(responseDTO.toEntity().getId());
         assertThat(supporterResponseDTO.name()).isEqualTo("update");
     }
+
+    @Test
+    @DisplayName("서포터를 softDelete 한다.")
+    void softDeleteTest() {
+        //given
+        SupporterCreateRequestDTO insertSupporter= new SupporterCreateRequestDTO(supporter.getName(),
+                supporter.getEmail());
+
+        SupporterResponseDTO responseDTO = supporterService.createSupporter(insertSupporter);
+
+        //when
+        supporterService.deleteSupporter(responseDTO.toEntity().getId());
+
+        //then
+        assertTrue(supporterRepository.findById(responseDTO.toEntity().getId()).get().isDeleted());
+    }
 }
