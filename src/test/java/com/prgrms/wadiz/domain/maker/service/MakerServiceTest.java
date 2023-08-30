@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class MakerServiceTest {
@@ -60,5 +61,20 @@ class MakerServiceTest {
         //then
         assertThat(makerResponseDTO.toEntity().getMakerId()).isEqualTo(makerResponseDTO.toEntity().getMakerId());
         assertThat(makerResponseDTO1.makerName()).isEqualTo("update");
+    }
+
+    @Test
+    @DisplayName("메이커 soft delete 테스트를 한다.")
+    void softDeleteTest() {
+        //given
+        MakerCreateRequestDTO makerCreateRequestDTO = new MakerCreateRequestDTO(maker.getMakerName(),
+                maker.getMakerBrand(), maker.getMakerEmail());
+        MakerResponseDTO makerResponseDTO = makerService.signUpMaker(makerCreateRequestDTO);
+
+        //when
+        makerService.deleteMaker(makerResponseDTO.toEntity().getMakerId());
+
+        //then
+        assertTrue(makerRepository.findById(makerResponseDTO.toEntity().getMakerId()).get().isDeleted());
     }
 }
