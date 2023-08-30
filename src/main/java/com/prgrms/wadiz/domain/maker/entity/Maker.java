@@ -50,6 +50,17 @@ public class Maker extends BaseEntity{
         this.makerEmail = makerEmail;
     }
 
+    public void changeMakerName(String makerName) {
+        this.makerName = makerName;
+    }
+
+    public void chaneMakerBrand(String makerBrand) {
+        this.makerBrand = makerBrand;
+    }
+
+    public void changeMakerEmail(String makerEmail) {
+        this.makerEmail = makerEmail;
+    }
     public static MakerCreateRequestDTO toDTOForRequest(Maker maker) {
         return new MakerCreateRequestDTO(maker.makerName, maker.makerBrand, maker.makerEmail);
     }
