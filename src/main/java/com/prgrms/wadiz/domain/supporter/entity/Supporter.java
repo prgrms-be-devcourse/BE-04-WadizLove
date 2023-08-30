@@ -1,7 +1,7 @@
 package com.prgrms.wadiz.domain.supporter.entity;
 
 import com.prgrms.wadiz.domain.supporter.dto.request.SupporterCreateRequestDTO;
-import com.prgrms.wadiz.domain.supporter.dto.response.SupporterCreateResponseDTO;
+import com.prgrms.wadiz.domain.supporter.dto.response.SupporterResponseDTO;
 import com.prgrms.wadiz.global.BaseEntity;
 import lombok.*;
 
@@ -42,8 +42,8 @@ public class Supporter extends BaseEntity {
         return new SupporterCreateRequestDTO(supporter.getName(), supporter.getEmail());
     }
 
-    public static SupporterCreateResponseDTO toDTOForResponse(Supporter supporter) {
-        return new SupporterCreateResponseDTO(supporter.getId(),supporter.getName(), supporter.getEmail());
+    public static SupporterResponseDTO toDTOForResponse(Supporter supporter) {
+        return new SupporterResponseDTO(supporter.getId(),supporter.getName(), supporter.getEmail());
     }
 
 }
