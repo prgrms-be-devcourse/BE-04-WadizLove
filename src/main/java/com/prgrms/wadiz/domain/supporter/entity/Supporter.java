@@ -4,6 +4,7 @@ import com.prgrms.wadiz.domain.supporter.dto.request.SupporterCreateRequestDTO;
 import com.prgrms.wadiz.domain.supporter.dto.response.SupporterResponseDTO;
 import com.prgrms.wadiz.global.BaseEntity;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
 
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @Getter
 @Table(name = "supporters")
 @NoArgsConstructor
+@SQLDelete(sql = "UPDATE supporters SET deleted = true WHERE supporter_id = ?")
 public class Supporter extends BaseEntity {
     @Id
     @Column(name="supporter_id")
@@ -23,7 +25,23 @@ public class Supporter extends BaseEntity {
     @Column(nullable = false)
     private String email;
 
+    @Column(nullable = false)
+    private boolean deleted = Boolean.FALSE; // 삭제 여부 기본값 false
 
+    @Builder
+    public Supporter(Long id, String name, String email) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+    }
+
+    @Builder
+    public Supporter(Long id, String name, String email, Boolean isDeleted) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.deleted = isDeleted;
+    }
     @Builder
     public Supporter(String name, String email) {
         this.name = name;
