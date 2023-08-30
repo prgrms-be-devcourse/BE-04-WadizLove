@@ -38,4 +38,8 @@ public class MakerService {
         Maker save = makerRepository.save(maker);
         return Maker.toDTOForResponse(save);
     }
+
+    public void deleteMaker(Long id) {
+        makerRepository.deleteById(id);
+    }
 }

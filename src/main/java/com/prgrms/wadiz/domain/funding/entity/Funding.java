@@ -3,7 +3,7 @@ package com.prgrms.wadiz.domain.funding.entity;
 import com.prgrms.wadiz.domain.funding.FundingCategory;
 import com.prgrms.wadiz.domain.funding.FundingStatus;
 import com.prgrms.wadiz.domain.post.entity.Post;
-import com.prgrms.wadiz.domain.seller.entity.Maker;
+import com.prgrms.wadiz.domain.maker.entity.Maker;
 import com.prgrms.wadiz.global.BaseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
