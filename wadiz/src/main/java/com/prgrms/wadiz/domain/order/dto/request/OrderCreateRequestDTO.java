@@ -1,4 +1,8 @@
 package com.prgrms.wadiz.domain.order.dto.request;
 
-public record OrderCreateRequestDTO(List<Reward> orderRewards) {
+
+import java.util.List;
+
+public record OrderCreateRequestDTO(List<OrderRewardRequestDTO> orderRewards) {
+
 }

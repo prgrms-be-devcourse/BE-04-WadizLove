@@ -1,6 +1,7 @@
 package com.prgrms.wadiz.domain.supporter.entity;
 
 import com.prgrms.wadiz.global.BaseEntity;
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -18,4 +19,11 @@ public class Supporter extends BaseEntity {
 
     @Column(nullable = false)
     private String supporterEmail;
+
+    @Builder
+    public Supporter(Long supporterId, String supporterName, String supporterEmail) {
+        this.supporterId = supporterId;
+        this.supporterName = supporterName;
+        this.supporterEmail = supporterEmail;
+    }
 }

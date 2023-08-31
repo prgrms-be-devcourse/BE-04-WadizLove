@@ -1,6 +1,5 @@
 package com.prgrms.wadiz.domain.order.entity;
 
-import com.prgrms.wadiz.domain.orderitem.entity.OrderItem;
 import com.prgrms.wadiz.domain.supporter.entity.Supporter;
 import com.prgrms.wadiz.domain.order.OrderStatus;
 import com.prgrms.wadiz.global.BaseEntity;
@@ -27,9 +26,6 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "supporter_id")
     private Supporter supporter;
 
-    @OneToMany(mappedBy = "orderRewards", cascade = CascadeType.ALL)
-    private List<OrderReward> orderRewards = new ArrayList<>();
-
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
@@ -37,9 +33,8 @@ public class Order extends BaseEntity {
     private List<OrderReward> orderRewards = new ArrayList<>();
 
     @Builder
-    public Order(Supporter supporter, List<OrderReward> orderRewards) {
+    public Order(Supporter supporter) {
         this.supporter = supporter;
-        this.orderRewards = orderRewards;
     }
 
     public static Order createOrder(
@@ -48,16 +43,21 @@ public class Order extends BaseEntity {
     ) {
         Order order = Order.builder()
                 .supporter(supporter)
-                .orderRewards(orderRewards)
                 .build();
+
+        for(OrderReward orderReward : orderRewards){
+            order.addOrderReward(orderReward);
+        }
+
         order.setOrderStatus(OrderStatus.REQUESTED);
+
         return order;
     }
 
     //createOrder와 관련된 연관관계 편의 메서드
-    public void addOrderItem(OrderReward orderReward) {
+    public void addOrderReward(OrderReward orderReward) {
         orderRewards.add(orderReward);
-        orderReward.setOrder(this);
+        orderReward.changeOrder(this);
     }
 
     public void setOrderStatus(OrderStatus orderStatus) {

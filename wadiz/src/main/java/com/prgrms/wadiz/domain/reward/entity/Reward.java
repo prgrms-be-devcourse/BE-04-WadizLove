@@ -4,6 +4,7 @@ import com.prgrms.wadiz.domain.project.entity.Project;
 import com.prgrms.wadiz.domain.reward.RewardStatus.RewardStatus;
 import com.prgrms.wadiz.domain.reward.RewardType.RewardType;
 import com.prgrms.wadiz.global.BaseEntity;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
@@ -15,6 +16,8 @@ import static lombok.AccessLevel.PROTECTED;
 @Table(name = "items")
 @NoArgsConstructor(access = PROTECTED)
 public class Reward extends BaseEntity {
+    private static final int ZERO_STOCK = 0;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rewardId;
@@ -43,4 +46,21 @@ public class Reward extends BaseEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private RewardStatus rewardStatus;
+
+    @Builder
+    public Reward(Long rewardId, Integer rewardQuantity, Integer rewardPrice) {
+        this.rewardId = rewardId;
+        this.rewardQuantity = rewardQuantity;
+        this.rewardPrice = rewardPrice;
+    }
+
+    public void removeStock(Integer rewardQuantity){
+        int restQuantity = this.rewardQuantity - rewardQuantity;
+
+        if (restQuantity < ZERO_STOCK){
+            throw new IllegalArgumentException("not good");
+        }
+
+        this.rewardQuantity = restQuantity;
+    }
 }

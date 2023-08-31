@@ -15,6 +15,8 @@ import javax.persistence.*;
 @Table(name = "order_rewards")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderReward extends BaseEntity {
+    private static final int POSITIVE_ORDER_QUANTITY = 1;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderRewardId;
@@ -32,4 +34,36 @@ public class OrderReward extends BaseEntity {
 
     @Column(nullable = false)
     private Integer orderRewardQuantity;
+
+    @Builder
+    public OrderReward(Reward reward, Integer orderRewardPrice, Integer orderRewardQuantity) {
+        this.reward = reward;
+        this.orderRewardPrice = orderRewardPrice;
+        this.orderRewardQuantity = validatePositive(orderRewardQuantity);
+    }
+
+    public static OrderReward createOrderReward(Reward reward, Integer orderRewardPrice, Integer orderRewardQuantity){
+        OrderReward orderReward = OrderReward.builder()
+                .reward(reward)
+                .orderRewardPrice(orderRewardPrice)
+                .orderRewardQuantity(orderRewardQuantity)
+                .build();
+
+        reward.removeStock(orderRewardQuantity);
+
+        return orderReward;
+    }
+
+    public void changeOrder(Order order) {
+        this.order = order;
+        order.getOrderRewards().add(this);
+    }
+
+    private Integer validatePositive(Integer orderRewardQuantity) {
+        if(orderRewardQuantity < POSITIVE_ORDER_QUANTITY){
+            throw new IllegalArgumentException("주문은 양수입니다.");
+        }
+
+        return orderRewardQuantity;
+    }
 }
