@@ -10,13 +10,12 @@ import javax.persistence.*;
 @Table(name = "supporters")
 public class Supporter extends BaseEntity {
     @Id
-    @Column(name="supporter_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long supporterId;
 
     @Column(nullable = false)
-    private String name;
+    private String supporterName;
 
     @Column(nullable = false)
-    private String email;
+    private String supporterEmail;
 }

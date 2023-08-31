@@ -1,10 +1,8 @@
 package com.prgrms.wadiz.domain.post.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.prgrms.wadiz.global.BaseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
@@ -15,19 +13,20 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 public class Post extends BaseEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "post_id")
-    private Long id;
+    private Long postId;
 
     @Column(nullable = false)
-    private String title;
+    private String postTitle;
+
+    @Lob
+    @Column(nullable = false)
+    private String postDescription;
 
     @Column(nullable = false)
-    private String thumbNailImage;
+    private String postThumbNailImage;
 
     @Column(nullable = false)
-    private String contentImage;
-
+    private String postContentImage;
 }
