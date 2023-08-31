@@ -16,7 +16,6 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderReward extends BaseEntity {
     private static final int POSITIVE_ORDER_QUANTITY = 1;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderRewardId;

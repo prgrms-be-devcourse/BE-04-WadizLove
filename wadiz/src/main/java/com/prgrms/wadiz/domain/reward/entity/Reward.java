@@ -17,7 +17,6 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 public class Reward extends BaseEntity {
     private static final int ZERO_STOCK = 0;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rewardId;

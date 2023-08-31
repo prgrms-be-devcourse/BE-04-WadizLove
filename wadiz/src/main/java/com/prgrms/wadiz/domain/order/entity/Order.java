@@ -26,6 +26,9 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "supporter_id")
     private Supporter supporter;
 
+    @OneToMany(mappedBy = "orderRewards", cascade = CascadeType.ALL)
+    private List<OrderReward> orderRewards = new ArrayList<>();
+
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
