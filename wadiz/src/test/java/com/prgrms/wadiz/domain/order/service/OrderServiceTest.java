@@ -5,9 +5,7 @@ import com.prgrms.wadiz.domain.order.dto.request.OrderCreateRequestDTO;
 import com.prgrms.wadiz.domain.order.dto.request.OrderRewardRequestDTO;
 import com.prgrms.wadiz.domain.order.entity.Order;
 import com.prgrms.wadiz.domain.order.repository.OrderRepository;
-import com.prgrms.wadiz.domain.reward.RewardRepository;
 import com.prgrms.wadiz.domain.reward.entity.Reward;
-import com.prgrms.wadiz.domain.supporter.SupporterRepository;
 import com.prgrms.wadiz.domain.supporter.entity.Supporter;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -25,7 +23,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class OrderServiceTest {
