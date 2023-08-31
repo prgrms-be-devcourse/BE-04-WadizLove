@@ -5,11 +5,14 @@ import com.prgrms.wadiz.domain.maker.entity.Maker;
 import com.prgrms.wadiz.domain.post.entity.Post;
 import com.prgrms.wadiz.global.BaseEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
+@Getter
 @Table(name = "projects")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Project extends BaseEntity {
@@ -28,4 +31,15 @@ public class Project extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "funding_id")
     private Funding funding;
+
+    @Builder
+    public Project(
+            Maker maker,
+            Post post,
+            Funding funding
+    ) {
+        this.maker = maker;
+        this.post = post;
+        this.funding = funding;
+    }
 }
