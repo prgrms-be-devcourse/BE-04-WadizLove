@@ -28,4 +28,12 @@ public class FundingService {
 
         return fundingRepository.save(funding);
     }
+
+    @Transactional
+    public FundingResponseDTO getFunding(Long fundingId) {
+        Funding funding = fundingRepository.findById(fundingId)
+                .orElseThrow(() -> new BaseException(ErrorCode.FUNDING_NOT_FOUND));
+
+        return FundingResponseDTO.toResponseDTO(funding);
+    }
 }
