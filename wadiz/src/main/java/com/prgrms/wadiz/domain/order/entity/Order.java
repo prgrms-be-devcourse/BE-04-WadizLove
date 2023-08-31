@@ -37,6 +37,13 @@ public class Order extends BaseEntity {
         this.supporter = supporter;
     }
 
+    @Builder
+    public Order(Long orderId, Supporter supporter, OrderStatus orderStatus) {
+        this.orderId = orderId;
+        this.supporter = supporter;
+        this.orderStatus = orderStatus;
+    }
+
     public static Order createOrder(
             Supporter supporter,
             List<OrderReward> orderRewards

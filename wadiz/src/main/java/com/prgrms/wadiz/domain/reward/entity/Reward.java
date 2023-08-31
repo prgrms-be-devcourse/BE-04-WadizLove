@@ -48,10 +48,10 @@ public class Reward extends BaseEntity {
     private RewardStatus rewardStatus;
 
     @Builder
-    public Reward(Long rewardId, Integer rewardQuantity, Integer rewardPrice) {
+    public Reward(Long rewardId, Integer rewardPrice, Integer rewardQuantity) {
         this.rewardId = rewardId;
-        this.rewardQuantity = rewardQuantity;
         this.rewardPrice = rewardPrice;
+        this.rewardQuantity = rewardQuantity;
     }
 
     public void removeStock(Integer rewardQuantity){
