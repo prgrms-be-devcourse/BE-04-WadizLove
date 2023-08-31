@@ -27,4 +27,11 @@ public class PostService {
         return postRepository.save(post);
     }
 
+    @Transactional
+    public PostResponseDTO getPost(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new BaseException(ErrorCode.POST_NOT_FOUND));
+
+        return PostResponseDTO.toResponseDTO(post);
+    }
 }
