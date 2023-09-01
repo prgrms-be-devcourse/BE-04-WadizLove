@@ -28,7 +28,7 @@ class FundingServiceTest {
     private FundingRepository fundingRepository;
 
     @Test
-    @DisplayName("Funding 정보 등록")
+    @DisplayName("[성공] Funding 정보 등록")
     void createFunding() {
         // given
         FundingCreateRequestDTO requestDTO = FundingCreateRequestDTO.builder()
@@ -57,7 +57,7 @@ class FundingServiceTest {
     }
 
     @Test
-    @DisplayName("Funding 정보 단건 조회")
+    @DisplayName("[성공] Funding 정보 단건 조회")
     void getFunding() {
         // given
         Long fundingId = 1L;

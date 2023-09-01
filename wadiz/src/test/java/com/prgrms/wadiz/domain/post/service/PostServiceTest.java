@@ -26,7 +26,7 @@ class PostServiceTest {
     private PostRepository postRepository;
 
     @Test
-    @DisplayName("Post 정보 등록")
+    @DisplayName("[성공] Post 정보 등록")
     void createPost() {
         // given
         PostCreateRequestDTO requestDTO = PostCreateRequestDTO.builder()
@@ -54,7 +54,7 @@ class PostServiceTest {
     }
 
     @Test
-    @DisplayName("Post 정보 단건 조회")
+    @DisplayName("[성공] Post 정보 단건 조회")
     void getPost() {
         // given
         Long postId = 1L;
