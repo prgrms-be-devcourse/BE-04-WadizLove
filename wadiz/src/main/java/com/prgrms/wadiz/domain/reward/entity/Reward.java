@@ -4,6 +4,8 @@ import com.prgrms.wadiz.domain.project.entity.Project;
 import com.prgrms.wadiz.domain.reward.RewardStatus.RewardStatus;
 import com.prgrms.wadiz.domain.reward.RewardType.RewardType;
 import com.prgrms.wadiz.global.BaseEntity;
+import com.prgrms.wadiz.global.util.exception.BaseException;
+import com.prgrms.wadiz.global.util.exception.ErrorCode;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -57,7 +59,7 @@ public class Reward extends BaseEntity {
         int restQuantity = this.rewardQuantity - rewardQuantity;
 
         if (restQuantity < ZERO_STOCK){
-            throw new IllegalArgumentException("not good");
+            throw new BaseException(ErrorCode.UNKNOWN);
         }
 
         this.rewardQuantity = restQuantity;

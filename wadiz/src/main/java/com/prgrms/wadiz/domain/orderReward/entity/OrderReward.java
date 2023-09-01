@@ -3,6 +3,8 @@ package com.prgrms.wadiz.domain.orderReward.entity;
 import com.prgrms.wadiz.domain.reward.entity.Reward;
 import com.prgrms.wadiz.domain.order.entity.Order;
 import com.prgrms.wadiz.global.BaseEntity;
+import com.prgrms.wadiz.global.util.exception.BaseException;
+import com.prgrms.wadiz.global.util.exception.ErrorCode;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -60,7 +62,7 @@ public class OrderReward extends BaseEntity {
 
     private Integer validatePositive(Integer orderRewardQuantity) {
         if(orderRewardQuantity < POSITIVE_ORDER_QUANTITY){
-            throw new IllegalArgumentException("주문은 양수입니다.");
+            throw new BaseException(ErrorCode.ORDER_COUNT_ERROR);
         }
 
         return orderRewardQuantity;

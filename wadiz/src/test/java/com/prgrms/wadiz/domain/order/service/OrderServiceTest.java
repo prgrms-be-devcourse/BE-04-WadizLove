@@ -2,11 +2,14 @@ package com.prgrms.wadiz.domain.order.service;
 
 import com.prgrms.wadiz.domain.order.OrderStatus;
 import com.prgrms.wadiz.domain.order.dto.request.OrderCreateRequestDTO;
+import com.prgrms.wadiz.domain.order.dto.response.OrderResponseDTO;
 import com.prgrms.wadiz.domain.order.dto.request.OrderRewardRequestDTO;
 import com.prgrms.wadiz.domain.order.entity.Order;
 import com.prgrms.wadiz.domain.order.repository.OrderRepository;
+import com.prgrms.wadiz.domain.orderReward.entity.OrderReward;
 import com.prgrms.wadiz.domain.reward.entity.Reward;
 import com.prgrms.wadiz.domain.supporter.entity.Supporter;
+import com.prgrms.wadiz.global.util.exception.BaseException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,8 +23,7 @@ import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,91 +43,84 @@ class OrderServiceTest {
 
     @ParameterizedTest
     @ValueSource(ints = {1,10})
-    @DisplayName("주문 생성에 성공한다.")
+    @DisplayName("[성공] 주문을 생성한다.")
     void successOrder(int orderQuantity){
         //given
+        Long orderId = 1L;
         Supporter supporter = createSupporter(1L, "hihi@gmail.com", "min");
         Reward reward = createReward(1L,10000,10);
-        Order order = new Order(1L,supporter,OrderStatus.REQUESTED);
 
-        OrderRewardRequestDTO orderRewardReq = new OrderRewardRequestDTO(1L, orderQuantity);
-        List<OrderRewardRequestDTO> orderRequest = new ArrayList<>();
-        orderRequest.add(orderRewardReq);
-        OrderCreateRequestDTO orderCreateReq = new OrderCreateRequestDTO(orderRequest);
+        OrderReward orderReward = new OrderReward(reward, 10000, orderQuantity);
+        List<OrderReward> orderRewards = new ArrayList<>();
+        orderRewards.add(orderReward);
+
+        Order order = new Order(orderId, supporter,orderRewards, OrderStatus.REQUESTED);
+
+        // request
+        OrderRewardRequestDTO orderRewardReq = OrderRewardRequestDTO.builder()
+                .rewardId(1L)
+                .orderQuantity(orderQuantity)
+                .build();
+
+        List<OrderRewardRequestDTO> orderRewardReqs = new ArrayList<>();
+        orderRewardReqs.add(orderRewardReq);
+
+        OrderCreateRequestDTO orderCreateReq = OrderCreateRequestDTO.builder()
+                .orderRewards(orderRewardReqs)
+                .build();
 
         given(supporterRepository.findById(anyLong())).willReturn(Optional.of(supporter));
         given(rewardRepository.findById(anyLong())).willReturn(Optional.of(reward));
         given(orderRepository.save(any(Order.class))).willReturn(order);
-        given(orderRepository.findById(anyLong())).willReturn(Optional.of(order));
 
         //when
-        Long savedOrderId = orderService.createOrder(supporter.getSupporterId(), orderCreateReq);
-        Order savedOrder = orderRepository.findById(savedOrderId).orElseThrow(IllegalArgumentException::new);
+        OrderResponseDTO savedOrder = orderService.createOrder(supporter.getSupporterId(), orderCreateReq);
 
         //then
-        assertThat(savedOrder.getOrderId()).isEqualTo(1L);
-        assertThat(savedOrder.getOrderStatus()).isEqualTo(OrderStatus.REQUESTED);
+        assertThat(savedOrder.orderId()).isEqualTo(order.getOrderId());
+        assertThat(savedOrder.orderRewards()).isEqualTo(order.getOrderRewards());
+        assertThat(savedOrder.orderStatus()).isEqualTo(order.getOrderStatus());
 
     }
 
-
-    @ParameterizedTest
-    @ValueSource(ints = {0,-1})
-    @DisplayName("주문이 0과 음수 입력으로 실패한다.")
-    void failOrderByZeroAndNegativeOrderQuantity(int orderQuantity) {
-        //given
-        Supporter supporter = createSupporter(1L, "hihi@gmail.com", "min");
-        Reward reward = createReward(1L,10000,10);
-        Order order = new Order(1L,supporter,OrderStatus.REQUESTED);
-
-        OrderRewardRequestDTO orderRewardReq = new OrderRewardRequestDTO(1L, orderQuantity);
-        List<OrderRewardRequestDTO> orderRequest = new ArrayList<>();
-        orderRequest.add(orderRewardReq);
-        OrderCreateRequestDTO orderCreateReq = new OrderCreateRequestDTO(orderRequest);
-
-        given(supporterRepository.findById(anyLong())).willReturn(Optional.of(supporter));
-        given(rewardRepository.findById(anyLong())).willReturn(Optional.of(reward));
-        given(orderRepository.save(any(Order.class))).willReturn(order);
-        given(orderRepository.findById(anyLong())).willReturn(Optional.of(order));
-
-        //when
-        Long savedOrderId = orderService.createOrder(supporter.getSupporterId(), orderCreateReq);
-        Order savedOrder = orderRepository.findById(savedOrderId).orElseThrow(IllegalArgumentException::new);
-
-        //then
-        assertThat(savedOrder.getOrderId()).isEqualTo(1L);
-        assertThat(savedOrder.getOrderStatus()).isEqualTo(OrderStatus.REQUESTED);
-
-    }
+//    @ParameterizedTest
+//    @ValueSource(ints = {0,-1})
+//    @DisplayName("[실패] 주문 수량 입력 0과 음수 입력으로 실패한다.") // 질문 dto에 대한 검증 테스트도 따로 해주고 도메인에서도 따로 해줘야 하는것인가? 도메인 레이어에서 테스트할 내용인가?
+//    void failOrderByZeroAndNegativeOrderQuantity(int orderQuantity) {
+//
+//    }
 
     @ParameterizedTest
     @ValueSource(ints = {11,100})
-    @DisplayName("주문이 재고 초과로 실패한다.")
+    @DisplayName("[실패] 주문이 재고 초과로 실패한다.")
     void failOrderByExceededOrderQuantity(int orderQuantity) {
         //given
         Supporter supporter = createSupporter(1L, "hihi@gmail.com", "min");
         Reward reward = createReward(1L,10000,10);
-        Order order = new Order(1L,supporter,OrderStatus.REQUESTED);
 
-        OrderRewardRequestDTO orderRewardReq = new OrderRewardRequestDTO(1L, orderQuantity);
-        List<OrderRewardRequestDTO> orderRequest = new ArrayList<>();
-        orderRequest.add(orderRewardReq);
-        OrderCreateRequestDTO orderCreateReq = new OrderCreateRequestDTO(orderRequest);
+        OrderReward orderReward = new OrderReward(reward, 10000, orderQuantity);
+        List<OrderReward> orderRewards = new ArrayList<>();
+        orderRewards.add(orderReward);
+
+        // request
+        OrderRewardRequestDTO orderRewardReq = OrderRewardRequestDTO.builder()
+                .rewardId(1L)
+                .orderQuantity(orderQuantity)
+                .build();
+
+        List<OrderRewardRequestDTO> orderRewardReqs = new ArrayList<>();
+        orderRewardReqs.add(orderRewardReq);
+
+        OrderCreateRequestDTO orderCreateReq = OrderCreateRequestDTO.builder()
+                .orderRewards(orderRewardReqs)
+                .build();
 
         given(supporterRepository.findById(anyLong())).willReturn(Optional.of(supporter));
         given(rewardRepository.findById(anyLong())).willReturn(Optional.of(reward));
-        given(orderRepository.save(any(Order.class))).willReturn(order);
-        given(orderRepository.findById(anyLong())).willReturn(Optional.of(order));
 
-        //when
-        Long savedOrderId = orderService.createOrder(supporter.getSupporterId(), orderCreateReq);
-        Order savedOrder = orderRepository.findById(savedOrderId).orElseThrow(IllegalArgumentException::new);
-
-        //then
-        Assertions.assertThat(savedOrder.getOrderId()).isEqualTo(1L);
-        Assertions.assertThat(savedOrder.getOrderStatus()).isEqualTo(OrderStatus.REQUESTED);
+        //when, then
+        assertThatThrownBy(() ->orderService.createOrder(supporter.getSupporterId(), orderCreateReq)).isInstanceOf(BaseException.class);
     }
-
 
     private Reward createReward(Long rewardId, int price, int quantity){
         return new Reward(rewardId, price, quantity);

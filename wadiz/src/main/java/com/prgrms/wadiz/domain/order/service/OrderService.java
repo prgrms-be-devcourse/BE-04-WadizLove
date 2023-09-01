@@ -1,6 +1,7 @@
 package com.prgrms.wadiz.domain.order.service;
 
 import com.prgrms.wadiz.domain.order.dto.request.OrderCreateRequestDTO;
+import com.prgrms.wadiz.domain.order.dto.response.OrderResponseDTO;
 import com.prgrms.wadiz.domain.order.entity.Order;
 import com.prgrms.wadiz.domain.order.repository.OrderRepository;
 import com.prgrms.wadiz.domain.orderReward.entity.OrderReward;
@@ -28,7 +29,7 @@ public class OrderService {
 
     // 주문 생성
     @Transactional
-    public Long createOrder(Long supporterId, OrderCreateRequestDTO orderCreateRequestDto) {
+    public OrderResponseDTO createOrder(Long supporterId, OrderCreateRequestDTO orderCreateRequestDto) {
         Supporter supporter = supporterRepository.findById(supporterId)
                 .orElseThrow(() -> {
                     log.error("Supporter {} is not found", supporterId);
@@ -39,16 +40,21 @@ public class OrderService {
         List<OrderReward> orderRewards = orderCreateRequestDto.orderRewards().stream()
                 .map(orderRewardRequest -> {
                     Reward reward = rewardRepository.findById(orderRewardRequest.rewardId())
-                            .orElseThrow(IllegalArgumentException::new);
+                            .orElseThrow(() -> {
+                                log.error("Supporter {} is not found", supporterId);
+
+                                return new BaseException(ErrorCode.UNKNOWN);
+                            });
+
                     Integer orderQuantity = orderRewardRequest.orderQuantity();
 
                     return OrderReward.createOrderReward(reward, reward.getRewardPrice(), orderQuantity);
                 })
                 .collect(Collectors.toList());
 
-        Order order = Order.createOrder(supporter, orderRewards);
+        Order order = orderRepository.save(Order.createOrder(supporter, orderRewards));
 
-        return orderRepository.save(order).getOrderId();
+        return OrderResponseDTO.from(order);
     }
 
 }

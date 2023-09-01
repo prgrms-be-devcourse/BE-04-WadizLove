@@ -8,8 +8,9 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 public enum ErrorCode {
     UNKNOWN(-9999, "알 수 없는 오류가 발생했습니다."),
-    CUSTOMER_NOT_FOUND(-1000, "조회하고자하는 고객이 존재하지 않습니다."),
-    VOUCHER_NOT_FOUND(-2000, "조회하고자하는 바우처가 존재하지 않습니다.");
+    ORDER_COUNT_ERROR(-10001, "주문 수량은 1개 이상이어야 합니다."),
+    STOCK_SETTING_ERROR(-10000, "재고는 양수여야 합니다.");
+
 
     private int code;
     private String errorMessage;

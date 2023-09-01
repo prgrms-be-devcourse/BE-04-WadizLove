@@ -32,18 +32,20 @@ public class Order extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderReward> orderRewards = new ArrayList<>();
-
     @Builder
-    public Order(Supporter supporter) {
+    public Order(
+            Supporter supporter,
+            OrderStatus orderStatus
+    ) {
         this.supporter = supporter;
+        this.orderStatus = orderStatus;
     }
 
     @Builder
-    public Order(Long orderId, Supporter supporter, OrderStatus orderStatus) {
+    public Order(Long orderId, Supporter supporter, List<OrderReward> orderRewards, OrderStatus orderStatus) {
         this.orderId = orderId;
         this.supporter = supporter;
+        this.orderRewards = orderRewards;
         this.orderStatus = orderStatus;
     }
 
