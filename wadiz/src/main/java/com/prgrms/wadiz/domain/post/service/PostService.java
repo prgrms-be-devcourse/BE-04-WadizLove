@@ -19,8 +19,8 @@ public class PostService {
     public Post createPost(PostCreateRequestDTO postCreateRequestDTO) {
         Post post = Post.builder()
                 .postTitle(postCreateRequestDTO.postTitle())
-                .postDescription(postCreateRequestDTO.PostDescription())
-                .postThumbNailImage(postCreateRequestDTO.postThumbNail())
+                .postDescription(postCreateRequestDTO.postDescription())
+                .postThumbNailImage(postCreateRequestDTO.postThumbNailImage())
                 .postContentImage(postCreateRequestDTO.postContentImage())
                 .build();
 

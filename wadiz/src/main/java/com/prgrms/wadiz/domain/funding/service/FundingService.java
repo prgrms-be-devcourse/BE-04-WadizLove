@@ -19,11 +19,11 @@ public class FundingService {
     @Transactional
     public Funding createFunding(FundingCreateRequestDTO fundingCreateRequestDTO) {
         Funding funding = Funding.builder()
-                .fundingCategory(fundingCreateRequestDTO.getFundingCategory())
-                .fundingTargetAmount(fundingCreateRequestDTO.getFundingTargetAmount())
+                .fundingCategory(fundingCreateRequestDTO.fundingCategory())
+                .fundingTargetAmount(fundingCreateRequestDTO.fundingTargetAmount())
                 .fundingStatus(FundingStatus.OPEN)
-                .fundingStartAt(fundingCreateRequestDTO.getFundingStartAt())
-                .fundingEndAt(fundingCreateRequestDTO.getFundingEndAt())
+                .fundingStartAt(fundingCreateRequestDTO.fundingStartAt())
+                .fundingEndAt(fundingCreateRequestDTO.fundingEndAt())
                 .build();
 
         return fundingRepository.save(funding);
