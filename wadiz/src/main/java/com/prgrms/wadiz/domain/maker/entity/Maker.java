@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Getter
 @Table(name = "makers")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLDelete(sql = "UPDATE makers SET deleted = true WHERE maker_id = ?")
+@SQLDelete(sql = "UPDATE makers SET activated = false WHERE maker_id = ?")
 public class Maker extends BaseEntity{
 
     @Id
@@ -33,7 +33,7 @@ public class Maker extends BaseEntity{
     private String makerEmail;
 
     @Column(nullable = false)
-    private boolean deleted = Boolean.FALSE; // 삭제 여부 기본값 false
+    private boolean activated = Boolean.TRUE; // 활성화 여부 -> 삭제 시 FALSE
 
     @Builder
     public Maker(

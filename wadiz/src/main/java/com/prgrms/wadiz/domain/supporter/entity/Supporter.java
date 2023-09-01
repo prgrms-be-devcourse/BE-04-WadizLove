@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Getter
 @Table(name = "supporters")
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE supporters SET deleted = true WHERE supporter_id = ?")
+@SQLDelete(sql = "UPDATE supporters SET activated = false WHERE supporter_id = ?")
 public class Supporter extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
