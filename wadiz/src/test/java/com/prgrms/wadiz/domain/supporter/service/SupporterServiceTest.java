@@ -41,8 +41,8 @@ class SupporterServiceTest {
     void saveTest() {
         //given
         SupporterCreateRequestDTO supporterDTO = new SupporterCreateRequestDTO(
-                supporter.getName(),
-                supporter.getEmail()
+                supporter.getSupporterName(),
+                supporter.getSupporterEmail()
         );
 
         when(supporterRepository.save(any(Supporter.class))).then(AdditionalAnswers.returnsFirstArg());
@@ -54,7 +54,7 @@ class SupporterServiceTest {
         Supporter supporter2 = supporterResponse.toEntity();
 
         //then
-        assertThat(supporter1.getId()).isEqualTo(supporter2.getId());
+        assertThat(supporter1.getSupporterId()).isEqualTo(supporter2.getSupporterId());
     }
 
     @Test
@@ -62,15 +62,15 @@ class SupporterServiceTest {
     void updateTest() {
         //given
         SupporterCreateRequestDTO supporterDTO= new SupporterCreateRequestDTO(
-                supporter.getName(),
-                supporter.getEmail()
+                supporter.getSupporterName(),
+                supporter.getSupporterEmail()
         );
 
         when(supporterRepository.save(any(Supporter.class))).then(AdditionalAnswers.returnsFirstArg());
 
         SupporterResponseDTO responseDTO = supporterService.createSupporter(supporterDTO);
         Supporter supporter1 = responseDTO.toEntity();
-        Long supporter1Id = supporter1.getId();
+        Long supporter1Id = supporter1.getSupporterId();
 
         SupporterUpdateRequestDTO supporterUpdateRequestDTO = new SupporterUpdateRequestDTO(
                 "update",
@@ -81,13 +81,13 @@ class SupporterServiceTest {
 
         //when
         SupporterResponseDTO supporterResponseDTO = supporterService.updateSupporter(
-                supporter1.getId(),
+                supporter1.getSupporterId(),
                 supporterUpdateRequestDTO
         );
 
         //then
-        assertThat(supporterResponseDTO.toEntity().getId())
-                .isEqualTo(supporter1.getId());
+        assertThat(supporterResponseDTO.toEntity().getSupporterId())
+                .isEqualTo(supporter1.getSupporterId());
 
         assertThat(supporterResponseDTO.name())
                 .isEqualTo("update");
@@ -98,15 +98,15 @@ class SupporterServiceTest {
     void softDeleteTest() {
         //given
         SupporterCreateRequestDTO supporterDTO = new SupporterCreateRequestDTO(
-                supporter.getName(),
-                supporter.getEmail()
+                supporter.getSupporterName(),
+                supporter.getSupporterEmail()
         );
 
         when(supporterRepository.save(any(Supporter.class))).then(AdditionalAnswers.returnsFirstArg());
 
         SupporterResponseDTO responseDTO = supporterService.createSupporter(supporterDTO);
         Supporter supporter1 = responseDTO.toEntity();
-        Long supporter1Id = supporter1.getId();
+        Long supporter1Id = supporter1.getSupporterId();
 
         //when
         supporterService.deleteSupporter(supporter1Id);

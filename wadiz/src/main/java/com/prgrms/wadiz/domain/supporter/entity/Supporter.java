@@ -15,53 +15,52 @@ import javax.persistence.*;
 @SQLDelete(sql = "UPDATE supporters SET deleted = true WHERE supporter_id = ?")
 public class Supporter extends BaseEntity {
     @Id
-    @Column(name="supporter_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long supporterId;
 
     @Column(nullable = false)
-    private String name;
+    private String supporterName;
 
     @Column(nullable = false)
-    private String email;
+    private String supporterEmail;
 
     @Column(nullable = false)
-    private boolean deleted = Boolean.FALSE; // 삭제 여부 기본값 false
+    private boolean activated = Boolean.TRUE; // 활성화 여부 -> 삭제 시 FALSE
 
     @Builder
     public Supporter(
             String name,
             String email
     ) {
-        this.name = name;
-        this.email = email;
+        this.supporterName = name;
+        this.supporterEmail = email;
     }
 
     @Builder
     public Supporter(
             String name,
             String email,
-            Boolean isDeleted
+            Boolean isActivated
     ) {
-        this.name = name;
-        this.email = email;
-        this.deleted = isDeleted;
+        this.supporterName = name;
+        this.supporterEmail = email;
+        this.activated = isActivated;
     }
 
     public void changeName(String name) {
-        this.name = name;
+        this.supporterName = name;
     }
 
     public void changeEmail(String email) {
-        this.email = email;
+        this.supporterEmail = email;
     }
 
     public static SupporterCreateRequestDTO toDTOForRequest(Supporter supporter) {
-        return new SupporterCreateRequestDTO(supporter.getName(), supporter.getEmail());
+        return new SupporterCreateRequestDTO(supporter.getSupporterName(), supporter.getSupporterEmail());
     }
 
     public static SupporterResponseDTO toDTOForResponse(Supporter supporter) {
-        return new SupporterResponseDTO(supporter.getName(), supporter.getEmail());
+        return new SupporterResponseDTO(supporter.getSupporterName(), supporter.getSupporterEmail());
     }
 
 }
