@@ -6,6 +6,7 @@ import com.prgrms.wadiz.domain.maker.dto.response.MakerResponseDTO;
 import com.prgrms.wadiz.domain.maker.entity.Maker;
 import com.prgrms.wadiz.domain.maker.repository.MakerRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -18,17 +19,23 @@ public class MakerService {
         this.makerRepository = makerRepository;
     }
 
+    @Transactional
     public MakerResponseDTO signUpMaker(MakerCreateRequestDTO dto) {
         Maker maker = makerRepository.save(dto.toEntity());
         return Maker.toDTOForResponse(maker);
     }
 
     public MakerResponseDTO getMaker(Long id) {
-        Maker findMaker = makerRepository.findById(id).orElseThrow(() -> new RuntimeException("id에 해당하는 Maker가 존재하지 않습니다."));
+        Maker findMaker = makerRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("id에 해당하는 Maker가 존재하지 않습니다."));
         return Maker.toDTOForResponse(findMaker);
     }
 
-    public MakerResponseDTO modifyMaker(Long id, MakerModifyRequestDTO dto) {
+    public MakerResponseDTO modifyMaker(
+            Long id,
+            MakerModifyRequestDTO dto
+    ) {
+
         MakerResponseDTO makerDTO = getMaker(id);
         Maker maker = makerDTO.toEntity();
         maker.changeMakerName(dto.makerName());
@@ -39,6 +46,7 @@ public class MakerService {
         return Maker.toDTOForResponse(save);
     }
 
+    @Transactional
     public void deleteMaker(Long id) {
         makerRepository.deleteById(id);
     }

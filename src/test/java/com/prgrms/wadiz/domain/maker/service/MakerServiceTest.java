@@ -34,8 +34,11 @@ class MakerServiceTest {
     @DisplayName("메이커 회원가입을 성공한다.")
     void signUpMakerTest() {
         //given
-        MakerCreateRequestDTO makerCreateRequestDTO = new MakerCreateRequestDTO(maker.getMakerName(),
-                maker.getMakerBrand(), maker.getMakerEmail());
+        MakerCreateRequestDTO makerCreateRequestDTO = new MakerCreateRequestDTO(
+                maker.getMakerName(),
+                maker.getMakerBrand(),
+                maker.getMakerEmail()
+        );
 
         //when
         MakerResponseDTO makerResponseDTO = makerService.signUpMaker(makerCreateRequestDTO);
@@ -48,11 +51,13 @@ class MakerServiceTest {
     @DisplayName("메이커 정보를 수정한다.")
     void modifyMakerTest() {
         //given
-        MakerCreateRequestDTO makerCreateRequestDTO = new MakerCreateRequestDTO(maker.getMakerName(),
+        MakerCreateRequestDTO makerCreateRequestDTO = new MakerCreateRequestDTO(
+                maker.getMakerName(),
                 maker.getMakerBrand(), maker.getMakerEmail());
         MakerResponseDTO makerResponseDTO = makerService.signUpMaker(makerCreateRequestDTO);
 
         MakerModifyRequestDTO makerModifyRequestDTO = new MakerModifyRequestDTO("update",
+
                 "updateBrand", "update@gmail.com");
 
         //when

@@ -1,6 +1,7 @@
-package com.prgrms.wadiz.domain.Reward.entity;
+package com.prgrms.wadiz.domain.reward.entity;
 
-import com.prgrms.wadiz.domain.Reward.RewardType;
+import com.prgrms.wadiz.domain.reward.RewardStatus;
+import com.prgrms.wadiz.domain.reward.RewardType;
 import com.prgrms.wadiz.domain.funding.entity.Funding;
 import com.prgrms.wadiz.global.BaseEntity;
 import lombok.Getter;
@@ -28,13 +29,16 @@ public class Reward extends BaseEntity {
     private String rewardName;
 
     @Column(nullable = false)
-    private Integer rewardQuantity;
+    private Integer rewardQuantity; // 수정 가능
 
     @Column(nullable = false)
     private Integer rewardPrice;
 
     @Column(nullable = false)
     private RewardType rewardType;
+
+    @Enumerated(EnumType.STRING)
+    private RewardStatus rewardStatus; // 수정 가능
 
 
 }

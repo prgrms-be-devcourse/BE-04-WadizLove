@@ -36,15 +36,23 @@ public class Maker extends BaseEntity{
     private boolean deleted = Boolean.FALSE; // 삭제 여부 기본값 false
 
     @Builder
-    public Maker(Long makerId, String makerName, String makerBrand, String makerEmail) {
+    public Maker(
+            Long makerId,
+            String makerName,
+            String makerBrand,
+            String makerEmail) {
+
         this.makerId = makerId;
         this.makerName = makerName;
         this.makerBrand = makerBrand;
         this.makerEmail = makerEmail;
+
     }
 
     @Builder
-    public Maker(String makerName, String makerBrand, String makerEmail) {
+    public Maker(String makerName,
+                 String makerBrand,
+                 String makerEmail) {
         this.makerName = makerName;
         this.makerBrand = makerBrand;
         this.makerEmail = makerEmail;
