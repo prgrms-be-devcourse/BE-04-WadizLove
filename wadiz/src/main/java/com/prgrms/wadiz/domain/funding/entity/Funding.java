@@ -3,6 +3,7 @@ package com.prgrms.wadiz.domain.funding.entity;
 import com.prgrms.wadiz.domain.funding.FundingCategory;
 import com.prgrms.wadiz.domain.funding.FundingStatus;
 import com.prgrms.wadiz.global.BaseEntity;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
@@ -35,4 +36,19 @@ public class Funding extends BaseEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private FundingStatus fundingStatus;
+
+    @Builder
+    public Funding(
+            Integer fundingTargetAmount,
+            LocalDateTime fundingStartAt,
+            LocalDateTime fundingEndAt,
+            FundingCategory fundingCategory,
+            FundingStatus fundingStatus
+    ) {
+        this.fundingTargetAmount = fundingTargetAmount;
+        this.fundingStartAt = fundingStartAt;
+        this.fundingEndAt = fundingEndAt;
+        this.fundingCategory = fundingCategory;
+        this.fundingStatus = fundingStatus;
+    }
 }
