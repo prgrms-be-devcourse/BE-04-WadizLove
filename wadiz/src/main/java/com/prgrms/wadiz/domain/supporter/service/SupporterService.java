@@ -8,17 +8,17 @@ import com.prgrms.wadiz.domain.supporter.repository.SupporterRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 
 @Service
 public class SupporterService {
 
     private SupporterRepository supporterRepository;
 
-
     public SupporterService(SupporterRepository supporterRepository) {
         this.supporterRepository = supporterRepository;
     }
+
+    @Transactional
 
     public SupporterResponseDTO createSupporter(SupporterCreateRequestDTO dto) {
         Supporter entity = dto.toEntity();
