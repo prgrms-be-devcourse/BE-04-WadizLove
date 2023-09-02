@@ -1,6 +1,6 @@
 package com.prgrms.wadiz.domain.maker.dto.request;
 
-public record MakerModifyRequestDTO(
+public record MakerUpdateRequestDTO(
         String makerName,
         String makerBrand,
         String makerEmail) {
