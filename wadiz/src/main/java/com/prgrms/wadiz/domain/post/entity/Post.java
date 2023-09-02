@@ -1,6 +1,7 @@
 package com.prgrms.wadiz.domain.post.entity;
 
 import com.prgrms.wadiz.global.BaseEntity;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -29,4 +30,17 @@ public class Post extends BaseEntity {
 
     @Column(nullable = false)
     private String postContentImage;
+
+    @Builder
+    public Post(
+            String postTitle,
+            String postDescription,
+            String postThumbNailImage,
+            String postContentImage
+    ) {
+        this.postTitle = postTitle;
+        this.postDescription = postDescription;
+        this.postThumbNailImage = postThumbNailImage;
+        this.postContentImage = postContentImage;
+    }
 }
