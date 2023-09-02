@@ -5,6 +5,7 @@ import com.prgrms.wadiz.domain.order.OrderStatus;
 import com.prgrms.wadiz.global.BaseEntity;
 import com.prgrms.wadiz.domain.orderReward.entity.OrderReward;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,4 +31,48 @@ public class Order extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
+
+    @Builder
+    public Order(
+            Supporter supporter,
+            OrderStatus orderStatus
+    ) {
+        this.supporter = supporter;
+        this.orderStatus = orderStatus;
+    }
+
+    @Builder
+    public Order(Long orderId, Supporter supporter, List<OrderReward> orderRewards, OrderStatus orderStatus) {
+        this.orderId = orderId;
+        this.supporter = supporter;
+        this.orderRewards = orderRewards;
+        this.orderStatus = orderStatus;
+    }
+
+    public static Order createOrder(
+            Supporter supporter,
+            List<OrderReward> orderRewards
+    ) {
+        Order order = Order.builder()
+                .supporter(supporter)
+                .build();
+
+        for(OrderReward orderReward : orderRewards){
+            order.addOrderReward(orderReward);
+        }
+
+        order.setOrderStatus(OrderStatus.REQUESTED);
+
+        return order;
+    }
+
+    //createOrder와 관련된 연관관계 편의 메서드
+    public void addOrderReward(OrderReward orderReward) {
+        orderRewards.add(orderReward);
+        orderReward.changeOrder(this);
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
 }

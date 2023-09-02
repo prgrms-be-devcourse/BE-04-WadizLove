@@ -5,6 +5,10 @@ import com.prgrms.wadiz.domain.reward.RewardStatus.RewardStatus;
 import com.prgrms.wadiz.domain.reward.RewardType.RewardType;
 import com.prgrms.wadiz.domain.reward.dto.response.RewardResponseDTO;
 import com.prgrms.wadiz.global.BaseEntity;
+
+import com.prgrms.wadiz.global.util.exception.BaseException;
+import com.prgrms.wadiz.global.util.exception.ErrorCode;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +24,7 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @SQLDelete(sql = "UPDATE rewards SET activated = false WHERE reward_id = ?")
 public class Reward extends BaseEntity {
+    private static final int ZERO_STOCK = 0;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rewardId;
@@ -48,6 +53,15 @@ public class Reward extends BaseEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private RewardStatus rewardStatus;
+
+    public void removeStock(Integer rewardQuantity){
+        int restQuantity = this.rewardQuantity - rewardQuantity;
+
+        if (restQuantity < ZERO_STOCK){
+            throw new BaseException(ErrorCode.UNKNOWN);
+        }
+
+        this.rewardQuantity = restQuantity;
 
     @Column(nullable = false)
     private Boolean activated = Boolean.TRUE; // 활성화 여부, 삭제 시 -> false

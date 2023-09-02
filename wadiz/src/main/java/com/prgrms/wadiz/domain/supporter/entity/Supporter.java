@@ -3,6 +3,10 @@ package com.prgrms.wadiz.domain.supporter.entity;
 import com.prgrms.wadiz.domain.supporter.dto.request.SupporterCreateRequestDTO;
 import com.prgrms.wadiz.domain.supporter.dto.response.SupporterResponseDTO;
 import com.prgrms.wadiz.global.BaseEntity;
+
+import lombok.Builder;
+import lombok.Getter;
+
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 
@@ -23,7 +27,7 @@ public class Supporter extends BaseEntity {
 
     @Column(nullable = false)
     private String supporterEmail;
-
+  
     @Column(nullable = false)
     private boolean activated = Boolean.TRUE; // 활성화 여부 -> 삭제 시 FALSE
 
