@@ -60,13 +60,36 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public OrderResponseDTO getOrder(Long orderId) {
+    public OrderResponseDTO getOrder(Long supporterId, Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> {
             log.error("Order {} is not found", orderId);
 
             return new BaseException(ErrorCode.ORDER_NOT_FOUND);
         });
 
+        if (!order.getSupporter().getSupporterId().equals(supporterId)){
+
+            throw new BaseException(ErrorCode.INVALID_ACCESS);
+        }
+
         return OrderResponseDTO.from(order);
+    }
+
+    @Transactional
+    public void cancelOrder(Long supporterId, Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> {
+            log.error("Order {} is not found", orderId);
+
+            return new BaseException(ErrorCode.ORDER_NOT_FOUND);
+        });
+
+        if (!order.getSupporter().getSupporterId().equals(supporterId)){
+
+            throw new BaseException(ErrorCode.INVALID_ACCESS);
+        }
+
+        order.cancel();
+
+
     }
 }

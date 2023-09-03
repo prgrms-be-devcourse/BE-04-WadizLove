@@ -72,7 +72,14 @@ public class Order extends BaseEntity {
         orderReward.changeOrder(this);
     }
 
+    public void cancel() {
+        this.setOrderStatus(OrderStatus.CANCELED);
+        orderRewards.forEach(OrderReward::cancel);
+    }
+
     public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
+
+
 }

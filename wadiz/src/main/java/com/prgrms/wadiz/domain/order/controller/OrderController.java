@@ -13,12 +13,28 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("new/{supporterId}")
-    public void createOrder(@PathVariable Long supporterId, OrderCreateRequestDTO orderCreateRequestDto){
+    public void createOrder(
+            @PathVariable Long supporterId,
+            OrderCreateRequestDTO orderCreateRequestDto
+    ){
         orderService.createOrder(supporterId, orderCreateRequestDto);
     }
 
-    @GetMapping("{orderId}")
-    public void getOrder(@PathVariable Long orderId){
-        orderService.getOrder(orderId);
+    @GetMapping("{supporterId}/{orderId}")
+    public void getOrder(
+            @PathVariable Long supporterId,
+            @PathVariable Long orderId
+    ){
+        orderService.getOrder(supporterId,orderId);
     }
+
+    @PatchMapping("{supporterId}/{orderId}")
+    public void cancelOrder(
+        @PathVariable Long supporterId,
+        @PathVariable Long orderId
+    ){
+
+        orderService.cancelOrder(supporterId, orderId);
+    }
+
 }

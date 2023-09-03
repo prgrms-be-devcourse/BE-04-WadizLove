@@ -3,18 +3,18 @@ package com.prgrms.wadiz.domain.funding.entity;
 import com.prgrms.wadiz.domain.funding.FundingCategory;
 import com.prgrms.wadiz.domain.funding.FundingStatus;
 import com.prgrms.wadiz.global.BaseEntity;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
 @Table(name = "fundings")
-@NoArgsConstructor(access = PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Funding extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

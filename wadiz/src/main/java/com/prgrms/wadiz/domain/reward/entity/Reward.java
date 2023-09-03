@@ -9,6 +9,7 @@ import com.prgrms.wadiz.global.BaseEntity;
 import com.prgrms.wadiz.global.util.exception.BaseException;
 import com.prgrms.wadiz.global.util.exception.ErrorCode;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,12 +17,11 @@ import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
 
-import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
 @Table(name = "rewards")
-@NoArgsConstructor(access = PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLDelete(sql = "UPDATE rewards SET activated = false WHERE reward_id = ?")
 public class Reward extends BaseEntity {
     private static final int ZERO_STOCK = 0;
@@ -54,14 +54,15 @@ public class Reward extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private RewardStatus rewardStatus;
 
-    public void removeStock(Integer rewardQuantity){
+    public void removeStock(Integer rewardQuantity) {
         int restQuantity = this.rewardQuantity - rewardQuantity;
 
-        if (restQuantity < ZERO_STOCK){
+        if (restQuantity < ZERO_STOCK) {
             throw new BaseException(ErrorCode.UNKNOWN);
         }
 
         this.rewardQuantity = restQuantity;
+    }
 
     @Column(nullable = false)
     private Boolean activated = Boolean.TRUE; // 활성화 여부, 삭제 시 -> false
@@ -119,4 +120,12 @@ public class Reward extends BaseEntity {
                 reward.getRewardType(),
                 reward.getRewardStatus());
     }
+
+    public void addQuantity(Integer orderRewardQuantity) {
+        this.rewardQuantity += orderRewardQuantity;
+    }
 }
+
+
+
+

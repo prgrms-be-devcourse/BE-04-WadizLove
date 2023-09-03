@@ -60,6 +60,11 @@ public class OrderReward extends BaseEntity {
         order.getOrderRewards().add(this);
     }
 
+    public void cancel() {
+        getReward().addQuantity(orderRewardQuantity);
+
+    }
+
     private Integer validatePositive(Integer orderRewardQuantity) {
         if(orderRewardQuantity < POSITIVE_ORDER_QUANTITY){
             throw new BaseException(ErrorCode.ORDER_COUNT_ERROR);
@@ -67,4 +72,6 @@ public class OrderReward extends BaseEntity {
 
         return orderRewardQuantity;
     }
+
+
 }
