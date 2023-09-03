@@ -3,7 +3,7 @@ package com.prgrms.wadiz.domain.reward.dto.request;
 import com.prgrms.wadiz.domain.reward.RewardStatus.RewardStatus;
 import com.prgrms.wadiz.domain.reward.RewardType.RewardType;
 
-public record RewardUpdateRequestDTO(
+public record RewardRequestDTO(
         String rewardName,
         String rewardDescription,
         Integer rewardQuantity,
