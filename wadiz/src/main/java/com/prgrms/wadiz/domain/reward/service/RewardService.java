@@ -2,8 +2,7 @@ package com.prgrms.wadiz.domain.reward.service;
 
 import com.prgrms.wadiz.domain.project.entity.Project;
 import com.prgrms.wadiz.domain.project.repository.ProjectRepository;
-import com.prgrms.wadiz.domain.reward.dto.request.RewardCreateRequestDTO;
-import com.prgrms.wadiz.domain.reward.dto.request.RewardUpdateRequestDTO;
+import com.prgrms.wadiz.domain.reward.dto.request.RewardRequestDTO;
 import com.prgrms.wadiz.domain.reward.dto.response.RewardResponseDTO;
 import com.prgrms.wadiz.domain.reward.entity.Reward;
 import com.prgrms.wadiz.domain.reward.repository.RewardRepository;
@@ -28,26 +27,42 @@ public class RewardService {
         Reward reward = rewardRepository.findById(rewardId)
                 .orElseThrow(() -> new RuntimeException("id에 해당하는 reward가 존재하지 않습니다."));
 
-        return Reward.toDTOForResponse(reward);
+        return RewardResponseDTO.of(
+                reward.getRewardName(),
+                reward.getRewardDescription(),
+                reward.getRewardQuantity(),
+                reward.getRewardPrice(),
+                reward.getRewardType(),
+                reward.getRewardStatus());
     }
 
-    //목록 조회는 커서기반 페이지네이션 예정
-
     @Transactional
-    public RewardResponseDTO createReward(Long projectId, RewardCreateRequestDTO dto) {
+    public RewardResponseDTO createReward(Long projectId, RewardRequestDTO dto) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new RuntimeException("id에 해당하는 프로젝트가 없습니다."));
 
-        Reward reward = dto.toEntity();
+        Reward reward = Reward.builder()
+                .rewardName(dto.rewardName())
+                .rewardDescription(dto.rewardDescription())
+                .rewardQuantity(dto.rewardQuantity())
+                .rewardPrice(dto.rewardPrice())
+                .rewardType(dto.rewardType())
+                .build();
 
         reward.allocateProject(project);
         Reward savedReward = rewardRepository.save(reward);
 
-        return Reward.toDTOForResponse(savedReward);
+        return RewardResponseDTO.of(
+                savedReward.getRewardName(),
+                savedReward.getRewardDescription(),
+                savedReward.getRewardQuantity(),
+                savedReward.getRewardPrice(),
+                reward.getRewardType(),
+                reward.getRewardStatus());
     }
 
     @Transactional
-    public RewardResponseDTO updateReward(Long rewardId, RewardUpdateRequestDTO dto) {
+    public RewardResponseDTO updateReward(Long rewardId, RewardRequestDTO dto) {
         Reward reward = rewardRepository.findById(rewardId)
                 .orElseThrow(() -> new RuntimeException("id에 해당하는 리워드가 없습니다."));
 
@@ -58,9 +73,15 @@ public class RewardService {
         reward.modifyRewardType(dto.rewardType());
         reward.modifyRewardStatus(dto.rewardStatus());
 
-        Reward modifiedReward = rewardRepository.save(reward);
+        Reward savedReward = rewardRepository.save(reward);
 
-        return Reward.toDTOForResponse(modifiedReward);
+        return RewardResponseDTO.of(
+                savedReward.getRewardName(),
+                savedReward.getRewardDescription(),
+                savedReward.getRewardQuantity(),
+                savedReward.getRewardPrice(),
+                reward.getRewardType(),
+                reward.getRewardStatus());
     }
 
     @Transactional
