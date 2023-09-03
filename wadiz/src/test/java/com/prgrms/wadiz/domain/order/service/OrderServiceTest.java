@@ -8,9 +8,10 @@ import com.prgrms.wadiz.domain.order.entity.Order;
 import com.prgrms.wadiz.domain.order.repository.OrderRepository;
 import com.prgrms.wadiz.domain.orderReward.entity.OrderReward;
 import com.prgrms.wadiz.domain.reward.entity.Reward;
+import com.prgrms.wadiz.domain.reward.repository.RewardRepository;
 import com.prgrms.wadiz.domain.supporter.entity.Supporter;
+import com.prgrms.wadiz.domain.supporter.repository.SupporterRepository;
 import com.prgrms.wadiz.global.util.exception.BaseException;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -54,7 +55,7 @@ class OrderServiceTest {
         List<OrderReward> orderRewards = new ArrayList<>();
         orderRewards.add(orderReward);
 
-        Order order = new Order(orderId, supporter,orderRewards, OrderStatus.REQUESTED);
+        Order order = new Order(supporter,orderRewards);
 
         // request
         OrderRewardRequestDTO orderRewardReq = OrderRewardRequestDTO.builder()
@@ -77,7 +78,6 @@ class OrderServiceTest {
         OrderResponseDTO savedOrder = orderService.createOrder(supporter.getSupporterId(), orderCreateReq);
 
         //then
-        assertThat(savedOrder.orderId()).isEqualTo(order.getOrderId());
         assertThat(savedOrder.orderRewards()).isEqualTo(order.getOrderRewards());
         assertThat(savedOrder.orderStatus()).isEqualTo(order.getOrderStatus());
 

@@ -6,7 +6,9 @@ import com.prgrms.wadiz.domain.order.entity.Order;
 import com.prgrms.wadiz.domain.order.repository.OrderRepository;
 import com.prgrms.wadiz.domain.orderReward.entity.OrderReward;
 import com.prgrms.wadiz.domain.reward.entity.Reward;
+import com.prgrms.wadiz.domain.reward.repository.RewardRepository;
 import com.prgrms.wadiz.domain.supporter.entity.Supporter;
+import com.prgrms.wadiz.domain.supporter.repository.SupporterRepository;
 import com.prgrms.wadiz.global.util.exception.BaseException;
 import com.prgrms.wadiz.global.util.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -41,20 +43,66 @@ public class OrderService {
                 .map(orderRewardRequest -> {
                     Reward reward = rewardRepository.findById(orderRewardRequest.rewardId())
                             .orElseThrow(() -> {
-                                log.error("Supporter {} is not found", supporterId);
+                                log.error("reward is not found");
 
                                 return new BaseException(ErrorCode.UNKNOWN);
                             });
 
                     Integer orderQuantity = orderRewardRequest.orderQuantity();
 
-                    return OrderReward.createOrderReward(reward, reward.getRewardPrice(), orderQuantity);
+                    OrderReward orderReward = OrderReward.builder()
+                            .reward(reward)
+                            .orderRewardPrice(reward.getRewardPrice())
+                            .orderRewardQuantity(orderQuantity)
+                            .build();
+                    reward.removeStock(orderQuantity);
+
+                    return orderReward;
                 })
                 .collect(Collectors.toList());
 
-        Order order = orderRepository.save(Order.createOrder(supporter, orderRewards));
+        Order order = Order.builder()
+                .supporter(supporter)
+                .orderRewards(orderRewards)
+                .build();
+        orderRewards.forEach(order::addOrderReward);
+
+        Order savedOrder = orderRepository.save(order);
+
+        return OrderResponseDTO.from(savedOrder);
+    }
+
+    @Transactional(readOnly = true)
+    public OrderResponseDTO getOrder(Long supporterId, Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> {
+            log.error("Order {} is not found", orderId);
+
+            return new BaseException(ErrorCode.ORDER_NOT_FOUND);
+        });
+
+        if (!order.getSupporter().getSupporterId().equals(supporterId)){
+
+            throw new BaseException(ErrorCode.INVALID_ACCESS);
+        }
 
         return OrderResponseDTO.from(order);
     }
 
+    @Transactional
+    public void cancelOrder(Long supporterId, Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> {
+            log.error("Order {} is not found", orderId);
+
+            return new BaseException(ErrorCode.ORDER_NOT_FOUND);
+        });
+
+        if (!order.getSupporter().getSupporterId().equals(supporterId)){
+
+            throw new BaseException(ErrorCode.INVALID_ACCESS);
+        }
+
+        order.cancel();
+
+
+    }
 }

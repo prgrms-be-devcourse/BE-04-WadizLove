@@ -1,18 +1,17 @@
 package com.prgrms.wadiz.domain.post.entity;
 
 import com.prgrms.wadiz.global.BaseEntity;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-import static lombok.AccessLevel.PROTECTED;
-
 @Entity
 @Table(name = "posts")
 @Getter
-@NoArgsConstructor(access = PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
