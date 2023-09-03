@@ -6,6 +6,8 @@ import com.prgrms.wadiz.domain.reward.dto.request.RewardRequestDTO;
 import com.prgrms.wadiz.domain.reward.dto.response.RewardResponseDTO;
 import com.prgrms.wadiz.domain.reward.entity.Reward;
 import com.prgrms.wadiz.domain.reward.repository.RewardRepository;
+import com.prgrms.wadiz.global.util.exception.BaseException;
+import com.prgrms.wadiz.global.util.exception.ErrorCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +27,7 @@ public class RewardService {
     @Transactional(readOnly = true)
     public RewardResponseDTO getReward(Long rewardId) {
         Reward reward = rewardRepository.findById(rewardId)
-                .orElseThrow(() -> new RuntimeException("id에 해당하는 reward가 존재하지 않습니다."));
+                .orElseThrow(() -> new BaseException(ErrorCode.REWARD_NOT_FOUND));
 
         return RewardResponseDTO.of(
                 reward.getRewardName(),
@@ -39,7 +41,7 @@ public class RewardService {
     @Transactional
     public RewardResponseDTO createReward(Long projectId, RewardRequestDTO dto) {
         Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new RuntimeException("id에 해당하는 프로젝트가 없습니다."));
+                .orElseThrow(() -> new BaseException(ErrorCode.PROJECT_NOT_FOUND));
 
         Reward reward = Reward.builder()
                 .rewardName(dto.rewardName())
@@ -64,7 +66,7 @@ public class RewardService {
     @Transactional
     public RewardResponseDTO updateReward(Long rewardId, RewardRequestDTO dto) {
         Reward reward = rewardRepository.findById(rewardId)
-                .orElseThrow(() -> new RuntimeException("id에 해당하는 리워드가 없습니다."));
+                .orElseThrow(() -> new BaseException(ErrorCode.REWARD_NOT_FOUND));
 
         reward.modifyRewardName(dto.rewardName());
         reward.modifyRewardDescription(dto.rewardDescription());
