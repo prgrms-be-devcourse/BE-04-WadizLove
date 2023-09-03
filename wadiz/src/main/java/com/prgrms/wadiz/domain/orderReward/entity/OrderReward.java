@@ -43,18 +43,6 @@ public class OrderReward extends BaseEntity {
         this.orderRewardQuantity = validatePositive(orderRewardQuantity);
     }
 
-    public static OrderReward createOrderReward(Reward reward, Integer orderRewardPrice, Integer orderRewardQuantity){
-        OrderReward orderReward = OrderReward.builder()
-                .reward(reward)
-                .orderRewardPrice(orderRewardPrice)
-                .orderRewardQuantity(orderRewardQuantity)
-                .build();
-
-        reward.removeStock(orderRewardQuantity);
-
-        return orderReward;
-    }
-
     public void changeOrder(Order order) {
         this.order = order;
         order.getOrderRewards().add(this);

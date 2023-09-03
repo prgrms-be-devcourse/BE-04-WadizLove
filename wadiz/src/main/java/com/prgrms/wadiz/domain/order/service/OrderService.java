@@ -50,13 +50,26 @@ public class OrderService {
 
                     Integer orderQuantity = orderRewardRequest.orderQuantity();
 
-                    return OrderReward.createOrderReward(reward, reward.getRewardPrice(), orderQuantity);
+                    OrderReward orderReward = OrderReward.builder()
+                            .reward(reward)
+                            .orderRewardPrice(reward.getRewardPrice())
+                            .orderRewardQuantity(orderQuantity)
+                            .build();
+                    reward.removeStock(orderQuantity);
+
+                    return orderReward;
                 })
                 .collect(Collectors.toList());
 
-        Order order = orderRepository.save(Order.createOrder(supporter, orderRewards));
+        Order order = Order.builder()
+                .supporter(supporter)
+                .orderRewards(orderRewards)
+                .build();
+        orderRewards.forEach(order::addOrderReward);
 
-        return OrderResponseDTO.from(order);
+        Order savedOrder = orderRepository.save(order);
+
+        return OrderResponseDTO.from(savedOrder);
     }
 
     @Transactional(readOnly = true)

@@ -35,35 +35,11 @@ public class Order extends BaseEntity {
     @Builder
     public Order(
             Supporter supporter,
-            OrderStatus orderStatus
-    ) {
-        this.supporter = supporter;
-        this.orderStatus = orderStatus;
-    }
-
-    @Builder
-    public Order(Long orderId, Supporter supporter, List<OrderReward> orderRewards, OrderStatus orderStatus) {
-        this.orderId = orderId;
-        this.supporter = supporter;
-        this.orderRewards = orderRewards;
-        this.orderStatus = orderStatus;
-    }
-
-    public static Order createOrder(
-            Supporter supporter,
             List<OrderReward> orderRewards
     ) {
-        Order order = Order.builder()
-                .supporter(supporter)
-                .build();
-
-        for(OrderReward orderReward : orderRewards){
-            order.addOrderReward(orderReward);
-        }
-
-        order.setOrderStatus(OrderStatus.REQUESTED);
-
-        return order;
+        this.supporter = supporter;
+        this.orderRewards = orderRewards;
+        this.orderStatus = OrderStatus.REQUESTED;
     }
 
     //createOrder와 관련된 연관관계 편의 메서드
