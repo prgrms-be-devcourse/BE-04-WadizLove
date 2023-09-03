@@ -1,14 +1,11 @@
 package com.prgrms.wadiz.domain.supporter.entity;
 
-import com.prgrms.wadiz.domain.supporter.dto.request.SupporterCreateRequestDTO;
-import com.prgrms.wadiz.domain.supporter.dto.response.SupporterResponseDTO;
 import com.prgrms.wadiz.global.BaseEntity;
 
 import lombok.Builder;
 import lombok.Getter;
 
 import lombok.*;
-import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
 
@@ -16,7 +13,7 @@ import javax.persistence.*;
 @Getter
 @Table(name = "supporters")
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE supporters SET activated = false WHERE supporter_id = ?")
+// @SQLDelete(sql = "UPDATE supporters SET activated = false WHERE supporter_id = ?")  jpa이용핮기!
 public class Supporter extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +26,7 @@ public class Supporter extends BaseEntity {
     private String supporterEmail;
   
     @Column(nullable = false)
-    private boolean activated = Boolean.TRUE; // 활성화 여부 -> 삭제 시 FALSE
+    private boolean activated = Boolean.TRUE; // 활성화 여부 -> 삭제 시 FALSE //// user 상태를 하나 만들기 (정지,탈퇴 등등)
 
     @Builder
     public Supporter(
@@ -57,14 +54,6 @@ public class Supporter extends BaseEntity {
 
     public void changeEmail(String email) {
         this.supporterEmail = email;
-    }
-
-    public static SupporterCreateRequestDTO toDTOForRequest(Supporter supporter) {
-        return new SupporterCreateRequestDTO(supporter.getSupporterName(), supporter.getSupporterEmail());
-    }
-
-    public static SupporterResponseDTO toDTOForResponse(Supporter supporter) {
-        return new SupporterResponseDTO(supporter.getSupporterName(), supporter.getSupporterEmail());
     }
 
 }

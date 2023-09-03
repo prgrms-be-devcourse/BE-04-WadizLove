@@ -6,8 +6,8 @@ import lombok.Builder;
 
 @Builder
 public record SupporterResponseDTO(String name, String email) {
-    public Supporter toEntity() {
-        return Supporter.builder()
+    public static SupporterResponseDTO of(String name, String email) {
+        return SupporterResponseDTO.builder()
                 .name(name)
                 .email(email)
                 .build();
