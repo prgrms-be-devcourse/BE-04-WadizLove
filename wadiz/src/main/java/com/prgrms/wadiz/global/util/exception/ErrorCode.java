@@ -16,7 +16,8 @@ public enum ErrorCode {
     MAKER_NOT_FOUND(222,"메이커  정보를 찾을 수 없습니다."),
     PROJECT_NOT_FOUND(223, "프로젝트 정보를 찾을 수 없습니다."),
 
-    POST_NOT_FOUND(-2000, "게시글 정보를 찾을 수 없습니다.");
+    POST_NOT_FOUND(-2000, "게시글 정보를 찾을 수 없습니다."),
+    ORDER_NOT_FOUND(-2001,"주문 정보를 찾을 수 없습니다." );
 
     private int code;
     private String errorMessage;

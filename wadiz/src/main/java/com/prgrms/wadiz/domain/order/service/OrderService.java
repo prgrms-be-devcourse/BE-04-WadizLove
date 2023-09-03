@@ -6,7 +6,9 @@ import com.prgrms.wadiz.domain.order.entity.Order;
 import com.prgrms.wadiz.domain.order.repository.OrderRepository;
 import com.prgrms.wadiz.domain.orderReward.entity.OrderReward;
 import com.prgrms.wadiz.domain.reward.entity.Reward;
+import com.prgrms.wadiz.domain.reward.repository.RewardRepository;
 import com.prgrms.wadiz.domain.supporter.entity.Supporter;
+import com.prgrms.wadiz.domain.supporter.repository.SupporterRepository;
 import com.prgrms.wadiz.global.util.exception.BaseException;
 import com.prgrms.wadiz.global.util.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +43,7 @@ public class OrderService {
                 .map(orderRewardRequest -> {
                     Reward reward = rewardRepository.findById(orderRewardRequest.rewardId())
                             .orElseThrow(() -> {
-                                log.error("Supporter {} is not found", supporterId);
+                                log.error("reward is not found");
 
                                 return new BaseException(ErrorCode.UNKNOWN);
                             });
@@ -57,4 +59,14 @@ public class OrderService {
         return OrderResponseDTO.from(order);
     }
 
+    @Transactional(readOnly = true)
+    public OrderResponseDTO getOrder(Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> {
+            log.error("Order {} is not found", orderId);
+
+            return new BaseException(ErrorCode.ORDER_NOT_FOUND);
+        });
+
+        return OrderResponseDTO.from(order);
+    }
 }
