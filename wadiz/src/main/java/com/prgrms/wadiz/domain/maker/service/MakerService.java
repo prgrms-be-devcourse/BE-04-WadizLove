@@ -1,7 +1,6 @@
 package com.prgrms.wadiz.domain.maker.service;
 
-import com.prgrms.wadiz.domain.maker.dto.request.MakerCreateRequestDTO;
-import com.prgrms.wadiz.domain.maker.dto.request.MakerModifyRequestDTO;
+import com.prgrms.wadiz.domain.maker.dto.request.MakerRequestDTO;
 import com.prgrms.wadiz.domain.maker.dto.response.MakerResponseDTO;
 import com.prgrms.wadiz.domain.maker.entity.Maker;
 import com.prgrms.wadiz.domain.maker.repository.MakerRepository;
@@ -18,30 +17,38 @@ public class MakerService {
     }
 
     @Transactional
-    public MakerResponseDTO signUpMaker(MakerCreateRequestDTO dto) {
-        Maker maker = makerRepository.save(dto.toEntity());
-        return Maker.toDTOForResponse(maker);
+    public MakerResponseDTO signUpMaker(MakerRequestDTO dto) {
+        Maker maker = Maker.builder()
+                .makerName(dto.makerName())
+                .makerBrand(dto.makerBrand())
+                .makerEmail(dto.makerEmail())
+                .build();
+
+        Maker savedMaker = makerRepository.save(maker);
+
+        return MakerResponseDTO.of(savedMaker.getMakerName(), savedMaker.getMakerBrand(), savedMaker.getMakerEmail());
     }
 
     public MakerResponseDTO getMaker(Long id) {
         Maker findMaker = makerRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("id에 해당하는 Maker가 존재하지 않습니다."));
-        return Maker.toDTOForResponse(findMaker);
+        return MakerResponseDTO.of(findMaker.getMakerName(), findMaker.getMakerBrand(), findMaker.getMakerEmail());
     }
 
-    public MakerResponseDTO modifyMaker(
+    public MakerResponseDTO updateMaker(
             Long id,
-            MakerModifyRequestDTO dto
+            MakerRequestDTO dto
     ) {
 
-        MakerResponseDTO makerDTO = getMaker(id);
-        Maker maker = makerDTO.toEntity();
+        Maker maker = makerRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("id에 해당하는 Maker가 존재하지 않습니다."));
+
         maker.changeMakerName(dto.makerName());
         maker.chaneMakerBrand(dto.makerBrand());
         maker.changeMakerEmail(dto.makerEmail());
 
-        Maker save = makerRepository.save(maker);
-        return Maker.toDTOForResponse(save);
+        Maker savedMaker = makerRepository.save(maker);
+        return MakerResponseDTO.of(savedMaker.getMakerName(), savedMaker.getMakerBrand(), savedMaker.getMakerEmail());
     }
 
     @Transactional
