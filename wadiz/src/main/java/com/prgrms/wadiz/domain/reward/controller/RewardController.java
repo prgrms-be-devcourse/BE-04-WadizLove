@@ -21,8 +21,8 @@ public class RewardController {
             @PathVariable Long projectId,
             RewardRequestDTO dto
     ) {
-        RewardResponseDTO rewardResponseDTO = rewardService.createReward(projectId, dto);
-        return ResponseEntity.ok(ResponseFactory.getSingleResult(rewardResponseDTO));
+        rewardService.createReward(projectId, dto);
+        return ResponseEntity.ok(ResponseFactory.getSuccessResult());
     }
 
     @PutMapping("{rewardId}")
@@ -30,8 +30,8 @@ public class RewardController {
             @PathVariable Long rewardId,
             RewardRequestDTO dto
     ) {
-        RewardResponseDTO rewardResponseDTO = rewardService.updateReward(rewardId, dto);
-        return ResponseEntity.ok(ResponseFactory.getSingleResult(rewardResponseDTO));
+        rewardService.updateReward(rewardId, dto);
+        return ResponseEntity.ok(ResponseFactory.getSuccessResult());
     }
 
     @GetMapping("{rewardId}")
