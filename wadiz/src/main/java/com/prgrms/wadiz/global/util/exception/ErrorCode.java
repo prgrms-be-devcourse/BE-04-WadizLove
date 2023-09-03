@@ -15,6 +15,8 @@ public enum ErrorCode {
     FUNDING_NOT_FOUND(-1000, "펀딩 정보를 찾을 수 없습니다."),
     MAKER_NOT_FOUND(222,"메이커  정보를 찾을 수 없습니다."),
     PROJECT_NOT_FOUND(223, "프로젝트 정보를 찾을 수 없습니다."),
+    SUPPORTER_NOT_FOUND(224,"서포터 정보를 찾을 수 없습니다."),
+    REWARD_NOT_FOUND(225, "리워드 정보를 찾을 수 없습니다."),
 
     POST_NOT_FOUND(-2000, "게시글 정보를 찾을 수 없습니다.");
 
