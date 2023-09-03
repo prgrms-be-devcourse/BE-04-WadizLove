@@ -52,7 +52,7 @@ class SupporterServiceTest {
                 .build();
 
         //when
-        SupporterResponseDTO supporterResponse = supporterService.createSupporter(supporterDTO);
+        SupporterResponseDTO supporterResponse = supporterService.signUpSupporter(supporterDTO);
 
         //then
         assertThat(supporterResponse).isNotNull();
@@ -69,7 +69,7 @@ class SupporterServiceTest {
 
         when(supporterRepository.save(any(Supporter.class))).then(AdditionalAnswers.returnsFirstArg());
 
-        SupporterResponseDTO responseDTO = supporterService.createSupporter(supporterDTO);
+        SupporterResponseDTO responseDTO = supporterService.signUpSupporter(supporterDTO);
         Supporter supporter1 = Supporter.builder()
                 .name(responseDTO.name())
                 .email(responseDTO.email())
@@ -107,7 +107,7 @@ class SupporterServiceTest {
 
         when(supporterRepository.save(any(Supporter.class))).then(AdditionalAnswers.returnsFirstArg());
 
-        SupporterResponseDTO responseDTO = supporterService.createSupporter(supporterDTO);
+        SupporterResponseDTO responseDTO = supporterService.signUpSupporter(supporterDTO);
         Supporter supporter1 = Supporter.builder()
                 .name(responseDTO.name())
                 .email(responseDTO.email())
