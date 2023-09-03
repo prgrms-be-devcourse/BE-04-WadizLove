@@ -1,7 +1,6 @@
 package com.prgrms.wadiz.domain.supporter.service;
 
-import com.prgrms.wadiz.domain.supporter.dto.request.SupporterCreateRequestDTO;
-import com.prgrms.wadiz.domain.supporter.dto.request.SupporterUpdateRequestDTO;
+import com.prgrms.wadiz.domain.supporter.dto.request.SupporterRequestDTO;
 import com.prgrms.wadiz.domain.supporter.dto.response.SupporterResponseDTO;
 import com.prgrms.wadiz.domain.supporter.entity.Supporter;
 import com.prgrms.wadiz.domain.supporter.repository.SupporterRepository;
@@ -40,28 +39,30 @@ class SupporterServiceTest {
     @DisplayName("서포터를 생성하여 저장한다")
     void saveTest() {
         //given
-        SupporterCreateRequestDTO supporterDTO = new SupporterCreateRequestDTO(
+        SupporterRequestDTO supporterDTO = new SupporterRequestDTO(
                 supporter.getSupporterName(),
                 supporter.getSupporterEmail()
         );
 
         when(supporterRepository.save(any(Supporter.class))).then(AdditionalAnswers.returnsFirstArg());
 
-        Supporter supporter1 = supporterDTO.toEntity();
+        Supporter supporter1 = Supporter.builder()
+                .name(supporterDTO.name())
+                .email(supporterDTO.email())
+                .build();
 
         //when
         SupporterResponseDTO supporterResponse = supporterService.createSupporter(supporterDTO);
-        Supporter supporter2 = supporterResponse.toEntity();
 
         //then
-        assertThat(supporter1.getSupporterId()).isEqualTo(supporter2.getSupporterId());
+        assertThat(supporterResponse).isNotNull();
     }
 
     @Test
     @DisplayName("서포터의 정보를 수정한다.")
     void updateTest() {
         //given
-        SupporterCreateRequestDTO supporterDTO= new SupporterCreateRequestDTO(
+        SupporterRequestDTO supporterDTO= new SupporterRequestDTO(
                 supporter.getSupporterName(),
                 supporter.getSupporterEmail()
         );
@@ -69,10 +70,14 @@ class SupporterServiceTest {
         when(supporterRepository.save(any(Supporter.class))).then(AdditionalAnswers.returnsFirstArg());
 
         SupporterResponseDTO responseDTO = supporterService.createSupporter(supporterDTO);
-        Supporter supporter1 = responseDTO.toEntity();
+        Supporter supporter1 = Supporter.builder()
+                .name(responseDTO.name())
+                .email(responseDTO.email())
+                .build();
+
         Long supporter1Id = supporter1.getSupporterId();
 
-        SupporterUpdateRequestDTO supporterUpdateRequestDTO = new SupporterUpdateRequestDTO(
+        SupporterRequestDTO supporterUpdateRequestDTO = new SupporterRequestDTO(
                 "update",
                 "update@gmail.com"
         );
@@ -85,10 +90,8 @@ class SupporterServiceTest {
                 supporterUpdateRequestDTO
         );
 
-        //then
-        assertThat(supporterResponseDTO.toEntity().getSupporterId())
-                .isEqualTo(supporter1.getSupporterId());
 
+        //then
         assertThat(supporterResponseDTO.name())
                 .isEqualTo("update");
     }
@@ -97,7 +100,7 @@ class SupporterServiceTest {
     @DisplayName("서포터를 soft-delete 한다.")
     void softDeleteTest() {
         //given
-        SupporterCreateRequestDTO supporterDTO = new SupporterCreateRequestDTO(
+        SupporterRequestDTO supporterDTO = new SupporterRequestDTO(
                 supporter.getSupporterName(),
                 supporter.getSupporterEmail()
         );
@@ -105,7 +108,11 @@ class SupporterServiceTest {
         when(supporterRepository.save(any(Supporter.class))).then(AdditionalAnswers.returnsFirstArg());
 
         SupporterResponseDTO responseDTO = supporterService.createSupporter(supporterDTO);
-        Supporter supporter1 = responseDTO.toEntity();
+        Supporter supporter1 = Supporter.builder()
+                .name(responseDTO.name())
+                .email(responseDTO.email())
+                .build();
+
         Long supporter1Id = supporter1.getSupporterId();
 
         //when
