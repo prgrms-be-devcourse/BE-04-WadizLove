@@ -1,6 +1,6 @@
 package com.prgrms.wadiz.domain.supporter.service;
 
-import com.prgrms.wadiz.domain.supporter.dto.request.SupporterRequestDTO;
+import com.prgrms.wadiz.domain.supporter.dto.request.SupporterCreateRequestDTO;
 import com.prgrms.wadiz.domain.supporter.dto.response.SupporterResponseDTO;
 import com.prgrms.wadiz.domain.supporter.entity.Supporter;
 import com.prgrms.wadiz.domain.supporter.repository.SupporterRepository;
@@ -39,7 +39,7 @@ class SupporterServiceTest {
     @DisplayName("서포터를 생성하여 저장한다")
     void saveTest() {
         //given
-        SupporterRequestDTO supporterDTO = new SupporterRequestDTO(
+        SupporterCreateRequestDTO supporterDTO = new SupporterCreateRequestDTO(
                 supporter.getSupporterName(),
                 supporter.getSupporterEmail()
         );
@@ -62,7 +62,7 @@ class SupporterServiceTest {
     @DisplayName("서포터의 정보를 수정한다.")
     void updateTest() {
         //given
-        SupporterRequestDTO supporterDTO= new SupporterRequestDTO(
+        SupporterCreateRequestDTO supporterDTO= new SupporterCreateRequestDTO(
                 supporter.getSupporterName(),
                 supporter.getSupporterEmail()
         );
@@ -77,7 +77,7 @@ class SupporterServiceTest {
 
         Long supporter1Id = supporter1.getSupporterId();
 
-        SupporterRequestDTO supporterUpdateRequestDTO = new SupporterRequestDTO(
+        SupporterCreateRequestDTO supporterUpdateRequestDTO = new SupporterCreateRequestDTO(
                 "update",
                 "update@gmail.com"
         );
@@ -100,7 +100,7 @@ class SupporterServiceTest {
     @DisplayName("서포터를 soft-delete 한다.")
     void softDeleteTest() {
         //given
-        SupporterRequestDTO supporterDTO = new SupporterRequestDTO(
+        SupporterCreateRequestDTO supporterDTO = new SupporterCreateRequestDTO(
                 supporter.getSupporterName(),
                 supporter.getSupporterEmail()
         );

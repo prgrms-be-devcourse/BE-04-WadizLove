@@ -1,6 +1,6 @@
 package com.prgrms.wadiz.domain.maker.service;
 
-import com.prgrms.wadiz.domain.maker.dto.request.MakerRequestDTO;
+import com.prgrms.wadiz.domain.maker.dto.request.MakerCreateRequestDTO;
 import com.prgrms.wadiz.domain.maker.dto.response.MakerResponseDTO;
 import com.prgrms.wadiz.domain.maker.entity.Maker;
 import com.prgrms.wadiz.domain.maker.repository.MakerRepository;
@@ -42,7 +42,7 @@ class MakerServiceTest {
     @DisplayName("메이커 회원가입을 성공한다.")
     void signUpMakerTest() {
         //given
-        MakerRequestDTO makerRequestDTO = MakerRequestDTO.builder()
+        MakerCreateRequestDTO makerCreateRequestDTO = MakerCreateRequestDTO.builder()
                 .makerName(maker.getMakerName())
                 .makerBrand(maker.getMakerBrand())
                 .makerEmail(maker.getMakerEmail())
@@ -51,7 +51,7 @@ class MakerServiceTest {
         when(makerRepository.save(any(Maker.class))).then(AdditionalAnswers.returnsFirstArg());
 
         //when
-        MakerResponseDTO makerResponseDTO = makerService.signUpMaker(makerRequestDTO);
+        MakerResponseDTO makerResponseDTO = makerService.signUpMaker(makerCreateRequestDTO);
 
         //then
         assertThat(makerResponseDTO).isNotNull();
@@ -61,7 +61,7 @@ class MakerServiceTest {
     @DisplayName("메이커 정보를 수정한다.")
     void modifyMakerTest() {
         //given
-        MakerRequestDTO makerCreateRequestDTO = new MakerRequestDTO(
+        MakerCreateRequestDTO makerCreateRequestDTO = new MakerCreateRequestDTO(
                 maker.getMakerName(),
                 maker.getMakerBrand(),
                 maker.getMakerEmail()
@@ -71,7 +71,7 @@ class MakerServiceTest {
 
         MakerResponseDTO makerResponseDTO = makerService.signUpMaker(makerCreateRequestDTO);
 
-        MakerRequestDTO makerUpdateRequestDTO = MakerRequestDTO.builder()
+        MakerCreateRequestDTO makerUpdateRequestDTO = MakerCreateRequestDTO.builder()
                 .makerName("update")
                 .makerBrand("updateBrand")
                 .makerEmail("update@gmail.com")
@@ -88,7 +88,7 @@ class MakerServiceTest {
     @DisplayName("메이커 soft-delete 테스트를 한다.")
     void softDeleteTest() {
         //given
-        MakerRequestDTO makerRequestDTO = new MakerRequestDTO(
+        MakerCreateRequestDTO makerCreateRequestDTO = new MakerCreateRequestDTO(
                 maker.getMakerName(),
                 maker.getMakerBrand(),
                 maker.getMakerEmail()
@@ -96,7 +96,7 @@ class MakerServiceTest {
 
         when(makerRepository.save(any(Maker.class))).then(AdditionalAnswers.returnsFirstArg());
 
-        MakerResponseDTO makerResponseDTO = makerService.signUpMaker(makerRequestDTO);
+        MakerResponseDTO makerResponseDTO = makerService.signUpMaker(makerCreateRequestDTO);
 
         //when
         makerService.deleteMaker(maker.getMakerId());
