@@ -1,6 +1,6 @@
 package com.prgrms.wadiz.domain.maker.entity;
 
-import com.prgrms.wadiz.global.BaseEntity;
+import com.prgrms.wadiz.domain.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

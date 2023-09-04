@@ -21,9 +21,9 @@ import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class FundingServiceTest {
+class FundingServiceFacadeTest {
     @InjectMocks
-    private FundingService fundingService;
+    private FundingServiceFacade fundingServiceFacade;
     @Mock
     private FundingRepository fundingRepository;
 
@@ -50,7 +50,7 @@ class FundingServiceTest {
         when(fundingRepository.save(any())).thenReturn(expectedFunding);
 
         // when
-        Funding actualFunding = fundingService.createFunding(requestDTO);
+        Funding actualFunding = fundingServiceFacade.createFunding(requestDTO);
 
         // then
         assertThat(actualFunding, samePropertyValuesAs(expectedFunding));
@@ -82,7 +82,7 @@ class FundingServiceTest {
         when(fundingRepository.findById(fundingId)).thenReturn(Optional.ofNullable(funding));
 
         // when
-        FundingResponseDTO actualFundingResponseDTO = fundingService.getFunding(fundingId);
+        FundingResponseDTO actualFundingResponseDTO = fundingServiceFacade.getFunding(fundingId);
 
         // then
         assertThat(actualFundingResponseDTO, samePropertyValuesAs(expectedFundingResponseDTO));

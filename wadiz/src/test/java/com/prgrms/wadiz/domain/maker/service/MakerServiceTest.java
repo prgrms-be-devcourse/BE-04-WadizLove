@@ -20,13 +20,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class MakerServiceTest {
+class MakerServiceFacadeTest {
 
     @Mock
     MakerRepository makerRepository;
 
     @InjectMocks
-    MakerService makerService;
+    MakerServiceFacade makerServiceFacade;
 
     Maker maker;
 
@@ -52,7 +52,12 @@ class MakerServiceTest {
         when(makerRepository.save(any(Maker.class))).then(AdditionalAnswers.returnsFirstArg());
 
         //when
+<<<<<<< HEAD:wadiz/src/test/java/com/prgrms/wadiz/domain/maker/service/MakerServiceTest.java
         MakerResponseDTO makerResponseDTO = makerService.signUpMaker(makerCreateRequestDTO);
+=======
+        MakerResponseDTO makerResponseDTO = makerServiceFacade.signUpMaker(makerCreateRequestDTO);
+        Maker maker2 = makerResponseDTO.toEntity();
+>>>>>>> fix:wadiz/src/test/java/com/prgrms/wadiz/domain/maker/service/MakerServiceFacadeTest.java
 
         //then
         assertThat(makerResponseDTO).isNotNull();
@@ -70,7 +75,7 @@ class MakerServiceTest {
 
         when(makerRepository.save(any(Maker.class))).then(AdditionalAnswers.returnsFirstArg());
 
-        MakerResponseDTO makerResponseDTO = makerService.signUpMaker(makerCreateRequestDTO);
+        MakerResponseDTO makerResponseDTO = makerServiceFacade.signUpMaker(makerCreateRequestDTO);
 
         MakerUpdateRequestDTO makerUpdateRequestDTO = MakerUpdateRequestDTO.builder()
                 .makerName("update")
@@ -79,7 +84,14 @@ class MakerServiceTest {
                 .build();
 
         //when
+<<<<<<< HEAD:wadiz/src/test/java/com/prgrms/wadiz/domain/maker/service/MakerServiceTest.java
         MakerResponseDTO makerUpdateResponse = makerService.updateMaker(maker.getMakerId(), makerUpdateRequestDTO);
+=======
+        MakerResponseDTO makerResponseDTO1 = makerServiceFacade.modifyMaker(
+                makerResponseDTO.toEntity().getMakerId(),
+                makerModifyRequestDTO
+        );
+>>>>>>> fix:wadiz/src/test/java/com/prgrms/wadiz/domain/maker/service/MakerServiceFacadeTest.java
 
         //then
         assertThat(makerUpdateResponse.makerName()).isEqualTo("update");
@@ -97,10 +109,19 @@ class MakerServiceTest {
 
         when(makerRepository.save(any(Maker.class))).then(AdditionalAnswers.returnsFirstArg());
 
+<<<<<<< HEAD:wadiz/src/test/java/com/prgrms/wadiz/domain/maker/service/MakerServiceTest.java
         MakerResponseDTO makerResponseDTO = makerService.signUpMaker(makerCreateRequestDTO);
 
         //when
         makerService.deleteMaker(maker.getMakerId());
+=======
+        MakerResponseDTO makerResponseDTO = makerServiceFacade.signUpMaker(makerCreateRequestDTO);
+        Maker maker1 = makerResponseDTO.toEntity();
+        Long makerId = maker1.getMakerId();
+
+        //when
+        makerServiceFacade.deleteMaker(makerId);
+>>>>>>> fix:wadiz/src/test/java/com/prgrms/wadiz/domain/maker/service/MakerServiceFacadeTest.java
 
         //then
         verify(makerRepository).deleteById(maker.getMakerId());

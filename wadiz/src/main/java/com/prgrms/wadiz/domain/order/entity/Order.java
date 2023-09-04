@@ -2,7 +2,7 @@ package com.prgrms.wadiz.domain.order.entity;
 
 import com.prgrms.wadiz.domain.supporter.entity.Supporter;
 import com.prgrms.wadiz.domain.order.OrderStatus;
-import com.prgrms.wadiz.global.BaseEntity;
+import com.prgrms.wadiz.domain.BaseEntity;
 import com.prgrms.wadiz.domain.orderReward.entity.OrderReward;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -35,35 +35,11 @@ public class Order extends BaseEntity {
     @Builder
     public Order(
             Supporter supporter,
-            OrderStatus orderStatus
-    ) {
-        this.supporter = supporter;
-        this.orderStatus = orderStatus;
-    }
-
-    @Builder
-    public Order(Long orderId, Supporter supporter, List<OrderReward> orderRewards, OrderStatus orderStatus) {
-        this.orderId = orderId;
-        this.supporter = supporter;
-        this.orderRewards = orderRewards;
-        this.orderStatus = orderStatus;
-    }
-
-    public static Order createOrder(
-            Supporter supporter,
             List<OrderReward> orderRewards
     ) {
-        Order order = Order.builder()
-                .supporter(supporter)
-                .build();
-
-        for(OrderReward orderReward : orderRewards){
-            order.addOrderReward(orderReward);
-        }
-
-        order.setOrderStatus(OrderStatus.REQUESTED);
-
-        return order;
+        this.supporter = supporter;
+        this.orderRewards = orderRewards;
+        this.orderStatus = OrderStatus.REQUESTED;
     }
 
     //createOrder와 관련된 연관관계 편의 메서드
@@ -72,7 +48,14 @@ public class Order extends BaseEntity {
         orderReward.changeOrder(this);
     }
 
+    public void cancel() {
+        this.setOrderStatus(OrderStatus.CANCELED);
+        orderRewards.forEach(OrderReward::cancel);
+    }
+
     public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
+
+
 }

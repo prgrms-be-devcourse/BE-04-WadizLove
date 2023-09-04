@@ -3,26 +3,23 @@ package com.prgrms.wadiz.domain.reward.entity;
 import com.prgrms.wadiz.domain.project.entity.Project;
 import com.prgrms.wadiz.domain.reward.RewardStatus.RewardStatus;
 import com.prgrms.wadiz.domain.reward.RewardType.RewardType;
-import com.prgrms.wadiz.domain.reward.dto.response.RewardResponseDTO;
-import com.prgrms.wadiz.global.BaseEntity;
+import com.prgrms.wadiz.domain.BaseEntity;
 
 import com.prgrms.wadiz.global.util.exception.BaseException;
 import com.prgrms.wadiz.global.util.exception.ErrorCode;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
 
-import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
 @Table(name = "rewards")
-@NoArgsConstructor(access = PROTECTED)
-// @SQLDelete(sql = "UPDATE rewards SET activated = false WHERE reward_id = ?") jpa 로
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Reward extends BaseEntity {
     private static final int ZERO_STOCK = 0;
     @Id
@@ -65,7 +62,6 @@ public class Reward extends BaseEntity {
         }
 
         this.rewardQuantity = restQuantity;
-
     }
 
     @Builder
@@ -104,5 +100,11 @@ public class Reward extends BaseEntity {
         this.project = project;
     }
 
-
+    public void addQuantity(Integer orderRewardQuantity) {
+        this.rewardQuantity += orderRewardQuantity;
+    }
 }
+
+
+
+

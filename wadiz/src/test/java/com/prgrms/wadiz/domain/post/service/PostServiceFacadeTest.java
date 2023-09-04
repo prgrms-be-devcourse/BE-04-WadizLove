@@ -18,9 +18,9 @@ import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class PostServiceTest {
+class PostServiceFacadeTest {
     @InjectMocks
-    private PostService postService;
+    private PostServiceFacade postServiceFacade;
 
     @Mock
     private PostRepository postRepository;
@@ -47,7 +47,7 @@ class PostServiceTest {
         when(postRepository.save(any())).thenReturn(expectedPost);
 
         // when
-        Post actualPost = postService.createPost(requestDTO);
+        Post actualPost = postServiceFacade.createPost(requestDTO);
 
         // then
         assertThat(actualPost, samePropertyValuesAs(expectedPost));
@@ -77,7 +77,7 @@ class PostServiceTest {
         when(postRepository.findById(postId)).thenReturn(Optional.ofNullable(post));
 
         // when
-        PostResponseDTO actualPostResponseDTO = postService.getPost(postId);
+        PostResponseDTO actualPostResponseDTO = postServiceFacade.getPost(postId);
 
         // then
         assertThat(actualPostResponseDTO, samePropertyValuesAs(expectedPostResponseDTO));

@@ -1,4 +1,4 @@
-package com.prgrms.wadiz.global;
+package com.prgrms.wadiz.domain;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

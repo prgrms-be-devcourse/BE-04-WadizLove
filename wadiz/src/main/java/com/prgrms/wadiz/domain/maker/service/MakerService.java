@@ -13,8 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class MakerService {
-
+public class MakerServiceFacade {
     private final MakerRepository makerRepository;
 
     @Transactional

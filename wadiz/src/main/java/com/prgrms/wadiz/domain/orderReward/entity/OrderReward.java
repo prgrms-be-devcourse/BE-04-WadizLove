@@ -2,7 +2,7 @@ package com.prgrms.wadiz.domain.orderReward.entity;
 
 import com.prgrms.wadiz.domain.reward.entity.Reward;
 import com.prgrms.wadiz.domain.order.entity.Order;
-import com.prgrms.wadiz.global.BaseEntity;
+import com.prgrms.wadiz.domain.BaseEntity;
 import com.prgrms.wadiz.global.util.exception.BaseException;
 import com.prgrms.wadiz.global.util.exception.ErrorCode;
 import lombok.AccessLevel;
@@ -43,21 +43,14 @@ public class OrderReward extends BaseEntity {
         this.orderRewardQuantity = validatePositive(orderRewardQuantity);
     }
 
-    public static OrderReward createOrderReward(Reward reward, Integer orderRewardPrice, Integer orderRewardQuantity){
-        OrderReward orderReward = OrderReward.builder()
-                .reward(reward)
-                .orderRewardPrice(orderRewardPrice)
-                .orderRewardQuantity(orderRewardQuantity)
-                .build();
-
-        reward.removeStock(orderRewardQuantity);
-
-        return orderReward;
-    }
-
     public void changeOrder(Order order) {
         this.order = order;
         order.getOrderRewards().add(this);
+    }
+
+    public void cancel() {
+        getReward().addQuantity(orderRewardQuantity);
+
     }
 
     private Integer validatePositive(Integer orderRewardQuantity) {
@@ -67,4 +60,6 @@ public class OrderReward extends BaseEntity {
 
         return orderRewardQuantity;
     }
+
+
 }

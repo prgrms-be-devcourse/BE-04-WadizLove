@@ -12,15 +12,17 @@ import com.prgrms.wadiz.global.util.exception.ErrorCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
-public class RewardService {
+public class RewardServiceFacade {
 
     private final RewardRepository rewardRepository;
 
     private final ProjectRepository projectRepository;
 
 
-    public RewardService(RewardRepository rewardRepository, ProjectRepository projectRepository) {
+    public RewardServiceFacade(RewardRepository rewardRepository, ProjectRepository projectRepository) {
         this.rewardRepository = rewardRepository;
         this.projectRepository = projectRepository;
     }
@@ -68,5 +70,13 @@ public class RewardService {
     @Transactional
     public void deleteReward(Long rewardId) {
         rewardRepository.deleteById(rewardId);
+    }
+
+    public boolean isRewardsExist(Long projectId) {
+        return false;
+    }
+
+    public List<RewardResponseDTO> getRewardsByProjectId(Long projectId) {
+        return null;
     }
 }
