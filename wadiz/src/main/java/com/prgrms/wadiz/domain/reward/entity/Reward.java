@@ -84,29 +84,21 @@ public class Reward extends BaseEntity {
         this.rewardStatus = RewardStatus.IN_STOCK;
     }
 
-    public void modifyRewardName(String rewardName) {
+    public void updateReward(
+            String rewardName,
+            String rewardDescription,
+            Integer rewardQuantity,
+            Integer rewardPrice,
+            RewardType rewardType,
+            RewardStatus rewardStatus) {
         this.rewardName = rewardName;
-    }
-
-    public void modifyRewardDescription(String rewardDescription) {
         this.rewardDescription = rewardDescription;
-    }
-
-    public void modifyRewardQuantity(Integer rewardQuantity) {
         this.rewardQuantity = rewardQuantity;
-    }
-
-    public void modifyRewardPrice(Integer rewardPrice) {
         this.rewardPrice = rewardPrice;
-    }
-
-    public void modifyRewardType(RewardType rewardType) {
         this.rewardType = rewardType;
-    }
-
-    public void modifyRewardStatus(RewardStatus rewardStatus) {
         this.rewardStatus = rewardStatus;
     }
+
 
     public void allocateProject(Project project) {
         this.project = project;
