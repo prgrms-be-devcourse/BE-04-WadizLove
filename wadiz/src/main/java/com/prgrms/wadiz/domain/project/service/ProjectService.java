@@ -4,7 +4,7 @@ import com.prgrms.wadiz.domain.funding.dto.response.FundingResponseDTO;
 import com.prgrms.wadiz.domain.funding.service.FundingServiceFacade;
 import com.prgrms.wadiz.domain.maker.dto.response.MakerResponseDTO;
 import com.prgrms.wadiz.domain.maker.entity.Maker;
-import com.prgrms.wadiz.domain.maker.service.MakerServiceFacade;
+import com.prgrms.wadiz.domain.maker.service.MakerService;
 import com.prgrms.wadiz.domain.post.dto.response.PostResponseDTO;
 import com.prgrms.wadiz.domain.reward.dto.response.RewardResponseDTO;
 import com.prgrms.wadiz.global.util.exception.ErrorCode;
@@ -23,7 +23,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ProjectService {
-    private final MakerServiceFacade makerServiceFacade;
+    private final MakerService makerService;
     private final FundingServiceFacade fundingServiceFacade;
     private final PostServiceFacade postServiceFacade;
     private final RewardServiceFacade rewardServiceFacade;
@@ -32,7 +32,7 @@ public class ProjectService {
 
     @Transactional
     public ProjectResponseDTO startProject(Long makerId) {
-        MakerServiceDTO makerServiceDTO = makerServiceFacade.getMakerDTO(makerId);
+        MakerServiceDTO makerServiceDTO = makerService.getMakerDTO(makerId);
         Maker maker = MakerServiceDTO.toEntity(makerServiceDTO);
 
         Project project = Project.builder()
