@@ -18,15 +18,12 @@ public class ProjectController {
     public ResponseEntity<ResponseTemplate> startProject(@PathVariable Long makerId) {
         ProjectResponseDTO projectResponseDTO = projectService.startProject(makerId);
 
-        return ResponseEntity.ok(ResponseFactory.getSingleResult(projectResponseDTO));
-    }
-
-    @PostMapping("/{makerId}/{projectId}")
+    @PostMapping("/{projectId}/maker/{makerId}")
     public ResponseEntity<ResponseTemplate> createProject(
-            @PathVariable Long makerId,
-            @PathVariable Long projectId
+            @PathVariable Long projectId,
+            @PathVariable Long makerId
     ) {
-        projectService.createProject(makerId, projectId);
+        projectService.createProject(projectId, makerId);
 
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());
     }
