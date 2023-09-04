@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class MakerService {
+public class MakerServiceFacade {
 
     private final MakerRepository makerRepository;
 
-    public MakerService(MakerRepository makerRepository) {
+    public MakerServiceFacade(MakerRepository makerRepository) {
         this.makerRepository = makerRepository;
     }
 

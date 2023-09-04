@@ -13,25 +13,22 @@ import org.mockito.AdditionalAnswers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class MakerServiceTest {
+class MakerServiceFacadeTest {
 
     @Mock
     MakerRepository makerRepository;
 
     @InjectMocks
-    MakerService makerService;
+    MakerServiceFacade makerServiceFacade;
 
     Maker maker;
 
@@ -54,7 +51,7 @@ class MakerServiceTest {
         Maker maker1 = makerCreateRequestDTO.toEntity();
 
         //when
-        MakerResponseDTO makerResponseDTO = makerService.signUpMaker(makerCreateRequestDTO);
+        MakerResponseDTO makerResponseDTO = makerServiceFacade.signUpMaker(makerCreateRequestDTO);
         Maker maker2 = makerResponseDTO.toEntity();
 
         //then
@@ -75,7 +72,7 @@ class MakerServiceTest {
         Maker maker1 = makerCreateRequestDTO.toEntity();
         Long makerId = maker1.getMakerId();
 
-        MakerResponseDTO makerResponseDTO = makerService.signUpMaker(makerCreateRequestDTO);
+        MakerResponseDTO makerResponseDTO = makerServiceFacade.signUpMaker(makerCreateRequestDTO);
 
         MakerModifyRequestDTO makerModifyRequestDTO = new MakerModifyRequestDTO(
                 "update",
@@ -87,7 +84,7 @@ class MakerServiceTest {
 
 
         //when
-        MakerResponseDTO makerResponseDTO1 = makerService.modifyMaker(
+        MakerResponseDTO makerResponseDTO1 = makerServiceFacade.modifyMaker(
                 makerResponseDTO.toEntity().getMakerId(),
                 makerModifyRequestDTO
         );
@@ -112,12 +109,12 @@ class MakerServiceTest {
 
         when(makerRepository.save(any(Maker.class))).then(AdditionalAnswers.returnsFirstArg());
 
-        MakerResponseDTO makerResponseDTO = makerService.signUpMaker(makerCreateRequestDTO);
+        MakerResponseDTO makerResponseDTO = makerServiceFacade.signUpMaker(makerCreateRequestDTO);
         Maker maker1 = makerResponseDTO.toEntity();
         Long makerId = maker1.getMakerId();
 
         //when
-        makerService.deleteMaker(makerId);
+        makerServiceFacade.deleteMaker(makerId);
 
         //then
         verify(makerRepository).deleteById(makerId);

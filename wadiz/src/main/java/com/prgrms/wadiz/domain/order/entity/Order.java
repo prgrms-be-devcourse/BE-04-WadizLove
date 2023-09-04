@@ -2,7 +2,7 @@ package com.prgrms.wadiz.domain.order.entity;
 
 import com.prgrms.wadiz.domain.supporter.entity.Supporter;
 import com.prgrms.wadiz.domain.order.OrderStatus;
-import com.prgrms.wadiz.global.BaseEntity;
+import com.prgrms.wadiz.domain.BaseEntity;
 import com.prgrms.wadiz.domain.orderReward.entity.OrderReward;
 import lombok.AccessLevel;
 import lombok.Builder;

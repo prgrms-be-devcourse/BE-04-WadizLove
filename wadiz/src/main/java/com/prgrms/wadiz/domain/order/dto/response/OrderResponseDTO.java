@@ -23,4 +23,8 @@ public record OrderResponseDTO(
                 .orderStatus(order.getOrderStatus())
                 .build();
     }
+
+    public static OrderResponseDTO of(Long orderId, Supporter supporter,OrderReward orderReward){
+
+    }
 }

@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class PostService {
+public class PostServiceFacade {
     private final PostRepository postRepository;
 
     @Transactional
@@ -33,5 +33,13 @@ public class PostService {
                 .orElseThrow(() -> new BaseException(ErrorCode.POST_NOT_FOUND));
 
         return PostResponseDTO.toResponseDTO(post);
+    }
+
+    public boolean isPostExist(Long projectId) {
+        return false;
+    }
+
+    public PostResponseDTO getPostByProjectId(Long projectId) {
+        return null;
     }
 }

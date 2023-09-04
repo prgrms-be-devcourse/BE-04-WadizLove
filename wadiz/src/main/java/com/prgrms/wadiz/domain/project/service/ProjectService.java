@@ -1,19 +1,18 @@
 package com.prgrms.wadiz.domain.project.service;
 
 import com.prgrms.wadiz.domain.funding.dto.response.FundingResponseDTO;
-import com.prgrms.wadiz.domain.funding.service.FundingService;
+import com.prgrms.wadiz.domain.funding.service.FundingServiceFacade;
 import com.prgrms.wadiz.domain.maker.dto.response.MakerResponseDTO;
 import com.prgrms.wadiz.domain.maker.entity.Maker;
-import com.prgrms.wadiz.domain.maker.service.MakerService;
+import com.prgrms.wadiz.domain.maker.service.MakerServiceFacade;
 import com.prgrms.wadiz.domain.post.dto.response.PostResponseDTO;
 import com.prgrms.wadiz.domain.reward.dto.response.RewardResponseDTO;
 import com.prgrms.wadiz.global.util.exception.ErrorCode;
-import com.prgrms.wadiz.domain.post.service.PostService;
+import com.prgrms.wadiz.domain.post.service.PostServiceFacade;
 import com.prgrms.wadiz.domain.project.dto.response.ProjectResponseDTO;
 import com.prgrms.wadiz.domain.project.entity.Project;
 import com.prgrms.wadiz.domain.project.repository.ProjectRepository;
-import com.prgrms.wadiz.domain.maker.repository.MakerRepository;
-import com.prgrms.wadiz.domain.reward.service.RewardService;
+import com.prgrms.wadiz.domain.reward.service.RewardServiceFacade;
 import com.prgrms.wadiz.global.util.exception.BaseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,41 +23,41 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ProjectService {
-    private final MakerService makerService;
-    private final FundingService fundingService;
-    private final PostService postService;
-    private final RewardService rewardService;
+    private final MakerServiceFacade makerServiceFacade;
+    private final FundingServiceFacade fundingServiceFacade;
+    private final PostServiceFacade postServiceFacade;
+    private final RewardServiceFacade rewardServiceFacade;
 
     private final ProjectRepository projectRepository;
-    private final MakerRepository makerRepository;
 
     @Transactional
     public ProjectResponseDTO startProject(Long makerId) {
-        // 질문
-        // 1. repository에 직접 접근해서 정보를 가져오은 것이 좋은가?
-        // 2. makerservice에서 정보를 가져오는 작업을 위임해서 maker 정보를 가져온다.
-        //    -> 그렇다면, makerservice 에서는 도메인을 반환해줘야 하는가, dto를 반환해서 여기서 변환을 해줘야하는가.
-
-        Maker maker = makerRepository.findById(makerId)
-                .orElseThrow(() -> new BaseException(ErrorCode.MAKER_NOT_FOUND));
+        MakerServiceDTO makerServiceDTO = makerServiceFacade.getMakerDTO(makerId);
+        Maker maker = MakerServiceDTO.toEntity(makerServiceDTO);
 
         Project project = Project.builder()
                 .maker(maker)
                 .build();
 
-        return ProjectResponseDTO.from(projectRepository.save(project).getProjectId());
+        return ProjectResponseDTO.of(projectRepository.save(project).getProjectId());
     }
 
     @Transactional
-    public void createProject(Long makerId, Long projectId) { // 질문 : makerId는 받는데, 1. 받는게 필요한지(필요하다고 생각중),
-                                                              // 2. 그리고 그 maker정보가 project의 maker정보와 맞는지 검증이 필요한가.
+    public void createProject(Long makerId, Long projectId) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new BaseException(ErrorCode.PROJECT_NOT_FOUND));
 
-        /**
-         * TODO: project의 maker, post, funding 필드가 null인지 검사하는 로직
-         * TODO: project의 maker가 맞는지 검사하는 로직
-         */
+        if (!project.getMaker().getMakerId().equals(makerId)) {
+            throw new BaseException(ErrorCode.MAKER_NOT_FOUND);
+        }
+
+        // boolean으로 확인할 부분
+        if (!postServiceFacade.isPostExist(projectId) ||
+            !fundingServiceFacade.isFundingExist(projectId)||
+            !rewardServiceFacade.isRewardsExist(projectId)
+        ) {
+            throw new BaseException(ErrorCode.UNKNOWN);
+        }
 
         project.setUpProject();
     }
@@ -68,11 +67,15 @@ public class ProjectService {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new BaseException(ErrorCode.PROJECT_NOT_FOUND));
 
-        MakerResponseDTO makerResponseDTO = makerService.getMaker(project.getMaker().getMakerId());
-        PostResponseDTO postResponseDTO = postService.getPost(project.getProjectId());
-        FundingResponseDTO fundingResponseDTO = fundingService.getFunding(project.getFunding().getFundingId());
-        List<RewardResponseDTO> rewardResponseDTOS = rewardService.getRewards(project.getProjectId());
+        PostResponseDTO postServiceDTO = postServiceFacade.getPostByProjectId(projectId);
+        FundingResponseDTO fundingServiceDTO = fundingServiceFacade.getFundingByProjectId(projectId);
+        List<RewardResponseDTO> rewardServiceDTOs = rewardServiceFacade.getRewardsByProjectId(projectId);
 
-        return ProjectResponseDTO.of(makerResponseDTO, postResponseDTO, fundingResponseDTO, rewardResponseDTOS);
+        Maker maker = project.getMaker();
+        MakerResponseDTO makerResponseDTO = MakerResponseDTO.of(maker.getMakerName(), maker.getMakerEmail(), maker.getMakerBrand());
+
+        return ProjectResponseDTO.of(projectId, makerResponseDTO, postServiceDTO, fundingServiceDTO, rewardServiceDTOs);
     }
+
+    //하위 도메인 생성 : 하위 도메인 서비스에게 생성을 위임한다.
 }

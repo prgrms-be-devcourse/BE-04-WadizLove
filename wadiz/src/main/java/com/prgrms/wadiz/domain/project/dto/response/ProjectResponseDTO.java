@@ -3,6 +3,7 @@ package com.prgrms.wadiz.domain.project.dto.response;
 import com.prgrms.wadiz.domain.funding.dto.response.FundingResponseDTO;
 import com.prgrms.wadiz.domain.maker.dto.response.MakerResponseDTO;
 import com.prgrms.wadiz.domain.post.dto.response.PostResponseDTO;
+import com.prgrms.wadiz.domain.project.entity.Project;
 import com.prgrms.wadiz.domain.reward.dto.response.RewardResponseDTO;
 import lombok.Builder;
 
@@ -16,19 +17,21 @@ public record ProjectResponseDTO(
         FundingResponseDTO fundingResponseDTO,
         List<RewardResponseDTO> rewardResponseDTOs
 ) {
-    public static ProjectResponseDTO from(Long projectId) {
+    public static ProjectResponseDTO of(Long projectId) {
         return ProjectResponseDTO.builder()
                 .projectId(projectId)
                 .build();
     }
 
     public static ProjectResponseDTO of(
+            Long projectId,
             MakerResponseDTO makerResponseDTO,
             PostResponseDTO postResponseDTO,
             FundingResponseDTO fundingResponseDTO,
             List<RewardResponseDTO> rewardResponseDTOs
     ) {
         return ProjectResponseDTO.builder()
+                .projectId(projectId)
                 .makerResponseDTO(makerResponseDTO)
                 .postResponseDTO(postResponseDTO)
                 .fundingResponseDTO(fundingResponseDTO)
