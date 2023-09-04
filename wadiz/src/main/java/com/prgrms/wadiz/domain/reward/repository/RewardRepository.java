@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
 public interface RewardRepository extends JpaRepository<Reward,Long> {
 
     public Optional<List<Reward>> findAllByProjectId(Long projectId);
