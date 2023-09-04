@@ -1,7 +1,5 @@
 package com.prgrms.wadiz.domain.maker.entity;
 
-import com.prgrms.wadiz.domain.maker.dto.request.MakerCreateRequestDTO;
-import com.prgrms.wadiz.domain.maker.dto.response.MakerResponseDTO;
 import com.prgrms.wadiz.global.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -46,7 +44,6 @@ public class Maker extends BaseEntity{
         this.makerEmail = makerEmail;
 
     }
-
     public void changeMakerName(String makerName) {
         this.makerName = makerName;
     }
@@ -58,10 +55,5 @@ public class Maker extends BaseEntity{
     public void changeMakerEmail(String makerEmail) {
         this.makerEmail = makerEmail;
     }
-    public static MakerCreateRequestDTO toDTOForRequest(Maker maker) {
-        return new MakerCreateRequestDTO(maker.makerName, maker.makerBrand, maker.makerEmail);
-    }
-    public static MakerResponseDTO toDTOForResponse(Maker maker) {
-        return new MakerResponseDTO(maker.makerName, maker.makerBrand, maker.makerEmail);
-    }
+
 }

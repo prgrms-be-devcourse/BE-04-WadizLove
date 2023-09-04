@@ -47,14 +47,16 @@ class SupporterServiceTest {
 
         when(supporterRepository.save(any(Supporter.class))).then(AdditionalAnswers.returnsFirstArg());
 
-        Supporter supporter1 = supporterDTO.toEntity();
+        Supporter supporter1 = Supporter.builder()
+                .name(supporterDTO.name())
+                .email(supporterDTO.email())
+                .build();
 
         //when
-        SupporterResponseDTO supporterResponse = supporterService.createSupporter(supporterDTO);
-        Supporter supporter2 = supporterResponse.toEntity();
+        SupporterResponseDTO supporterResponse = supporterService.signUpSupporter(supporterDTO);
 
         //then
-        assertThat(supporter1.getSupporterId()).isEqualTo(supporter2.getSupporterId());
+        assertThat(supporterResponse).isNotNull();
     }
 
     @Test
@@ -68,8 +70,12 @@ class SupporterServiceTest {
 
         when(supporterRepository.save(any(Supporter.class))).then(AdditionalAnswers.returnsFirstArg());
 
-        SupporterResponseDTO responseDTO = supporterService.createSupporter(supporterDTO);
-        Supporter supporter1 = responseDTO.toEntity();
+        SupporterResponseDTO responseDTO = supporterService.signUpSupporter(supporterDTO);
+        Supporter supporter1 = Supporter.builder()
+                .name(responseDTO.name())
+                .email(responseDTO.email())
+                .build();
+
         Long supporter1Id = supporter1.getSupporterId();
 
         SupporterUpdateRequestDTO supporterUpdateRequestDTO = new SupporterUpdateRequestDTO(
@@ -85,10 +91,8 @@ class SupporterServiceTest {
                 supporterUpdateRequestDTO
         );
 
-        //then
-        assertThat(supporterResponseDTO.toEntity().getSupporterId())
-                .isEqualTo(supporter1.getSupporterId());
 
+        //then
         assertThat(supporterResponseDTO.name())
                 .isEqualTo("update");
     }
@@ -104,8 +108,12 @@ class SupporterServiceTest {
 
         when(supporterRepository.save(any(Supporter.class))).then(AdditionalAnswers.returnsFirstArg());
 
-        SupporterResponseDTO responseDTO = supporterService.createSupporter(supporterDTO);
-        Supporter supporter1 = responseDTO.toEntity();
+        SupporterResponseDTO responseDTO = supporterService.signUpSupporter(supporterDTO);
+        Supporter supporter1 = Supporter.builder()
+                .name(responseDTO.name())
+                .email(responseDTO.email())
+                .build();
+
         Long supporter1Id = supporter1.getSupporterId();
 
         //when

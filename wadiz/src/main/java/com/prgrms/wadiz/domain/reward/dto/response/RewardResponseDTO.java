@@ -3,8 +3,11 @@ package com.prgrms.wadiz.domain.reward.dto.response;
 import com.prgrms.wadiz.domain.reward.RewardStatus.RewardStatus;
 import com.prgrms.wadiz.domain.reward.RewardType.RewardType;
 import com.prgrms.wadiz.domain.reward.entity.Reward;
+import lombok.Builder;
 
+@Builder
 public record RewardResponseDTO(
+        Long rewardId,
         String rewardName,
         String rewardDescription,
         Integer rewardQuantity,
@@ -12,14 +15,15 @@ public record RewardResponseDTO(
         RewardType rewardType,
         RewardStatus rewardStatus
 ) {
-    public Reward toEntity() {
-        return Reward.builder()
-                .rewardName(rewardName)
-                .rewardDescription(rewardDescription)
-                .rewardQuantity(rewardQuantity)
-                .rewardPrice(rewardPrice)
-                .rewardType(rewardType)
-                .rewardStatus(rewardStatus)
+    public static RewardResponseDTO from(Reward reward){
+
+        return RewardResponseDTO.builder()
+                .rewardName(reward.getRewardName())
+                .rewardDescription(reward.getRewardDescription())
+                .rewardQuantity(reward.getRewardQuantity())
+                .rewardPrice(reward.getRewardPrice())
+                .rewardType(reward.getRewardType())
+                .rewardStatus(reward.getRewardStatus())
                 .build();
     }
 }

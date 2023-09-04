@@ -22,7 +22,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @Table(name = "rewards")
 @NoArgsConstructor(access = PROTECTED)
-@SQLDelete(sql = "UPDATE rewards SET activated = false WHERE reward_id = ?")
+// @SQLDelete(sql = "UPDATE rewards SET activated = false WHERE reward_id = ?") jpa 로
 public class Reward extends BaseEntity {
     private static final int ZERO_STOCK = 0;
     @Id
@@ -54,17 +54,19 @@ public class Reward extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private RewardStatus rewardStatus;
 
-    public void removeStock(Integer rewardQuantity){
+    @Column(nullable = false)
+    private Boolean activated = Boolean.TRUE; // 활성화 여부, 삭제 시 -> false
+
+    public void removeStock(Integer rewardQuantity) {
         int restQuantity = this.rewardQuantity - rewardQuantity;
 
-        if (restQuantity < ZERO_STOCK){
+        if (restQuantity < ZERO_STOCK) {
             throw new BaseException(ErrorCode.UNKNOWN);
         }
 
         this.rewardQuantity = restQuantity;
 
-    @Column(nullable = false)
-    private Boolean activated = Boolean.TRUE; // 활성화 여부, 삭제 시 -> false
+    }
 
     @Builder
     public Reward(
@@ -72,8 +74,23 @@ public class Reward extends BaseEntity {
                   String rewardDescription,
                   Integer rewardQuantity,
                   Integer rewardPrice,
-                  RewardType rewardType,
-                  RewardStatus rewardStatus) {
+                  RewardType rewardType
+                  ) {
+        this.rewardName = rewardName;
+        this.rewardDescription = rewardDescription;
+        this.rewardQuantity = rewardQuantity;
+        this.rewardPrice = rewardPrice;
+        this.rewardType = rewardType;
+        this.rewardStatus = RewardStatus.IN_STOCK;
+    }
+
+    public void updateReward(
+            String rewardName,
+            String rewardDescription,
+            Integer rewardQuantity,
+            Integer rewardPrice,
+            RewardType rewardType,
+            RewardStatus rewardStatus) {
         this.rewardName = rewardName;
         this.rewardDescription = rewardDescription;
         this.rewardQuantity = rewardQuantity;
@@ -82,41 +99,10 @@ public class Reward extends BaseEntity {
         this.rewardStatus = rewardStatus;
     }
 
-    public void modifyRewardName(String rewardName) {
-        this.rewardName = rewardName;
-    }
-
-    public void modifyRewardDescription(String rewardDescription) {
-        this.rewardDescription = rewardDescription;
-    }
-
-    public void modifyRewardQuantity(Integer rewardQuantity) {
-        this.rewardQuantity = rewardQuantity;
-    }
-
-    public void modifyRewardPrice(Integer rewardPrice) {
-        this.rewardPrice = rewardPrice;
-    }
-
-    public void modifyRewardType(RewardType rewardType) {
-        this.rewardType = rewardType;
-    }
-
-    public void modifyRewardStatus(RewardStatus rewardStatus) {
-        this.rewardStatus = rewardStatus;
-    }
 
     public void allocateProject(Project project) {
         this.project = project;
     }
 
-    public static RewardResponseDTO toDTOForResponse(Reward reward) {
-        return new RewardResponseDTO(
-                reward.getRewardName(),
-                reward.getRewardDescription(),
-                reward.getRewardQuantity(),
-                reward.getRewardPrice(),
-                reward.getRewardType(),
-                reward.getRewardStatus());
-    }
+
 }

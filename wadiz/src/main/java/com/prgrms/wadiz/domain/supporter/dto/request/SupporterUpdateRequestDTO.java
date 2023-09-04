@@ -1,4 +1,10 @@
 package com.prgrms.wadiz.domain.supporter.dto.request;
 
-public record SupporterUpdateRequestDTO(String name, String email) {
+import lombok.Builder;
+
+@Builder
+public record SupporterUpdateRequestDTO(
+        String name,
+        String email
+) {
 }
