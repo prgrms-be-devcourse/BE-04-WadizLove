@@ -2,7 +2,7 @@ package com.prgrms.wadiz.domain.reward.service;
 
 import com.prgrms.wadiz.domain.project.entity.Project;
 import com.prgrms.wadiz.domain.project.repository.ProjectRepository;
-import com.prgrms.wadiz.domain.reward.dto.request.RewardRequestDTO;
+import com.prgrms.wadiz.domain.reward.dto.request.RewardCreateRequestDTO;
 import com.prgrms.wadiz.domain.reward.dto.response.RewardResponseDTO;
 import com.prgrms.wadiz.domain.reward.entity.Reward;
 import com.prgrms.wadiz.domain.reward.repository.RewardRepository;
@@ -39,7 +39,7 @@ public class RewardService {
     }
 
     @Transactional
-    public RewardResponseDTO createReward(Long projectId, RewardRequestDTO dto) {
+    public RewardResponseDTO createReward(Long projectId, RewardCreateRequestDTO dto) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new BaseException(ErrorCode.PROJECT_NOT_FOUND));
 
@@ -64,7 +64,7 @@ public class RewardService {
     }
 
     @Transactional
-    public RewardResponseDTO updateReward(Long rewardId, RewardRequestDTO dto) {
+    public RewardResponseDTO updateReward(Long rewardId, RewardCreateRequestDTO dto) {
         Reward reward = rewardRepository.findById(rewardId)
                 .orElseThrow(() -> new BaseException(ErrorCode.REWARD_NOT_FOUND));
 
