@@ -1,6 +1,7 @@
 package com.prgrms.wadiz.domain.supporter.service;
 
 import com.prgrms.wadiz.domain.supporter.dto.request.SupporterCreateRequestDTO;
+import com.prgrms.wadiz.domain.supporter.dto.request.SupporterUpdateRequestDTO;
 import com.prgrms.wadiz.domain.supporter.dto.response.SupporterResponseDTO;
 import com.prgrms.wadiz.domain.supporter.entity.Supporter;
 import com.prgrms.wadiz.domain.supporter.repository.SupporterRepository;
@@ -77,7 +78,7 @@ class SupporterServiceTest {
 
         Long supporter1Id = supporter1.getSupporterId();
 
-        SupporterCreateRequestDTO supporterUpdateRequestDTO = new SupporterCreateRequestDTO(
+        SupporterUpdateRequestDTO supporterUpdateRequestDTO = new SupporterUpdateRequestDTO(
                 "update",
                 "update@gmail.com"
         );
