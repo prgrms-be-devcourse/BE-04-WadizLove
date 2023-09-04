@@ -15,22 +15,15 @@ public record RewardResponseDTO(
         RewardType rewardType,
         RewardStatus rewardStatus
 ) {
-    public static RewardResponseDTO of(
-            String rewardName,
-            String rewardDescription,
-            Integer rewardQuantity,
-            Integer rewardPrice,
-            RewardType rewardType,
-            RewardStatus rewardStatus
-    ){
+    public static RewardResponseDTO from(Reward reward){
 
         return RewardResponseDTO.builder()
-                .rewardName(rewardName)
-                .rewardDescription(rewardDescription)
-                .rewardQuantity(rewardQuantity)
-                .rewardPrice(rewardPrice)
-                .rewardType(rewardType)
-                .rewardStatus(rewardStatus)
+                .rewardName(reward.getRewardName())
+                .rewardDescription(reward.getRewardDescription())
+                .rewardQuantity(reward.getRewardQuantity())
+                .rewardPrice(reward.getRewardPrice())
+                .rewardType(reward.getRewardType())
+                .rewardStatus(reward.getRewardStatus())
                 .build();
     }
 }

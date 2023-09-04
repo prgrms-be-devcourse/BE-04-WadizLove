@@ -1,6 +1,7 @@
 package com.prgrms.wadiz.domain.maker.service;
 
-import com.prgrms.wadiz.domain.maker.dto.request.MakerRequestDTO;
+import com.prgrms.wadiz.domain.maker.dto.request.MakerCreateRequestDTO;
+import com.prgrms.wadiz.domain.maker.dto.request.MakerUpdateRequestDTO;
 import com.prgrms.wadiz.domain.maker.dto.response.MakerResponseDTO;
 import com.prgrms.wadiz.domain.maker.entity.Maker;
 import com.prgrms.wadiz.domain.maker.repository.MakerRepository;
@@ -17,7 +18,7 @@ public class MakerService {
     private final MakerRepository makerRepository;
 
     @Transactional
-    public MakerResponseDTO signUpMaker(MakerRequestDTO dto) {
+    public MakerResponseDTO signUpMaker(MakerCreateRequestDTO dto) {
         Maker maker = Maker.builder()
                 .makerName(dto.makerName())
                 .makerBrand(dto.makerBrand())
@@ -37,7 +38,7 @@ public class MakerService {
 
     public MakerResponseDTO updateMaker(
             Long id,
-            MakerRequestDTO dto
+            MakerUpdateRequestDTO dto
     ) {
 
         Maker maker = makerRepository.findById(id)

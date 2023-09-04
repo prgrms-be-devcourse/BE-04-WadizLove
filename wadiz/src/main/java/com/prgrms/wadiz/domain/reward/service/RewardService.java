@@ -3,6 +3,7 @@ package com.prgrms.wadiz.domain.reward.service;
 import com.prgrms.wadiz.domain.project.entity.Project;
 import com.prgrms.wadiz.domain.project.repository.ProjectRepository;
 import com.prgrms.wadiz.domain.reward.dto.request.RewardCreateRequestDTO;
+import com.prgrms.wadiz.domain.reward.dto.request.RewardUpdateRequestDTO;
 import com.prgrms.wadiz.domain.reward.dto.response.RewardResponseDTO;
 import com.prgrms.wadiz.domain.reward.entity.Reward;
 import com.prgrms.wadiz.domain.reward.repository.RewardRepository;
@@ -29,17 +30,12 @@ public class RewardService {
         Reward reward = rewardRepository.findById(rewardId)
                 .orElseThrow(() -> new BaseException(ErrorCode.REWARD_NOT_FOUND));
 
-        return RewardResponseDTO.of(
-                reward.getRewardName(),
-                reward.getRewardDescription(),
-                reward.getRewardQuantity(),
-                reward.getRewardPrice(),
-                reward.getRewardType(),
-                reward.getRewardStatus());
+        return RewardResponseDTO.from(reward);
+
     }
 
     @Transactional
-    public RewardResponseDTO createReward(Long projectId, RewardCreateRequestDTO dto) {
+    public RewardResponseDTO createReward(Long projectId, RewardUpdateRequestDTO dto) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new BaseException(ErrorCode.PROJECT_NOT_FOUND));
 
@@ -54,13 +50,7 @@ public class RewardService {
         reward.allocateProject(project);
         Reward savedReward = rewardRepository.save(reward);
 
-        return RewardResponseDTO.of(
-                savedReward.getRewardName(),
-                savedReward.getRewardDescription(),
-                savedReward.getRewardQuantity(),
-                savedReward.getRewardPrice(),
-                reward.getRewardType(),
-                reward.getRewardStatus());
+        return RewardResponseDTO.from(savedReward);
     }
 
     @Transactional
@@ -68,22 +58,11 @@ public class RewardService {
         Reward reward = rewardRepository.findById(rewardId)
                 .orElseThrow(() -> new BaseException(ErrorCode.REWARD_NOT_FOUND));
 
-        reward.modifyRewardName(dto.rewardName());
-        reward.modifyRewardDescription(dto.rewardDescription());
-        reward.modifyRewardQuantity(dto.rewardQuantity());
-        reward.modifyRewardPrice(dto.rewardPrice());
-        reward.modifyRewardType(dto.rewardType());
-        reward.modifyRewardStatus(dto.rewardStatus());
+        reward.updateReward(dto.rewardName(),dto.rewardDescription(),dto.rewardQuantity(),dto.rewardPrice(),dto.rewardType(),dto.rewardStatus());
 
         Reward savedReward = rewardRepository.save(reward);
 
-        return RewardResponseDTO.of(
-                savedReward.getRewardName(),
-                savedReward.getRewardDescription(),
-                savedReward.getRewardQuantity(),
-                savedReward.getRewardPrice(),
-                reward.getRewardType(),
-                reward.getRewardStatus());
+        return RewardResponseDTO.from(savedReward);
     }
 
     @Transactional

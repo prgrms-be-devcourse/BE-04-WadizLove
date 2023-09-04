@@ -1,6 +1,7 @@
 package com.prgrms.wadiz.domain.supporter.service;
 
 import com.prgrms.wadiz.domain.supporter.dto.request.SupporterCreateRequestDTO;
+import com.prgrms.wadiz.domain.supporter.dto.request.SupporterUpdateRequestDTO;
 import com.prgrms.wadiz.domain.supporter.dto.response.SupporterResponseDTO;
 import com.prgrms.wadiz.domain.supporter.entity.Supporter;
 import com.prgrms.wadiz.domain.supporter.repository.SupporterRepository;
@@ -35,7 +36,7 @@ public class SupporterService {
         return SupporterResponseDTO.of(supporter.getSupporterName(),supporter.getSupporterEmail());
     }
 
-    public SupporterResponseDTO updateSupporter(Long id, SupporterCreateRequestDTO dto) {
+    public SupporterResponseDTO updateSupporter(Long id, SupporterUpdateRequestDTO dto) {
         Supporter supporter = supporterRepository.findById(id)
                 .orElseThrow(() -> new BaseException(ErrorCode.SUPPORTER_NOT_FOUND));
 

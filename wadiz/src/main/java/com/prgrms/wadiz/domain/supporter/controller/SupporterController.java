@@ -1,6 +1,7 @@
 package com.prgrms.wadiz.domain.supporter.controller;
 
 import com.prgrms.wadiz.domain.supporter.dto.request.SupporterCreateRequestDTO;
+import com.prgrms.wadiz.domain.supporter.dto.request.SupporterUpdateRequestDTO;
 import com.prgrms.wadiz.domain.supporter.dto.response.SupporterResponseDTO;
 import com.prgrms.wadiz.domain.supporter.service.SupporterService;
 import com.prgrms.wadiz.global.util.resTemplate.ResponseFactory;
@@ -25,7 +26,7 @@ public class SupporterController {
     @PutMapping("/{supporterId}")
     public ResponseEntity<ResponseTemplate> updateSupporter(
             @PathVariable Long supporterId,
-            SupporterCreateRequestDTO dto
+            SupporterUpdateRequestDTO dto
     ) {
         supporterService.updateSupporter(supporterId, dto);
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());

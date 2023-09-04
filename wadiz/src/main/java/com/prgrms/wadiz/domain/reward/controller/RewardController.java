@@ -1,6 +1,7 @@
 package com.prgrms.wadiz.domain.reward.controller;
 
 import com.prgrms.wadiz.domain.reward.dto.request.RewardCreateRequestDTO;
+import com.prgrms.wadiz.domain.reward.dto.request.RewardUpdateRequestDTO;
 import com.prgrms.wadiz.domain.reward.dto.response.RewardResponseDTO;
 import com.prgrms.wadiz.domain.reward.service.RewardService;
 import com.prgrms.wadiz.global.util.resTemplate.ResponseFactory;
@@ -19,7 +20,7 @@ public class RewardController {
     @PostMapping("/{projectId]")
     public ResponseEntity<ResponseTemplate> createReward(
             @PathVariable Long projectId,
-            RewardCreateRequestDTO dto
+            RewardUpdateRequestDTO dto
     ) {
         rewardService.createReward(projectId, dto);
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());

@@ -1,7 +1,5 @@
 package com.prgrms.wadiz.domain.maker.entity;
 
-import com.prgrms.wadiz.domain.maker.dto.request.MakerRequestDTO;
-import com.prgrms.wadiz.domain.maker.dto.response.MakerResponseDTO;
 import com.prgrms.wadiz.global.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
