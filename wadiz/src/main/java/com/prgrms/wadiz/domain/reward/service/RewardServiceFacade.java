@@ -13,18 +13,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RewardServiceFacade {
 
     private final RewardRepository rewardRepository;
 
-    private final ProjectRepository projectRepository;
-
-
     public RewardServiceFacade(RewardRepository rewardRepository, ProjectRepository projectRepository) {
         this.rewardRepository = rewardRepository;
-        this.projectRepository = projectRepository;
     }
 
     @Transactional(readOnly = true)
@@ -33,13 +30,11 @@ public class RewardServiceFacade {
                 .orElseThrow(() -> new BaseException(ErrorCode.REWARD_NOT_FOUND));
 
         return RewardResponseDTO.from(reward);
-
     }
 
     @Transactional
     public RewardResponseDTO createReward(Long projectId, RewardUpdateRequestDTO dto) {
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new BaseException(ErrorCode.PROJECT_NOT_FOUND));
+        Project project = rewardRepository.findByProjectId(projectId).getProject();
 
         Reward reward = Reward.builder()
                 .rewardName(dto.rewardName())
@@ -69,14 +64,21 @@ public class RewardServiceFacade {
 
     @Transactional
     public void deleteReward(Long rewardId) {
+        Reward reward = rewardRepository.findById(rewardId)
+                .orElseThrow(() -> new BaseException(ErrorCode.REWARD_NOT_FOUND));
+        reward.deletedStatus();
         rewardRepository.deleteById(rewardId);
     }
 
     public boolean isRewardsExist(Long projectId) {
-        return false;
+        Optional<List<Reward>> rewards = rewardRepository.findAllByProjectId(projectId);
+        return rewards.isPresent();
     }
 
     public List<RewardResponseDTO> getRewardsByProjectId(Long projectId) {
-        return null;
+        List<Reward> rewards = rewardRepository.findAllByProjectId(projectId)
+                .orElseThrow(() -> new BaseException(ErrorCode.REWARD_NOT_FOUND));
+
+        return rewards.stream().map(RewardResponseDTO::from).toList();
     }
 }

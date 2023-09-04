@@ -1,5 +1,6 @@
 package com.prgrms.wadiz.domain.maker.service;
 
+import com.prgrms.wadiz.domain.maker.dto.MakerServiceDTO;
 import com.prgrms.wadiz.domain.maker.dto.request.MakerCreateRequestDTO;
 import com.prgrms.wadiz.domain.maker.dto.request.MakerUpdateRequestDTO;
 import com.prgrms.wadiz.domain.maker.dto.response.MakerResponseDTO;
@@ -54,5 +55,11 @@ public class MakerService {
     @Transactional
     public void deleteMaker(Long id) {
         makerRepository.deleteById(id);
+    }
+
+    public MakerServiceDTO getMakerDTO(Long makerId) {
+        Maker findMaker = makerRepository.findById(makerId)
+                .orElseThrow(() -> new BaseException(ErrorCode.MAKER_NOT_FOUND));
+        return MakerServiceDTO.from(findMaker);
     }
 }

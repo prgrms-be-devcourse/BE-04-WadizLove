@@ -3,7 +3,7 @@ package com.prgrms.wadiz.domain.reward.controller;
 import com.prgrms.wadiz.domain.reward.dto.request.RewardCreateRequestDTO;
 import com.prgrms.wadiz.domain.reward.dto.request.RewardUpdateRequestDTO;
 import com.prgrms.wadiz.domain.reward.dto.response.RewardResponseDTO;
-import com.prgrms.wadiz.domain.reward.service.RewardService;
+import com.prgrms.wadiz.domain.reward.service.RewardServiceFacade;
 import com.prgrms.wadiz.global.util.resTemplate.ResponseFactory;
 import com.prgrms.wadiz.global.util.resTemplate.ResponseTemplate;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class RewardController {
 
-    private final RewardService rewardService;
+    private final RewardServiceFacade rewardService;
 
     @PostMapping("/{projectId]")
     public ResponseEntity<ResponseTemplate> createReward(
