@@ -24,6 +24,8 @@ public class ProjectController {
     public ResponseEntity<ResponseTemplate> startProject(@PathVariable Long makerId) {
         ProjectResponseDTO projectResponseDTO = projectService.startProject(makerId);
 
+        return ResponseEntity.ok(ResponseFactory.getSingleResult(projectResponseDTO));
+    }
     @PostMapping("/{projectId}/maker/{makerId}")
     public ResponseEntity<ResponseTemplate> createProject(
             @PathVariable Long projectId,

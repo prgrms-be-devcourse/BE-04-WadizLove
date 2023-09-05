@@ -17,7 +17,7 @@ public class SupporterController {
 
     private final SupporterService supporterService;
 
-    @PostMapping
+    @PostMapping("/sign-up")
     public ResponseEntity<ResponseTemplate> signUpSupporter(SupporterCreateRequestDTO dto) {
         supporterService.signUpSupporter(dto);
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());

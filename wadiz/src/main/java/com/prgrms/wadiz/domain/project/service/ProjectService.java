@@ -37,6 +37,17 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
 
     @Transactional
+    public ProjectResponseDTO startProject(Long makerId) {
+        MakerServiceDTO makerServiceDTO = makerService.getMakerDTO(makerId);
+        Maker maker = MakerServiceDTO.toEntity(makerServiceDTO);
+
+        Project project = Project.builder()
+                .maker(maker)
+                .build();
+
+        return ProjectResponseDTO.of(projectRepository.save(project).getProjectId());
+    }
+    @Transactional
     public void createProject(Long projectId, Long makerId) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new BaseException(ErrorCode.PROJECT_NOT_FOUND));
