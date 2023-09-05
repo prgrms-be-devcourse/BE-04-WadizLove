@@ -48,4 +48,16 @@ public class Post extends BaseEntity {
         this.postThumbNailImage = postThumbNailImage;
         this.postContentImage = postContentImage;
     }
+
+    public void updatePost(
+            String postTitle,
+            String postDescription,
+            String postThumbNailImage,
+            String postContentImage
+    ) {
+        this.postTitle = postTitle;
+        this.postDescription = postDescription;
+        this.postThumbNailImage = postThumbNailImage;
+        this.postContentImage = postContentImage;
+    }
 }

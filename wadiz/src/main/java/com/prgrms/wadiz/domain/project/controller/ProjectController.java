@@ -1,5 +1,8 @@
 package com.prgrms.wadiz.domain.project.controller;
 
+import com.prgrms.wadiz.domain.post.dto.request.PostCreateRequestDTO;
+import com.prgrms.wadiz.domain.post.dto.request.PostUpdateRequestDTO;
+import com.prgrms.wadiz.domain.post.dto.response.PostResponseDTO;
 import com.prgrms.wadiz.domain.funding.dto.request.FundingCreateRequestDTO;
 import com.prgrms.wadiz.domain.funding.dto.request.FundingUpdateRequestDTO;
 import com.prgrms.wadiz.domain.funding.dto.response.FundingResponseDTO;
@@ -51,7 +54,7 @@ public class ProjectController {
     @GetMapping("/{projectId}/fundings")
     public ResponseEntity<ResponseTemplate> getFunding(@PathVariable Long projectId) {
         FundingResponseDTO fundingResponseDTO = projectService.getFunding(projectId);
-
+      
         return ResponseEntity.ok(ResponseFactory.getSingleResult(fundingResponseDTO));
     }
 
@@ -68,6 +71,40 @@ public class ProjectController {
     @DeleteMapping("/{projectId}/fundings")
     public ResponseEntity<ResponseTemplate> deleteFunding(@PathVariable Long projectId) {
         projectService.deleteFunding(projectId);
+
+        return ResponseEntity.ok(ResponseFactory.getSuccessResult());
+    }
+      
+    @PostMapping("/{projectId}/posts/new")
+    public ResponseEntity<ResponseTemplate> createPost(
+            @PathVariable Long projectId,
+            @RequestBody PostCreateRequestDTO postCreateRequestDTO
+    ) {
+        projectService.createPost(projectId, postCreateRequestDTO);
+
+        return ResponseEntity.ok(ResponseFactory.getSuccessResult());
+    }
+
+    @GetMapping("/{projectId}/posts")
+    public ResponseEntity<ResponseTemplate> getPost(@PathVariable Long projectId) {
+        PostResponseDTO postResponseDTO = projectService.getPost(projectId);
+
+        return ResponseEntity.ok(ResponseFactory.getSingleResult(postResponseDTO));
+    }
+
+    @PutMapping("/{projectId}/posts")
+    public ResponseEntity<ResponseTemplate> updatePost(
+            @PathVariable Long projectId,
+            @RequestBody PostUpdateRequestDTO postUpdateRequestDTO
+    ) {
+        projectService.updatePost(projectId, postUpdateRequestDTO);
+
+        return ResponseEntity.ok(ResponseFactory.getSuccessResult());
+    }
+
+    @DeleteMapping("/{projectId}/posts")
+    public ResponseEntity<ResponseTemplate> deletePost(@PathVariable Long projectId) {
+        projectService.deletePost(projectId);
 
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());
     }

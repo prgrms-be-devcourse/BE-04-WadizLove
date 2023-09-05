@@ -8,6 +8,8 @@ import com.prgrms.wadiz.domain.maker.dto.MakerServiceDTO;
 import com.prgrms.wadiz.domain.maker.dto.response.MakerResponseDTO;
 import com.prgrms.wadiz.domain.maker.entity.Maker;
 import com.prgrms.wadiz.domain.maker.service.MakerService;
+import com.prgrms.wadiz.domain.post.dto.request.PostCreateRequestDTO;
+import com.prgrms.wadiz.domain.post.dto.request.PostUpdateRequestDTO;
 import com.prgrms.wadiz.domain.post.dto.response.PostResponseDTO;
 import com.prgrms.wadiz.domain.project.dto.ProjectServiceDTO;
 import com.prgrms.wadiz.domain.reward.dto.response.RewardResponseDTO;
@@ -70,11 +72,14 @@ public class ProjectService {
     }
 
     @Transactional
-    public void createFunding(Long projectId, FundingCreateRequestDTO fundingCreateRequestDTO) {
+    public void createFunding(
+            Long projectId, 
+            FundingCreateRequestDTO fundingCreateRequestDTO
+    ) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new BaseException(ErrorCode.PROJECT_NOT_FOUND));
         ProjectServiceDTO projectServiceDTO = ProjectServiceDTO.from(project);
-
+      
         fundingServiceFacade.createFunding(projectServiceDTO, fundingCreateRequestDTO);
     }
 
@@ -94,5 +99,35 @@ public class ProjectService {
     @Transactional
     public void deleteFunding(Long projectId) {
         fundingServiceFacade.deleteFunding(projectId);
+    }
+  
+    @Transactional
+    public void createPost(
+            Long projectId,
+            PostCreateRequestDTO postCreateRequestDTO
+    ) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new BaseException(ErrorCode.PROJECT_NOT_FOUND));
+        ProjectServiceDTO projectServiceDTO = ProjectServiceDTO.from(project);
+
+        postServiceFacade.createPost(projectServiceDTO, postCreateRequestDTO);
+    }
+
+    @Transactional(readOnly = true)
+    public PostResponseDTO getPost(Long projectId) {
+        return postServiceFacade.getPostByProjectId(projectId);
+    }
+
+    @Transactional
+    public void updatePost(
+            Long projectId,
+            PostUpdateRequestDTO postUpdateRequestDTO
+    ) {
+        postServiceFacade.updatePost(projectId, postUpdateRequestDTO);
+    }
+
+    @Transactional
+    public void deletePost(Long projectId) {
+        postServiceFacade.deletePost(projectId);
     }
 }
