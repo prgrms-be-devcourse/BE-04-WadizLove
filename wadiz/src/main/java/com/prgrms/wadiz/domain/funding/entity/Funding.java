@@ -56,4 +56,18 @@ public class Funding extends BaseEntity {
         this.fundingCategory = fundingCategory;
         this.fundingStatus = FundingStatus.OPEN;
     }
+
+    public void updateFunding(
+            Integer fundingTargetAmount,
+            LocalDateTime fundingStartAt,
+            LocalDateTime fundingEndAt,
+            FundingCategory fundingCategory,
+            FundingStatus fundingStatus
+    ) {
+        this.fundingTargetAmount = fundingTargetAmount;
+        this.fundingStartAt = fundingStartAt;
+        this.fundingEndAt = fundingEndAt;
+        this.fundingCategory = fundingCategory;
+        this.fundingStatus = fundingStatus;
+    }
 }

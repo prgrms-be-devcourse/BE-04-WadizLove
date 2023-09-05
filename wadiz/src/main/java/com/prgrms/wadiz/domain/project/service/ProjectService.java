@@ -1,5 +1,7 @@
 package com.prgrms.wadiz.domain.project.service;
 
+import com.prgrms.wadiz.domain.funding.dto.request.FundingCreateRequestDTO;
+import com.prgrms.wadiz.domain.funding.dto.request.FundingUpdateRequestDTO;
 import com.prgrms.wadiz.domain.funding.dto.response.FundingResponseDTO;
 import com.prgrms.wadiz.domain.funding.service.FundingServiceFacade;
 import com.prgrms.wadiz.domain.maker.dto.MakerServiceDTO;
@@ -7,6 +9,7 @@ import com.prgrms.wadiz.domain.maker.dto.response.MakerResponseDTO;
 import com.prgrms.wadiz.domain.maker.entity.Maker;
 import com.prgrms.wadiz.domain.maker.service.MakerService;
 import com.prgrms.wadiz.domain.post.dto.response.PostResponseDTO;
+import com.prgrms.wadiz.domain.project.dto.ProjectServiceDTO;
 import com.prgrms.wadiz.domain.reward.dto.response.RewardResponseDTO;
 import com.prgrms.wadiz.global.util.exception.ErrorCode;
 import com.prgrms.wadiz.domain.post.service.PostServiceFacade;
@@ -32,19 +35,7 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
 
     @Transactional
-    public ProjectResponseDTO startProject(Long makerId) {
-        MakerServiceDTO makerServiceDTO = makerService.getMakerDTO(makerId);
-        Maker maker = MakerServiceDTO.toEntity(makerServiceDTO);
-
-        Project project = Project.builder()
-                .maker(maker)
-                .build();
-
-        return ProjectResponseDTO.of(projectRepository.save(project).getProjectId());
-    }
-
-    @Transactional
-    public void createProject(Long makerId, Long projectId) {
+    public void createProject(Long projectId, Long makerId) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new BaseException(ErrorCode.PROJECT_NOT_FOUND));
 
@@ -78,4 +69,30 @@ public class ProjectService {
         return ProjectResponseDTO.of(projectId, makerResponseDTO, postServiceDTO, fundingServiceDTO, rewardServiceDTOs);
     }
 
+    @Transactional
+    public void createFunding(Long projectId, FundingCreateRequestDTO fundingCreateRequestDTO) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new BaseException(ErrorCode.PROJECT_NOT_FOUND));
+        ProjectServiceDTO projectServiceDTO = ProjectServiceDTO.from(project);
+
+        fundingServiceFacade.createFunding(projectServiceDTO, fundingCreateRequestDTO);
+    }
+
+    @Transactional(readOnly = true)
+    public FundingResponseDTO getFunding(Long projectId) {
+        return fundingServiceFacade.getFundingByProjectId(projectId);
+    }
+
+    @Transactional
+    public void updateFunding(
+            Long projectId,
+            FundingUpdateRequestDTO fundingUpdateRequestDTO
+    ) {
+        fundingServiceFacade.updateFunding(projectId, fundingUpdateRequestDTO);
+    }
+
+    @Transactional
+    public void deleteFunding(Long projectId) {
+        fundingServiceFacade.deleteFunding(projectId);
+    }
 }
