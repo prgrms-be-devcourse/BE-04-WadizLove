@@ -10,19 +10,19 @@ import java.time.LocalDateTime;
 @Builder
 public record FundingResponseDTO(
         Long fundingId,
-        FundingCategory fundingCategory,
         Integer fundingTargetAmount,
         LocalDateTime fundingStartAt,
         LocalDateTime fundingEndAt,
+        FundingCategory fundingCategory,
         FundingStatus fundingStatus
 ) {
     public static FundingResponseDTO from(Funding funding) {
         return FundingResponseDTO.builder()
                 .fundingId(funding.getFundingId())
-                .fundingCategory(funding.getFundingCategory())
                 .fundingTargetAmount(funding.getFundingTargetAmount())
                 .fundingStartAt(funding.getFundingStartAt())
                 .fundingEndAt(funding.getFundingEndAt())
+                .fundingCategory(funding.getFundingCategory())
                 .fundingStatus(funding.getFundingStatus())
                 .build();
     }

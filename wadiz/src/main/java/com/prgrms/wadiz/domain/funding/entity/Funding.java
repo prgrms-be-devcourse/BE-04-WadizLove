@@ -58,11 +58,11 @@ public class Funding extends BaseEntity {
     }
 
     public void updateFunding(
-            FundingStatus fundingStatus,
             Integer fundingTargetAmount,
-            FundingCategory fundingCategory,
             LocalDateTime fundingStartAt,
-            LocalDateTime fundingEndAt
+            LocalDateTime fundingEndAt,
+            FundingCategory fundingCategory,
+            FundingStatus fundingStatus
     ) {
         this.fundingTargetAmount = fundingTargetAmount;
         this.fundingStartAt = fundingStartAt;

@@ -7,10 +7,10 @@ import java.time.LocalDateTime;
 
 @Builder
 public record FundingCreateRequestDTO(
-        FundingCategory fundingCategory,
         Integer fundingTargetAmount,
         LocalDateTime fundingStartAt,
-        LocalDateTime fundingEndAt
+        LocalDateTime fundingEndAt,
+        FundingCategory fundingCategory
 ) {
 
 }
