@@ -16,7 +16,7 @@ public record FundingResponseDTO(
         LocalDateTime fundingEndAt,
         FundingStatus fundingStatus
 ) {
-    public static FundingResponseDTO toResponseDTO(Funding funding) {
+    public static FundingResponseDTO from(Funding funding) {
         return FundingResponseDTO.builder()
                 .fundingId(funding.getFundingId())
                 .fundingCategory(funding.getFundingCategory())
