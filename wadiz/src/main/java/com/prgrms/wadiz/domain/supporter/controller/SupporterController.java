@@ -32,6 +32,11 @@ public class SupporterController {
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());
     }
 
+    @DeleteMapping("/{supporterId}")
+    public ResponseEntity<ResponseTemplate> deleteSupporter(@PathVariable Long supporterId){
+        supporterService.deleteSupporter(supporterId);
+        return ResponseEntity.ok(ResponseFactory.getSuccessResult());
+    }
     @GetMapping("/{supporterId}")
     public ResponseEntity<ResponseTemplate> getSupporter(@PathVariable Long supporterId) {
         SupporterResponseDTO supporterResponseDTO = supporterService.getSupporter(supporterId);
