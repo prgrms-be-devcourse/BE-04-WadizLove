@@ -95,6 +95,10 @@ public class Reward extends BaseEntity {
         this.rewardStatus = rewardStatus;
     }
 
+    public void deletedStatus() {
+        activated = Boolean.FALSE;
+    }
+
 
     public void allocateProject(Project project) {
         this.project = project;
