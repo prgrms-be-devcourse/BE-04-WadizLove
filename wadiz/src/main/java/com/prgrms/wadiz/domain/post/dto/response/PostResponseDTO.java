@@ -12,7 +12,7 @@ public record PostResponseDTO(
         String postContentImage
 ) {
 
-    public static PostResponseDTO toResponseDTO(Post post) {
+    public static PostResponseDTO from(Post post) {
         return PostResponseDTO.builder()
                 .postId(post.getPostId())
                 .postTitle(post.getPostTitle())
