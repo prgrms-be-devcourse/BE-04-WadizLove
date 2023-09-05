@@ -4,7 +4,9 @@ import com.prgrms.wadiz.domain.order.dto.request.OrderCreateRequestDTO;
 import com.prgrms.wadiz.domain.order.dto.response.OrderResponseDTO;
 import com.prgrms.wadiz.domain.order.entity.Order;
 import com.prgrms.wadiz.domain.order.repository.OrderRepository;
+import com.prgrms.wadiz.domain.orderReward.dto.response.OrderRewardResponseDTO;
 import com.prgrms.wadiz.domain.orderReward.entity.OrderReward;
+import com.prgrms.wadiz.domain.post.repository.PostRepository;
 import com.prgrms.wadiz.domain.project.entity.Project;
 import com.prgrms.wadiz.domain.reward.entity.Reward;
 import com.prgrms.wadiz.domain.reward.repository.RewardRepository;
@@ -28,6 +30,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final SupporterRepository supporterRepository;
     private final RewardRepository rewardRepository;
+    private final PostRepository postRepository;
 
     // 주문 생성
     @Transactional
@@ -74,8 +77,8 @@ public class OrderService {
         orderRepository.save(order);
     }
 
-    @Transactional(readOnly = true) // 수정중
-    public OrderResponseDTO getOrder(Long supporterId, Long orderId) {
+    @Transactional(readOnly = true)
+    public OrderResponseDTO getPurchase(Long supporterId, Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> {
             log.error("Order {} is not found", orderId);
 
@@ -87,9 +90,29 @@ public class OrderService {
             throw new BaseException(ErrorCode.INVALID_ACCESS);
         }
 
+        Long projectId = order.getProject().getProjectId();
+        String postTitle = postRepository.findById(projectId).orElseThrow(() -> {
+            log.error("post is not found");
+
+            return new BaseException(ErrorCode.POST_NOT_FOUND);
+        }).getPostTitle();
+
+        List<OrderRewardResponseDTO> orderRewardResponseDTOs = order.getOrderRewards().stream()
+                .map(orderReward -> OrderRewardResponseDTO.of(
+                        orderReward.getReward().getRewardName(),
+                        orderReward.getReward().getRewardDescription(),
+                        orderReward.getOrderRewardPrice(),
+                        orderReward.getOrderRewardQuantity()
+
+                ))
+                .collect(Collectors.toList());
+
         return OrderResponseDTO.of(
                 order.getOrderId(),
-                order.getProject()
+                postTitle,
+                order.getProject().getMaker().getMakerBrand(),
+                orderRewardResponseDTOs,
+                order.getOrderStatus()
         );
     }
 

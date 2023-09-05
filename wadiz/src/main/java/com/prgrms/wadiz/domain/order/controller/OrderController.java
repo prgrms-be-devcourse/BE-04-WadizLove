@@ -26,12 +26,12 @@ public class OrderController {
     }
 
     @GetMapping("{orderId}/supporters/{supporterId}")
-    public void getOrder(
+    public void getPurchase(
             @PathVariable Long orderId,
             @PathVariable Long supporterId
 
     ){
-        orderService.getOrder(orderId,supporterId);
+        orderService.getPurchase(orderId,supporterId);
     }
 
     @PatchMapping("{supporterId}/{orderId}")
