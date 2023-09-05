@@ -1,6 +1,7 @@
 package com.prgrms.wadiz.domain.order.controller;
 
 import com.prgrms.wadiz.domain.order.dto.request.OrderCreateRequestDTO;
+import com.prgrms.wadiz.domain.order.dto.response.OrderResponseDTO;
 import com.prgrms.wadiz.domain.order.service.OrderService;
 import com.prgrms.wadiz.global.util.resTemplate.ResponseFactory;
 import com.prgrms.wadiz.global.util.resTemplate.ResponseTemplate;
@@ -26,12 +27,13 @@ public class OrderController {
     }
 
     @GetMapping("{orderId}/supporters/{supporterId}")
-    public void getPurchase(
+    public ResponseEntity<ResponseTemplate> getPurchase(
             @PathVariable Long orderId,
             @PathVariable Long supporterId
-
     ){
-        orderService.getPurchase(orderId,supporterId);
+        OrderResponseDTO orderResponseDTO = orderService.getPurchase(orderId, supporterId);
+
+        return ResponseEntity.ok(ResponseFactory.getSingleResult(orderResponseDTO));
     }
 
     @PatchMapping("{supporterId}/{orderId}")
