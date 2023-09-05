@@ -1,5 +1,8 @@
 package com.prgrms.wadiz.domain.project.controller;
 
+import com.prgrms.wadiz.domain.post.dto.request.PostCreateRequestDTO;
+import com.prgrms.wadiz.domain.post.dto.request.PostUpdateRequestDTO;
+import com.prgrms.wadiz.domain.post.dto.response.PostResponseDTO;
 import com.prgrms.wadiz.domain.project.dto.response.ProjectResponseDTO;
 import com.prgrms.wadiz.domain.project.service.ProjectService;
 import com.prgrms.wadiz.global.util.resTemplate.ResponseFactory;
@@ -39,6 +42,37 @@ public class ProjectController {
     }
 
 
+    @PostMapping("/{projectId}/posts/new")
+    public ResponseEntity<ResponseTemplate> createPost(
+            @PathVariable Long projectId,
+            @RequestBody PostCreateRequestDTO postCreateRequestDTO
+    ) {
+        projectService.createPost(projectId, postCreateRequestDTO);
 
+        return ResponseEntity.ok(ResponseFactory.getSuccessResult());
+    }
 
+    @GetMapping("/{projectId}/posts")
+    public ResponseEntity<ResponseTemplate> getPost(@PathVariable Long projectId) {
+        PostResponseDTO postResponseDTO = projectService.getPost(projectId);
+
+        return ResponseEntity.ok(ResponseFactory.getSingleResult(postResponseDTO));
+    }
+
+    @PutMapping("/{projectId}/posts")
+    public ResponseEntity<ResponseTemplate> updatePost(
+            @PathVariable Long projectId,
+            @RequestBody PostUpdateRequestDTO postUpdateRequestDTO
+    ) {
+        projectService.updatePost(projectId, postUpdateRequestDTO);
+
+        return ResponseEntity.ok(ResponseFactory.getSuccessResult());
+    }
+
+    @DeleteMapping("/{projectId}/posts")
+    public ResponseEntity<ResponseTemplate> deletePost(@PathVariable Long projectId) {
+        projectService.deletePost(projectId);
+
+        return ResponseEntity.ok(ResponseFactory.getSuccessResult());
+    }
 }
