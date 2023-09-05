@@ -1,9 +1,12 @@
 package com.prgrms.wadiz.domain.post.repository;
 
 import com.prgrms.wadiz.domain.post.entity.Post;
+import com.prgrms.wadiz.domain.project.entity.Project;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.util.Optional;
 
 import java.util.Optional;
 

@@ -1,16 +1,15 @@
 package com.prgrms.wadiz.domain.funding.dto.request;
 
 import com.prgrms.wadiz.domain.funding.FundingCategory;
-import lombok.Builder;
+import com.prgrms.wadiz.domain.funding.FundingStatus;
 
 import java.time.LocalDateTime;
 
-@Builder
-public record FundingCreateRequestDTO(
+public record FundingUpdateRequestDTO(
         Integer fundingTargetAmount,
         LocalDateTime fundingStartAt,
         LocalDateTime fundingEndAt,
-        FundingCategory fundingCategory
+        FundingCategory fundingCategory,
+        FundingStatus fundingStatus
 ) {
-
 }

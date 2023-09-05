@@ -1,5 +1,6 @@
 package com.prgrms.wadiz.domain.order.entity;
 
+import com.prgrms.wadiz.domain.project.entity.Project;
 import com.prgrms.wadiz.domain.supporter.entity.Supporter;
 import com.prgrms.wadiz.domain.order.OrderStatus;
 import com.prgrms.wadiz.domain.BaseEntity;
@@ -26,6 +27,10 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "supporter_id")
     private Supporter supporter;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id")
+    private Project project;
+
     @OneToMany(mappedBy = "orderRewards", cascade = CascadeType.ALL)
     private List<OrderReward> orderRewards = new ArrayList<>();
 
@@ -35,10 +40,12 @@ public class Order extends BaseEntity {
     @Builder
     public Order(
             Supporter supporter,
+            Project project,
             List<OrderReward> orderRewards
     ) {
         this.supporter = supporter;
         this.orderRewards = orderRewards;
+        this.project = project;
         this.orderStatus = OrderStatus.REQUESTED;
     }
 

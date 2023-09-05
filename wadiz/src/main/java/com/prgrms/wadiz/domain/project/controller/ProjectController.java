@@ -3,6 +3,9 @@ package com.prgrms.wadiz.domain.project.controller;
 import com.prgrms.wadiz.domain.post.dto.request.PostCreateRequestDTO;
 import com.prgrms.wadiz.domain.post.dto.request.PostUpdateRequestDTO;
 import com.prgrms.wadiz.domain.post.dto.response.PostResponseDTO;
+import com.prgrms.wadiz.domain.funding.dto.request.FundingCreateRequestDTO;
+import com.prgrms.wadiz.domain.funding.dto.request.FundingUpdateRequestDTO;
+import com.prgrms.wadiz.domain.funding.dto.response.FundingResponseDTO;
 import com.prgrms.wadiz.domain.project.dto.response.ProjectResponseDTO;
 import com.prgrms.wadiz.domain.project.service.ProjectService;
 import com.prgrms.wadiz.global.util.resTemplate.ResponseFactory;
@@ -21,15 +24,12 @@ public class ProjectController {
     public ResponseEntity<ResponseTemplate> startProject(@PathVariable Long makerId) {
         ProjectResponseDTO projectResponseDTO = projectService.startProject(makerId);
 
-        return ResponseEntity.ok(ResponseFactory.getSingleResult(projectResponseDTO));
-    }
-
-    @PostMapping("/{makerId}/{projectId}")
+    @PostMapping("/{projectId}/maker/{makerId}")
     public ResponseEntity<ResponseTemplate> createProject(
-            @PathVariable Long makerId,
-            @PathVariable Long projectId
+            @PathVariable Long projectId,
+            @PathVariable Long makerId
     ) {
-        projectService.createProject(makerId, projectId);
+        projectService.createProject(projectId, makerId);
 
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());
     }
@@ -41,7 +41,40 @@ public class ProjectController {
         return ResponseEntity.ok(ResponseFactory.getSingleResult(projectResponseDTO));
     }
 
+    @PostMapping("/{projectId}/fundings/new")
+    public ResponseEntity<ResponseTemplate> createFunding(
+            @PathVariable Long projectId,
+            @RequestBody FundingCreateRequestDTO fundingCreateRequestDTO
+    ) {
+        projectService.createFunding(projectId, fundingCreateRequestDTO);
 
+        return ResponseEntity.ok(ResponseFactory.getSuccessResult());
+    }
+
+    @GetMapping("/{projectId}/fundings")
+    public ResponseEntity<ResponseTemplate> getFunding(@PathVariable Long projectId) {
+        FundingResponseDTO fundingResponseDTO = projectService.getFunding(projectId);
+      
+        return ResponseEntity.ok(ResponseFactory.getSingleResult(fundingResponseDTO));
+    }
+
+    @PutMapping("/{projectId}/fundings")
+    public ResponseEntity<ResponseTemplate> updateFunding(
+            @PathVariable Long projectId,
+            @RequestBody FundingUpdateRequestDTO fundingUpdateRequestDTO
+    ) {
+        projectService.updateFunding(projectId, fundingUpdateRequestDTO);
+
+        return ResponseEntity.ok(ResponseFactory.getSuccessResult());
+    }
+
+    @DeleteMapping("/{projectId}/fundings")
+    public ResponseEntity<ResponseTemplate> deleteFunding(@PathVariable Long projectId) {
+        projectService.deleteFunding(projectId);
+
+        return ResponseEntity.ok(ResponseFactory.getSuccessResult());
+    }
+      
     @PostMapping("/{projectId}/posts/new")
     public ResponseEntity<ResponseTemplate> createPost(
             @PathVariable Long projectId,
