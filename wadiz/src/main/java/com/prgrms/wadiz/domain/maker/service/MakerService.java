@@ -5,7 +5,7 @@ import com.prgrms.wadiz.domain.maker.dto.request.MakerCreateRequestDTO;
 import com.prgrms.wadiz.domain.maker.dto.request.MakerUpdateRequestDTO;
 import com.prgrms.wadiz.domain.maker.dto.response.MakerResponseDTO;
 import com.prgrms.wadiz.domain.maker.entity.Maker;
-import com.prgrms.wadiz.domain.maker.repository.MakerRepository;
+import com.prgrms.wadiz.domain.maker.respository.MakerRepository;
 import com.prgrms.wadiz.global.util.exception.BaseException;
 import com.prgrms.wadiz.global.util.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -30,12 +30,14 @@ public class MakerService {
         return MakerResponseDTO.of(savedMaker.getMakerName(), savedMaker.getMakerBrand(), savedMaker.getMakerEmail());
     }
 
+    @Transactional(readOnly = true)
     public MakerResponseDTO getMaker(Long id) {
         Maker findMaker = makerRepository.findById(id)
                 .orElseThrow(() -> new BaseException(ErrorCode.MAKER_NOT_FOUND));
         return MakerResponseDTO.of(findMaker.getMakerName(), findMaker.getMakerBrand(), findMaker.getMakerEmail());
     }
 
+    @Transactional
     public MakerResponseDTO updateMaker(
             Long id,
             MakerUpdateRequestDTO dto

@@ -4,6 +4,6 @@ import lombok.Builder;
 
 @Builder
 public record SupporterCreateRequestDTO(
-        String name,
-        String email) {
+        String supporterName,
+        String supporterEmail) {
 }
