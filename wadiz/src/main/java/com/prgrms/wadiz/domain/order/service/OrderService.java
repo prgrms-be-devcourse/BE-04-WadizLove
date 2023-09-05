@@ -5,6 +5,7 @@ import com.prgrms.wadiz.domain.order.dto.response.OrderResponseDTO;
 import com.prgrms.wadiz.domain.order.entity.Order;
 import com.prgrms.wadiz.domain.order.repository.OrderRepository;
 import com.prgrms.wadiz.domain.orderReward.entity.OrderReward;
+import com.prgrms.wadiz.domain.project.entity.Project;
 import com.prgrms.wadiz.domain.reward.entity.Reward;
 import com.prgrms.wadiz.domain.reward.repository.RewardRepository;
 import com.prgrms.wadiz.domain.supporter.entity.Supporter;
@@ -15,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,7 +31,7 @@ public class OrderService {
 
     // 주문 생성
     @Transactional
-    public OrderResponseDTO createOrder(Long supporterId, OrderCreateRequestDTO orderCreateRequestDto) {
+    public void createOrder(Long supporterId, OrderCreateRequestDTO orderCreateRequestDto) {
         Supporter supporter = supporterRepository.findById(supporterId)
                 .orElseThrow(() -> {
                     log.error("Supporter {} is not found", supporterId);
@@ -61,18 +61,20 @@ public class OrderService {
                 })
                 .collect(Collectors.toList());
 
+        Project project = orderRewards.get(0).getReward().getProject();
+
         Order order = Order.builder()
                 .supporter(supporter)
+                .project(project)
                 .orderRewards(orderRewards)
                 .build();
+
         orderRewards.forEach(order::addOrderReward);
 
-        Order savedOrder = orderRepository.save(order);
-
-        return OrderResponseDTO.from(savedOrder);
+        orderRepository.save(order);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true) // 수정중
     public OrderResponseDTO getOrder(Long supporterId, Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> {
             log.error("Order {} is not found", orderId);
@@ -85,7 +87,10 @@ public class OrderService {
             throw new BaseException(ErrorCode.INVALID_ACCESS);
         }
 
-        return OrderResponseDTO.from(order);
+        return OrderResponseDTO.of(
+                order.getOrderId(),
+                order.getProject()
+        );
     }
 
     @Transactional
