@@ -1,9 +1,7 @@
 package com.prgrms.wadiz.domain.order.dto.response;
 
 import com.prgrms.wadiz.domain.order.OrderStatus;
-import com.prgrms.wadiz.domain.order.entity.Order;
 import com.prgrms.wadiz.domain.orderReward.dto.response.OrderRewardResponseDTO;
-import com.prgrms.wadiz.domain.orderReward.entity.OrderReward;
 import lombok.Builder;
 
 import java.util.List;
@@ -38,6 +36,7 @@ public record OrderResponseDTO(
                 .postTitle(postTitle)
                 .makerBrand(makerBrand)
                 .orderRewardResponseDTOs(orderRewardResponseDTOs)
+                .orderStatus(orderStatus)
                 .build();
     }
 }

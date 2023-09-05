@@ -34,7 +34,10 @@ public class OrderService {
 
     // 주문 생성
     @Transactional
-    public void createOrder(Long supporterId, OrderCreateRequestDTO orderCreateRequestDto) {
+    public void createOrder(
+            Long supporterId,
+            OrderCreateRequestDTO orderCreateRequestDto
+    ) {
         Supporter supporter = supporterRepository.findById(supporterId)
                 .orElseThrow(() -> {
                     log.error("Supporter {} is not found", supporterId);
@@ -78,7 +81,10 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public OrderResponseDTO getPurchase(Long supporterId, Long orderId) {
+    public OrderResponseDTO getPurchase(
+            Long supporterId,
+            Long orderId
+    ) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> {
             log.error("Order {} is not found", orderId);
 
@@ -91,7 +97,7 @@ public class OrderService {
         }
 
         Long projectId = order.getProject().getProjectId();
-        String postTitle = postRepository.findById(projectId).orElseThrow(() -> {
+        String postTitle = postRepository.findByProjectId(projectId).orElseThrow(() -> {
             log.error("post is not found");
 
             return new BaseException(ErrorCode.POST_NOT_FOUND);
@@ -117,7 +123,10 @@ public class OrderService {
     }
 
     @Transactional
-    public void cancelOrder(Long supporterId, Long orderId) {
+    public void cancelOrder(
+            Long supporterId,
+            Long orderId
+    ) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> {
             log.error("Order {} is not found", orderId);
 
@@ -130,7 +139,5 @@ public class OrderService {
         }
 
         order.cancel();
-
-
     }
 }

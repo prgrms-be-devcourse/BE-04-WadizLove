@@ -36,12 +36,11 @@ public class OrderController {
         return ResponseEntity.ok(ResponseFactory.getSingleResult(orderResponseDTO));
     }
 
-    @PatchMapping("{supporterId}/{orderId}")
+    @PutMapping("{supporterId}/{orderId}")
     public void cancelOrder(
         @PathVariable Long supporterId,
         @PathVariable Long orderId
     ){
-
         orderService.cancelOrder(supporterId, orderId);
     }
 
