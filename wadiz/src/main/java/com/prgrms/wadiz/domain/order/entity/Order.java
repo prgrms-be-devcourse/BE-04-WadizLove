@@ -1,5 +1,6 @@
 package com.prgrms.wadiz.domain.order.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.prgrms.wadiz.domain.project.entity.Project;
 import com.prgrms.wadiz.domain.supporter.entity.Supporter;
 import com.prgrms.wadiz.domain.order.OrderStatus;
@@ -40,11 +41,9 @@ public class Order extends BaseEntity {
     @Builder
     public Order(
             Supporter supporter,
-            Project project,
-            List<OrderReward> orderRewards
+            Project project
     ) {
         this.supporter = supporter;
-        this.orderRewards = orderRewards;
         this.project = project;
         this.orderStatus = OrderStatus.REQUESTED;
     }

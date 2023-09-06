@@ -75,7 +75,6 @@ public class OrderService {
         Order order = Order.builder()
                 .supporter(supporter)
                 .project(project)
-                .orderRewards(orderRewards)
                 .build();
 
         orderRewards.forEach(order::addOrderReward);

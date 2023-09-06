@@ -45,7 +45,6 @@ public class OrderReward extends BaseEntity {
 
     public void changeOrder(Order order) {
         this.order = order;
-        order.getOrderRewards().add(this);
     }
 
     public void cancel() {

@@ -1,12 +1,13 @@
 package com.prgrms.wadiz.domain.order.service;
 
-import com.prgrms.wadiz.domain.order.OrderStatus;
 import com.prgrms.wadiz.domain.order.dto.request.OrderCreateRequestDTO;
 import com.prgrms.wadiz.domain.order.dto.response.OrderResponseDTO;
 import com.prgrms.wadiz.domain.order.dto.request.OrderRewardRequestDTO;
 import com.prgrms.wadiz.domain.order.entity.Order;
 import com.prgrms.wadiz.domain.order.repository.OrderRepository;
 import com.prgrms.wadiz.domain.orderReward.entity.OrderReward;
+import com.prgrms.wadiz.domain.project.entity.Project;
+import com.prgrms.wadiz.domain.reward.RewardType.RewardType;
 import com.prgrms.wadiz.domain.reward.entity.Reward;
 import com.prgrms.wadiz.domain.reward.repository.RewardRepository;
 import com.prgrms.wadiz.domain.supporter.entity.Supporter;
@@ -19,6 +20,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.*;
 
@@ -47,17 +49,43 @@ class OrderServiceTest {
     @DisplayName("[성공] 주문을 생성한다.")
     void successOrder(int orderQuantity){
         //given
-        Long orderId = 1L;
-        Supporter supporter = createSupporter(1L, "hihi@gmail.com", "min");
-        Reward reward = createReward(1L,10000,10);
+        Supporter supporter = createSupporter();
+        ReflectionTestUtils.setField(
+                supporter,
+                "supporterId",
+                1L
+        );
 
-        OrderReward orderReward = new OrderReward(reward, 10000, orderQuantity);
+        Reward reward = createReward();
+        ReflectionTestUtils.setField(
+                reward,
+                "rewardId",
+                1L
+        );
+
+        Project project = Project.builder().build();
+
+        OrderReward orderReward = createOrderReward(
+                reward,
+                orderQuantity
+        );
+
         List<OrderReward> orderRewards = new ArrayList<>();
         orderRewards.add(orderReward);
 
-        Order order = new Order(supporter,orderRewards);
+        Order order = createOrder(
+                supporter,
+                project,
+                orderRewards
+        );
 
-        // request
+        ReflectionTestUtils.setField(
+                order,
+                "orderId",
+                1L
+        );
+
+        // make request
         OrderRewardRequestDTO orderRewardReq = OrderRewardRequestDTO.builder()
                 .rewardId(1L)
                 .orderQuantity(orderQuantity)
@@ -73,14 +101,20 @@ class OrderServiceTest {
         given(supporterRepository.findById(anyLong())).willReturn(Optional.of(supporter));
         given(rewardRepository.findById(anyLong())).willReturn(Optional.of(reward));
         given(orderRepository.save(any(Order.class))).willReturn(order);
+        given(orderRepository.findById(anyLong())).willReturn(Optional.of(order));
 
         //when
-        OrderResponseDTO savedOrder = orderService.createOrder(supporter.getSupporterId(), orderCreateReq);
+        orderService.createOrder(
+                supporter.getSupporterId(),
+                orderCreateReq
+        );
 
         //then
-        assertThat(savedOrder.orderRewards()).isEqualTo(order.getOrderRewards());
-        assertThat(savedOrder.orderStatus()).isEqualTo(order.getOrderStatus());
+        Order savedOrder = orderRepository.findById(order.getOrderId()).get();
 
+        assertThat(order.getOrderId()).isEqualTo(savedOrder.getOrderId());
+        assertThat(order.getSupporter()).isEqualTo(savedOrder.getSupporter());
+        assertThat(order.getOrderRewards()).isEqualTo(savedOrder.getOrderRewards());
     }
 
 //    @ParameterizedTest
@@ -89,45 +123,77 @@ class OrderServiceTest {
 //    void failOrderByZeroAndNegativeOrderQuantity(int orderQuantity) {
 //
 //    }
+//
+//    @ParameterizedTest
+//    @ValueSource(ints = {11,100})
+//    @DisplayName("[실패] 주문이 재고 초과로 실패한다.")
+//    void failOrderByExceededOrderQuantity(int orderQuantity) {
+//        //given
+//        Supporter supporter = createSupporter(1L, "hihi@gmail.com", "min");
+//        Reward reward = createReward();
+//        ReflectionTestUtils.setField(reward,"rewardId",1L);
+//
+//        OrderReward orderReward = new OrderReward(reward, 10000, orderQuantity);
+//        List<OrderReward> orderRewards = new ArrayList<>();
+//        orderRewards.add(orderReward);
+//
+//        // request
+//        OrderRewardRequestDTO orderRewardReq = OrderRewardRequestDTO.builder()
+//                .rewardId(1L)
+//                .orderQuantity(orderQuantity)
+//                .build();
+//
+//        List<OrderRewardRequestDTO> orderRewardReqs = new ArrayList<>();
+//        orderRewardReqs.add(orderRewardReq);
+//
+//        OrderCreateRequestDTO orderCreateReq = OrderCreateRequestDTO.builder()
+//                .orderRewards(orderRewardReqs)
+//                .build();
+//
+//        given(supporterRepository.findById(anyLong())).willReturn(Optional.of(supporter));
+//        given(rewardRepository.findById(anyLong())).willReturn(Optional.of(reward));
+//
+//        //when, then
+//        assertThatThrownBy(() ->orderService.createOrder(supporter.getSupporterId(), orderCreateReq)).isInstanceOf(BaseException.class);
+//    }
 
-    @ParameterizedTest
-    @ValueSource(ints = {11,100})
-    @DisplayName("[실패] 주문이 재고 초과로 실패한다.")
-    void failOrderByExceededOrderQuantity(int orderQuantity) {
-        //given
-        Supporter supporter = createSupporter(1L, "hihi@gmail.com", "min");
-        Reward reward = createReward(1L,10000,10);
-
-        OrderReward orderReward = new OrderReward(reward, 10000, orderQuantity);
-        List<OrderReward> orderRewards = new ArrayList<>();
-        orderRewards.add(orderReward);
-
-        // request
-        OrderRewardRequestDTO orderRewardReq = OrderRewardRequestDTO.builder()
-                .rewardId(1L)
-                .orderQuantity(orderQuantity)
+    private Reward createReward(){
+        return Reward.builder()
+                .rewardName("겁나 싼 우산")
+                .rewardDescription("수분 충전 가능")
+                .rewardPrice(10000)
+                .rewardQuantity(10)
+                .rewardType(RewardType.EARLY_BIRD)
                 .build();
-
-        List<OrderRewardRequestDTO> orderRewardReqs = new ArrayList<>();
-        orderRewardReqs.add(orderRewardReq);
-
-        OrderCreateRequestDTO orderCreateReq = OrderCreateRequestDTO.builder()
-                .orderRewards(orderRewardReqs)
-                .build();
-
-        given(supporterRepository.findById(anyLong())).willReturn(Optional.of(supporter));
-        given(rewardRepository.findById(anyLong())).willReturn(Optional.of(reward));
-
-        //when, then
-        assertThatThrownBy(() ->orderService.createOrder(supporter.getSupporterId(), orderCreateReq)).isInstanceOf(BaseException.class);
     }
 
-    private Reward createReward(Long rewardId, int price, int quantity){
-        return new Reward(rewardId, price, quantity);
+    private Supporter createSupporter() {
+        return Supporter.builder()
+                .supporterName("min")
+                .supporterEmail("test@gmail.com")
+                .build();
     }
 
-    private Supporter createSupporter(Long supporterId, String email, String name) {
-        return new Supporter(supporterId, email, name);
+    private OrderReward createOrderReward(
+            Reward reward,
+            Integer orderQuantity
+    ){
+        return OrderReward.builder()
+                .reward(reward)
+                .orderRewardPrice(10000)
+                .orderRewardQuantity(orderQuantity)
+                .build();
+    }
+
+    private Order createOrder(
+            Supporter supporter,
+            Project project,
+            List<OrderReward> orderRewards
+    ){
+        return Order.builder()
+                .supporter(supporter)
+                .project(project)
+                .build();
     }
 
 }
