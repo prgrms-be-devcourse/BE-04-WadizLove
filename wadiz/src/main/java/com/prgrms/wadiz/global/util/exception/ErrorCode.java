@@ -20,7 +20,8 @@ public enum ErrorCode {
     REWARD_NOT_FOUND(225, "리워드 정보를 찾을 수 없습니다."),
 
     POST_NOT_FOUND(-2000, "게시글 정보를 찾을 수 없습니다."),
-    ORDER_NOT_FOUND(-2001,"주문 정보를 찾을 수 없습니다." );
+    ORDER_NOT_FOUND(-2001,"주문 정보를 찾을 수 없습니다." ),
+    PROJECT_ACCESS_DENY(444, "프로젝트가 개설된 이후로는 접근할 수 없습니다.");
 
     private int code;
     private String errorMessage;
