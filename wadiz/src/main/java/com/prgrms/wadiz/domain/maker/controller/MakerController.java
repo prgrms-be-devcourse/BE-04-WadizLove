@@ -27,7 +27,10 @@ public class MakerController {
     }
 
     @PutMapping("/{makerId}")
-    public ResponseEntity<ResponseTemplate> updateMaker(@PathVariable Long makerId, MakerUpdateRequestDTO dto) {
+    public ResponseEntity<ResponseTemplate> updateMaker(
+            @PathVariable Long makerId,
+            MakerUpdateRequestDTO dto
+    ) {
         makerService.updateMaker(makerId, dto);
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());
     }
