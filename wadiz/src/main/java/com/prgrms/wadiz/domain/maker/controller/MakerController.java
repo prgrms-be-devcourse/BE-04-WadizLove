@@ -21,7 +21,7 @@ public class MakerController {
     private final MakerService makerService;
 
     @PostMapping("/sign-up")
-    public ResponseEntity<ResponseTemplate> signUpMaker(MakerCreateRequestDTO dto) {
+    public ResponseEntity<ResponseTemplate> signUpMaker(@RequestBody @Valid MakerCreateRequestDTO dto) {
         makerService.signUpMaker(dto);
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());
     }
@@ -29,7 +29,7 @@ public class MakerController {
     @PutMapping("/{makerId}")
     public ResponseEntity<ResponseTemplate> updateMaker(
             @PathVariable Long makerId,
-            MakerUpdateRequestDTO dto
+            @RequestBody @Valid MakerUpdateRequestDTO dto
     ) {
         makerService.updateMaker(makerId, dto);
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());

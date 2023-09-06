@@ -16,12 +16,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class RewardServiceFacade {
+public class RewardService {
 
     private final RewardRepository rewardRepository;
 
-    public RewardServiceFacade(RewardRepository rewardRepository, ProjectRepository projectRepository) {
+    private final ProjectRepository projectRepository;
+
+    public RewardService(RewardRepository rewardRepository, ProjectRepository projectRepository) {
         this.rewardRepository = rewardRepository;
+        this.projectRepository = projectRepository;
     }
 
     @Transactional(readOnly = true)
@@ -33,7 +36,7 @@ public class RewardServiceFacade {
     }
 
     @Transactional
-    public RewardResponseDTO createReward(Long projectId, RewardUpdateRequestDTO dto) {
+    public RewardResponseDTO createReward(Long projectId, RewardCreateRequestDTO dto) {
         Project project = rewardRepository.findByProjectId(projectId).getProject();
 
         Reward reward = Reward.builder()
@@ -51,7 +54,7 @@ public class RewardServiceFacade {
     }
 
     @Transactional
-    public RewardResponseDTO updateReward(Long rewardId, RewardCreateRequestDTO dto) {
+    public RewardResponseDTO updateReward(Long rewardId, RewardUpdateRequestDTO dto) {
         Reward reward = rewardRepository.findById(rewardId)
                 .orElseThrow(() -> new BaseException(ErrorCode.REWARD_NOT_FOUND));
 
