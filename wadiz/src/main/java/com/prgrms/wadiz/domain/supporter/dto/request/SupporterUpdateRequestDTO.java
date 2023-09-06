@@ -4,7 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record SupporterUpdateRequestDTO(
-        String name,
-        String email
+        String supporterName,
+        String supporterEmail
 ) {
 }

@@ -30,11 +30,11 @@ public class Supporter extends BaseEntity {
 
     @Builder
     public Supporter(
-            String name,
-            String email
+            String supporterName,
+            String supporterEmail
     ) {
-        this.supporterName = name;
-        this.supporterEmail = email;
+        this.supporterName = supporterName;
+        this.supporterEmail = supporterEmail;
     }
 
     @Builder
