@@ -6,11 +6,13 @@ import lombok.Builder;
 public record MakerResponseDTO(
         String makerName,
         String makerBrand,
-        String makerEmail) {
+        String makerEmail
+) {
     public static MakerResponseDTO of(
             String makerName,
             String makerBrand,
-            String makerEmail) {
+            String makerEmail
+    ) {
         return MakerResponseDTO.builder()
                 .makerName(makerName)
                 .makerBrand(makerBrand)

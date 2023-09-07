@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Getter
@@ -22,12 +25,16 @@ public class Maker extends BaseEntity{
     private Long makerId;
 
     @Column(nullable = false)
+    @Min(value = 2, message = "이름은 최소 2자 이상입니다.")
     private String makerName;
 
     @Column(nullable = false)
+    @NotBlank(message = "이름을 입력해주세요.")
     private String makerBrand;
 
     @Column(nullable = false)
+    @Email
+    @NotBlank(message = "이메일을 입력해주세요.")
     private String makerEmail;
 
     @Column(nullable = false)
