@@ -37,22 +37,19 @@ public class RewardController {
 
     @PutMapping("/{projectId}/rewards/{rewardId}")
     public ResponseEntity<ResponseTemplate> updateReward(
+            @PathVariable Long projectId,
             @PathVariable Long rewardId,
             @RequestBody @Valid RewardUpdateRequestDTO dto
-    ) {
-        rewardService.updateReward(rewardId, dto);
+            ) {
+        rewardService.updateReward(projectId,rewardId, dto);
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());
     }
 
-    @GetMapping("/{projectId}/rewards/{rewardId}")
-    public ResponseEntity<ResponseTemplate> getReward(@PathVariable Long rewardId) {
-        RewardResponseDTO rewardResponseDTO = rewardService.getReward(rewardId);
-        return ResponseEntity.ok(ResponseFactory.getSingleResult(rewardResponseDTO));
-    }
-
     @DeleteMapping("/{projectId}/rewards/{rewardId}")
-    public ResponseEntity<ResponseTemplate> deleteReward(@PathVariable Long rewardId) {
-        rewardService.deleteReward(rewardId);
+    public ResponseEntity<ResponseTemplate> deleteReward(
+            @PathVariable Long projectId,
+            @PathVariable Long rewardId) {
+        rewardService.deleteReward(projectId, rewardId);
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());
     }
 }

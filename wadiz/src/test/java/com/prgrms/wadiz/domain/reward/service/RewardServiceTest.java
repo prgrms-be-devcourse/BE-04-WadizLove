@@ -1,10 +1,6 @@
 package com.prgrms.wadiz.domain.reward.service;
 
-import com.prgrms.wadiz.domain.maker.entity.Maker;
-import com.prgrms.wadiz.domain.maker.respository.MakerRepository;
 import com.prgrms.wadiz.domain.project.dto.ProjectServiceDTO;
-import com.prgrms.wadiz.domain.project.entity.Project;
-import com.prgrms.wadiz.domain.project.repository.ProjectRepository;
 import com.prgrms.wadiz.domain.reward.RewardStatus.RewardStatus;
 import com.prgrms.wadiz.domain.reward.RewardType.RewardType;
 import com.prgrms.wadiz.domain.reward.dto.request.RewardCreateRequestDTO;
@@ -63,7 +59,9 @@ class RewardServiceTest {
     @Test
     @DisplayName("[성공] 리워드 수정 테스트")
     void rewardUpdateTest() {
-        ProjectServiceDTO projectServiceDTO = ProjectServiceDTO.builder().build();
+        ProjectServiceDTO projectServiceDTO = ProjectServiceDTO.builder()
+                .projectId(1L)
+                .build();
 
         RewardCreateRequestDTO createRequestDTO = RewardCreateRequestDTO.builder()
                 .rewardName("test")
@@ -98,7 +96,7 @@ class RewardServiceTest {
                 .build();
 
         //when
-        RewardResponseDTO updateReward = rewardService.updateReward(rewardId, updateRequestDTO);
+        RewardResponseDTO updateReward = rewardService.updateReward(1L, rewardId, updateRequestDTO);
 
         //then
         assertThat(updateReward.rewardName()).isEqualTo("update");
@@ -139,7 +137,7 @@ class RewardServiceTest {
         when(rewardRepository.findById(rewardId)).thenReturn(Optional.of(reward));
 
         //when
-        rewardService.deleteReward(rewardId);
+        rewardService.deleteReward(rewardId, rewardId);
         Optional<Reward> findReward = rewardRepository.findById(rewardId);
 
         //then
