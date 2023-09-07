@@ -4,7 +4,6 @@ import com.prgrms.wadiz.domain.project.ProjectStatus;
 import com.prgrms.wadiz.domain.project.dto.ProjectServiceDTO;
 import com.prgrms.wadiz.domain.reward.dto.request.RewardCreateRequestDTO;
 import com.prgrms.wadiz.domain.reward.dto.request.RewardUpdateRequestDTO;
-import com.prgrms.wadiz.domain.reward.dto.response.RewardResponseDTO;
 import com.prgrms.wadiz.domain.reward.service.RewardService;
 import com.prgrms.wadiz.global.util.resTemplate.ResponseFactory;
 import com.prgrms.wadiz.global.util.resTemplate.ResponseTemplate;

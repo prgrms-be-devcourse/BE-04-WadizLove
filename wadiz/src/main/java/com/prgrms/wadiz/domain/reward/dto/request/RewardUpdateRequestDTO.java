@@ -15,10 +15,10 @@ public record RewardUpdateRequestDTO(
         @NotBlank(message = "리워드 설명을 입력해주세요.")
         String rewardDescription,
 
-        @NotBlank(message = "리워드 재고를 입력해주세요.") @Min(1)
+        @Min(value = 1, message = "리워드 재고는 최소 1개 이상입니다.")
         Integer rewardQuantity,
 
-        @NotBlank(message = "리워드 가격을 입력해주세요.") @Min(10)
+        @Min(value = 10, message = "리워드 가격을 입력해주세요.")
         Integer rewardPrice,
 
         @NotBlank(message = "리워드 타입을 입력해주세요.")
