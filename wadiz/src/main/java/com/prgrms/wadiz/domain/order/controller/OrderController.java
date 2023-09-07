@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("orders/")
+@RequestMapping("/api/orders/")
 @RequiredArgsConstructor
 public class OrderController {
 
@@ -57,7 +57,7 @@ public class OrderController {
         return ResponseEntity.ok(ResponseFactory.getSingleResult(orderResponseDTOs));
     }
 
-    @PutMapping("{supporterId}/{orderId}")
+    @PutMapping("{orderId}/supporters/{supporterId}")
     public void cancelOrder(
         @PathVariable Long supporterId,
         @PathVariable Long orderId
