@@ -1,5 +1,7 @@
 package com.prgrms.wadiz.domain.reward.service;
 
+import com.prgrms.wadiz.domain.project.ProjectStatus;
+import com.prgrms.wadiz.domain.project.dto.ProjectServiceDTO;
 import com.prgrms.wadiz.domain.project.entity.Project;
 import com.prgrms.wadiz.domain.project.repository.ProjectRepository;
 import com.prgrms.wadiz.domain.reward.dto.request.RewardCreateRequestDTO;
@@ -13,30 +15,27 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
-public class RewardServiceFacade {
+public class RewardService {
 
     private final RewardRepository rewardRepository;
 
-    public RewardServiceFacade(RewardRepository rewardRepository, ProjectRepository projectRepository) {
+    public RewardService(RewardRepository rewardRepository) {
         this.rewardRepository = rewardRepository;
     }
 
-    @Transactional(readOnly = true)
-    public RewardResponseDTO getReward(Long rewardId) {
-        Reward reward = rewardRepository.findById(rewardId)
-                .orElseThrow(() -> new BaseException(ErrorCode.REWARD_NOT_FOUND));
-
-        return RewardResponseDTO.from(reward);
-    }
-
     @Transactional
-    public RewardResponseDTO createReward(Long projectId, RewardUpdateRequestDTO dto) {
-        Project project = rewardRepository.findByProjectId(projectId).getProject();
+    public Long createReward(
+            ProjectServiceDTO projectServiceDTO,
+            RewardCreateRequestDTO dto
+    ) {
+        Project project = ProjectServiceDTO.toEntity(projectServiceDTO);
 
         Reward reward = Reward.builder()
+                .project(project)
                 .rewardName(dto.rewardName())
                 .rewardDescription(dto.rewardDescription())
                 .rewardQuantity(dto.rewardQuantity())
@@ -44,16 +43,21 @@ public class RewardServiceFacade {
                 .rewardType(dto.rewardType())
                 .build();
 
-        reward.allocateProject(project);
-        Reward savedReward = rewardRepository.save(reward);
-
-        return RewardResponseDTO.from(savedReward);
+        return rewardRepository.save(reward).getRewardId();
     }
 
     @Transactional
-    public RewardResponseDTO updateReward(Long rewardId, RewardCreateRequestDTO dto) {
+    public RewardResponseDTO updateReward(Long projectId, Long rewardId, RewardUpdateRequestDTO dto) {
         Reward reward = rewardRepository.findById(rewardId)
                 .orElseThrow(() -> new BaseException(ErrorCode.REWARD_NOT_FOUND));
+
+        if (!Objects.equals(reward.getProject().getProjectId(), projectId)) {
+            throw new BaseException(ErrorCode.NOT_MATCH);
+        }
+
+        if(!isProjectBeforeSetUp(reward.getProject())){
+            throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
+        }
 
         reward.updateReward(dto.rewardName(),dto.rewardDescription(),dto.rewardQuantity(),dto.rewardPrice(),dto.rewardType(),dto.rewardStatus());
 
@@ -62,10 +66,23 @@ public class RewardServiceFacade {
         return RewardResponseDTO.from(savedReward);
     }
 
+    private boolean isProjectBeforeSetUp(Project project) {
+        return project.getProjectStatus() == ProjectStatus.READY;
+    }
+
     @Transactional
-    public void deleteReward(Long rewardId) {
+    public void deleteReward(Long projectId, Long rewardId) {
         Reward reward = rewardRepository.findById(rewardId)
                 .orElseThrow(() -> new BaseException(ErrorCode.REWARD_NOT_FOUND));
+
+        if (!Objects.equals(reward.getProject().getProjectId(), projectId)) {
+            throw new BaseException(ErrorCode.NOT_MATCH);
+        }
+
+        if(!isProjectBeforeSetUp(reward.getProject())){
+            throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
+        }
+
         reward.deletedStatus();
         rewardRepository.deleteById(rewardId);
     }

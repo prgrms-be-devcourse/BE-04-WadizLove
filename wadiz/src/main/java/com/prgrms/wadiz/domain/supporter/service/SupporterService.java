@@ -21,8 +21,8 @@ public class SupporterService {
     @Transactional
     public SupporterResponseDTO signUpSupporter(SupporterCreateRequestDTO dto) {
         Supporter supporter = Supporter.builder()
-                .name(dto.name())
-                .email(dto.email())
+                .supporterName(dto.supporterName())
+                .supporterEmail(dto.supporterEmail())
                 .build();
 
         Supporter savedEntity = supporterRepository.save(supporter);
@@ -40,8 +40,8 @@ public class SupporterService {
         Supporter supporter = supporterRepository.findById(id)
                 .orElseThrow(() -> new BaseException(ErrorCode.SUPPORTER_NOT_FOUND));
 
-        supporter.changeName(dto.name());
-        supporter.changeEmail(dto.email());
+        supporter.changeName(dto.supporterName());
+        supporter.changeEmail(dto.supporterEmail());
 
         Supporter savedSupporter = supporterRepository.save(supporter);
         return SupporterResponseDTO.of(savedSupporter.getSupporterName(),savedSupporter.getSupporterEmail());

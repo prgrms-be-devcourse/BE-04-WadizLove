@@ -4,7 +4,7 @@ import com.prgrms.wadiz.domain.maker.dto.request.MakerCreateRequestDTO;
 import com.prgrms.wadiz.domain.maker.dto.request.MakerUpdateRequestDTO;
 import com.prgrms.wadiz.domain.maker.dto.response.MakerResponseDTO;
 import com.prgrms.wadiz.domain.maker.entity.Maker;
-import com.prgrms.wadiz.domain.maker.repository.MakerRepository;
+import com.prgrms.wadiz.domain.maker.respository.MakerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Getter
@@ -20,9 +23,12 @@ public class Supporter extends BaseEntity {
     private Long supporterId;
 
     @Column(nullable = false)
+    @NotBlank(message = "이름을 입력해주세요.")
+    @Min(value = 2, message = "최소 2자 이상입니다.")
     private String supporterName;
 
     @Column(nullable = false)
+    @Email @NotBlank(message = "이메일 정보를 입력해 주세요")
     private String supporterEmail;
   
     @Column(nullable = false)
@@ -30,11 +36,11 @@ public class Supporter extends BaseEntity {
 
     @Builder
     public Supporter(
-            String name,
-            String email
+            String supporterName,
+            String supporterEmail
     ) {
-        this.supporterName = name;
-        this.supporterEmail = email;
+        this.supporterName = supporterName;
+        this.supporterEmail = supporterEmail;
     }
 
     @Builder

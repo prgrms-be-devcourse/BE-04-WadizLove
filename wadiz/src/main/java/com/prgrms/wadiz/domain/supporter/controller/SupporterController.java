@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/supporters")
 @RequiredArgsConstructor
@@ -18,7 +20,7 @@ public class SupporterController {
     private final SupporterService supporterService;
 
     @PostMapping("/sign-up")
-    public ResponseEntity<ResponseTemplate> signUpSupporter(SupporterCreateRequestDTO dto) {
+    public ResponseEntity<ResponseTemplate> signUpSupporter(@RequestBody @Valid SupporterCreateRequestDTO dto) {
         supporterService.signUpSupporter(dto);
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());
     }
@@ -26,12 +28,17 @@ public class SupporterController {
     @PutMapping("/{supporterId}")
     public ResponseEntity<ResponseTemplate> updateSupporter(
             @PathVariable Long supporterId,
-            SupporterUpdateRequestDTO dto
+            @RequestBody @Valid SupporterUpdateRequestDTO dto
     ) {
         supporterService.updateSupporter(supporterId, dto);
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());
     }
 
+    @DeleteMapping("/{supporterId}")
+    public ResponseEntity<ResponseTemplate> deleteSupporter(@PathVariable Long supporterId){
+        supporterService.deleteSupporter(supporterId);
+        return ResponseEntity.ok(ResponseFactory.getSuccessResult());
+    }
     @GetMapping("/{supporterId}")
     public ResponseEntity<ResponseTemplate> getSupporter(@PathVariable Long supporterId) {
         SupporterResponseDTO supporterResponseDTO = supporterService.getSupporter(supporterId);
