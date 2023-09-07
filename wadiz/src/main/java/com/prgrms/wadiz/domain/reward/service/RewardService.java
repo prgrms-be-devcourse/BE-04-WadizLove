@@ -1,5 +1,6 @@
 package com.prgrms.wadiz.domain.reward.service;
 
+import com.prgrms.wadiz.domain.project.dto.ProjectServiceDTO;
 import com.prgrms.wadiz.domain.project.entity.Project;
 import com.prgrms.wadiz.domain.project.repository.ProjectRepository;
 import com.prgrms.wadiz.domain.reward.dto.request.RewardCreateRequestDTO;
@@ -36,10 +37,14 @@ public class RewardService {
     }
 
     @Transactional
-    public RewardResponseDTO createReward(Long projectId, RewardCreateRequestDTO dto) {
-        Project project = rewardRepository.findByProjectId(projectId).getProject();
+    public Long createReward(
+            ProjectServiceDTO projectServiceDTO,
+            RewardCreateRequestDTO dto
+    ) {
+        Project project = ProjectServiceDTO.toEntity(projectServiceDTO);
 
         Reward reward = Reward.builder()
+                .project(project)
                 .rewardName(dto.rewardName())
                 .rewardDescription(dto.rewardDescription())
                 .rewardQuantity(dto.rewardQuantity())
@@ -47,10 +52,7 @@ public class RewardService {
                 .rewardType(dto.rewardType())
                 .build();
 
-        reward.allocateProject(project);
-        Reward savedReward = rewardRepository.save(reward);
-
-        return RewardResponseDTO.from(savedReward);
+        return rewardRepository.save(reward).getRewardId();
     }
 
     @Transactional

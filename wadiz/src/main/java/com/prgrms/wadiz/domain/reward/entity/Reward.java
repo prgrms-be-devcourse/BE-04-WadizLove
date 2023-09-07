@@ -74,12 +74,14 @@ public class Reward extends BaseEntity {
 
     @Builder
     public Reward(
+                  Project project,
                   String rewardName,
                   String rewardDescription,
                   Integer rewardQuantity,
                   Integer rewardPrice,
                   RewardType rewardType
-                  ) {
+                  )
+    {   this.project = project;
         this.rewardName = rewardName;
         this.rewardDescription = rewardDescription;
         this.rewardQuantity = rewardQuantity;
