@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/projects")
 @RequiredArgsConstructor
@@ -46,7 +48,7 @@ public class ProjectController {
     @PostMapping("/{projectId}/fundings/new")
     public ResponseEntity<ResponseTemplate> createFunding(
             @PathVariable Long projectId,
-            @RequestBody FundingCreateRequestDTO fundingCreateRequestDTO
+            @RequestBody @Valid FundingCreateRequestDTO fundingCreateRequestDTO
     ) {
         projectService.createFunding(projectId, fundingCreateRequestDTO);
 
@@ -63,7 +65,7 @@ public class ProjectController {
     @PutMapping("/{projectId}/fundings")
     public ResponseEntity<ResponseTemplate> updateFunding(
             @PathVariable Long projectId,
-            @RequestBody FundingUpdateRequestDTO fundingUpdateRequestDTO
+            @RequestBody @Valid FundingUpdateRequestDTO fundingUpdateRequestDTO
     ) {
         projectService.updateFunding(projectId, fundingUpdateRequestDTO);
 
@@ -80,7 +82,7 @@ public class ProjectController {
     @PostMapping("/{projectId}/posts/new")
     public ResponseEntity<ResponseTemplate> createPost(
             @PathVariable Long projectId,
-            @RequestBody PostCreateRequestDTO postCreateRequestDTO
+            @RequestBody @Valid PostCreateRequestDTO postCreateRequestDTO
     ) {
         projectService.createPost(projectId, postCreateRequestDTO);
 
@@ -97,7 +99,7 @@ public class ProjectController {
     @PutMapping("/{projectId}/posts")
     public ResponseEntity<ResponseTemplate> updatePost(
             @PathVariable Long projectId,
-            @RequestBody PostUpdateRequestDTO postUpdateRequestDTO
+            @RequestBody @Valid PostUpdateRequestDTO postUpdateRequestDTO
     ) {
         projectService.updatePost(projectId, postUpdateRequestDTO);
 

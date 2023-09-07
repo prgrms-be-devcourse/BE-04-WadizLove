@@ -5,6 +5,7 @@ import com.prgrms.wadiz.domain.post.dto.request.PostUpdateRequestDTO;
 import com.prgrms.wadiz.domain.post.dto.response.PostResponseDTO;
 import com.prgrms.wadiz.domain.post.entity.Post;
 import com.prgrms.wadiz.domain.post.repository.PostRepository;
+import com.prgrms.wadiz.domain.project.ProjectStatus;
 import com.prgrms.wadiz.domain.project.dto.ProjectServiceDTO;
 import com.prgrms.wadiz.domain.project.entity.Project;
 import com.prgrms.wadiz.global.util.exception.BaseException;
@@ -41,6 +42,10 @@ public class PostServiceFacade {
         Post post = postRepository.findByProjectId(projectId)
                 .orElseThrow(() -> new BaseException(ErrorCode.POST_NOT_FOUND));
 
+        if (!isProjectBeforeSetUp(post.getProject())) {
+            throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
+        }
+
         return PostResponseDTO.from(post);
     }
 
@@ -52,6 +57,10 @@ public class PostServiceFacade {
         Post post = postRepository.findByProjectId(projectId)
                 .orElseThrow(() -> new BaseException(ErrorCode.POST_NOT_FOUND));
 
+        if (!isProjectBeforeSetUp(post.getProject())) {
+            throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
+        }
+
         post.updatePost(
                 postUpdateRequestDTO.postTitle(),
                 postUpdateRequestDTO.postDescription(),
@@ -60,13 +69,24 @@ public class PostServiceFacade {
         );
     }
 
+    @Transactional
+    public void deletePost(Long projectId) {
+        Post post = postRepository.findByProjectId(projectId)
+                .orElseThrow(() -> new BaseException(ErrorCode.POST_NOT_FOUND));
+
+        if (!isProjectBeforeSetUp(post.getProject())) {
+            throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
+        }
+
+        postRepository.deleteByProjectId(projectId);
+    }
+
     @Transactional(readOnly = true)
     public boolean isPostExist(Long projectId) {
         return postRepository.findByProjectId(projectId).isPresent();
     }
 
-    @Transactional
-    public void deletePost(Long projectId) {
-        postRepository.deleteByProjectId(projectId);
+    private boolean isProjectBeforeSetUp(Project project) {
+        return project.getProjectStatus() == ProjectStatus.READY;
     }
 }
