@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("orders/")
 @RequiredArgsConstructor
@@ -27,13 +29,32 @@ public class OrderController {
     }
 
     @GetMapping("{orderId}/supporters/{supporterId}")
-    public ResponseEntity<ResponseTemplate> getPurchase(
+    public ResponseEntity<ResponseTemplate> getSupporterPurchase(
             @PathVariable Long orderId,
             @PathVariable Long supporterId
     ){
-        OrderResponseDTO orderResponseDTO = orderService.getPurchase(orderId, supporterId);
+        OrderResponseDTO orderResponseDTO = orderService.getSupporterPurchase(orderId, supporterId);
 
         return ResponseEntity.ok(ResponseFactory.getSingleResult(orderResponseDTO));
+    }
+
+    @GetMapping("supporters/{supporterId}")
+    public ResponseEntity<ResponseTemplate> getSupporterPurchaseHistory(
+            @PathVariable Long supporterId
+    ){
+        List<OrderResponseDTO> orderResponseDTOs = orderService.getSupporterPurchaseHistory(supporterId);
+
+        return ResponseEntity.ok(ResponseFactory.getSingleResult(orderResponseDTOs));
+    }
+
+    @GetMapping("projects/{projectId}/makers/{makerId}")
+    public ResponseEntity<ResponseTemplate> getMakerProjectOrders(
+            @PathVariable Long projectId,
+            @PathVariable Long makerId
+    ){
+        List<OrderResponseDTO> orderResponseDTOs = orderService.getMakerProjectOrders(projectId,makerId);
+
+        return ResponseEntity.ok(ResponseFactory.getSingleResult(orderResponseDTOs));
     }
 
     @PutMapping("{supporterId}/{orderId}")
