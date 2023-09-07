@@ -93,7 +93,6 @@ class MakerControllerTest {
     @Test
     @DisplayName("[성공] 메이커 삭제 테스트")
     void makerDeleteTest() throws Exception {
-
         //when & then
         mvc.perform(delete("/makers/" + 1L)
                         .contentType(MediaType.APPLICATION_JSON)
