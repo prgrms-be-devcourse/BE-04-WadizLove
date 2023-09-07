@@ -5,6 +5,7 @@ import com.prgrms.wadiz.domain.funding.dto.request.FundingUpdateRequestDTO;
 import com.prgrms.wadiz.domain.funding.dto.response.FundingResponseDTO;
 import com.prgrms.wadiz.domain.funding.entity.Funding;
 import com.prgrms.wadiz.domain.funding.repository.FundingRepository;
+import com.prgrms.wadiz.domain.project.ProjectStatus;
 import com.prgrms.wadiz.domain.project.dto.ProjectServiceDTO;
 import com.prgrms.wadiz.domain.project.entity.Project;
 import com.prgrms.wadiz.global.util.exception.BaseException;
@@ -41,6 +42,10 @@ public class FundingServiceFacade {
         Funding funding = fundingRepository.findByProjectId(projectId)
                 .orElseThrow(() -> new BaseException(ErrorCode.FUNDING_NOT_FOUND));
 
+        if (!isProjectBeforeSetUp(funding.getProject())) {
+            throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
+        }
+
         return FundingResponseDTO.from(funding);
     }
 
@@ -52,13 +57,29 @@ public class FundingServiceFacade {
         Funding funding = fundingRepository.findByProjectId(projectId)
                 .orElseThrow(() -> new BaseException(ErrorCode.FUNDING_NOT_FOUND));
 
+        if (!isProjectBeforeSetUp(funding.getProject())) {
+            throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
+        }
+
         funding.updateFunding(
-                fundingUpdateRequestDTO.fundingStatus(),
                 fundingUpdateRequestDTO.fundingTargetAmount(),
-                fundingUpdateRequestDTO.fundingCategory(),
                 fundingUpdateRequestDTO.fundingStartAt(),
-                fundingUpdateRequestDTO.fundingEndAt()
+                fundingUpdateRequestDTO.fundingEndAt(),
+                fundingUpdateRequestDTO.fundingCategory(),
+                fundingUpdateRequestDTO.fundingStatus()
         );
+    }
+
+    @Transactional
+    public void deleteFunding(Long projectId) {
+        Funding funding = fundingRepository.findByProjectId(projectId)
+                .orElseThrow(() -> new BaseException(ErrorCode.FUNDING_NOT_FOUND));
+
+        if (!isProjectBeforeSetUp(funding.getProject())) {
+            throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
+        }
+
+        fundingRepository.deleteByProjectId(projectId);
     }
 
     @Transactional(readOnly = true)
@@ -66,8 +87,7 @@ public class FundingServiceFacade {
         return fundingRepository.findByProjectId(projectId).isPresent();
     }
 
-    @Transactional
-    public void deleteFunding(Long projectId) {
-        fundingRepository.deleteByProjectId(projectId);
+    private boolean isProjectBeforeSetUp(Project project) {
+        return project.getProjectStatus() == ProjectStatus.READY;
     }
 }

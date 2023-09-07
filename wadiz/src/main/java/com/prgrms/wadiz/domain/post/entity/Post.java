@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "posts")
@@ -22,16 +24,20 @@ public class Post extends BaseEntity {
     private Project project;
 
     @Column(nullable = false)
+    @NotBlank(message = "제목은 비워둘 수 없습니다.")
     private String postTitle;
 
     @Lob
     @Column(nullable = false)
+    @NotBlank(message = "상세 설명은 비워둘 수 없습니다.")
     private String postDescription;
 
     @Column(nullable = false)
+    @Pattern(regexp = "^https?://.*\\.(?:png|jpg|jpeg|gif)$", message = "올바른 이미지 URL 형식이 아닙니다.")
     private String postThumbNailImage;
 
     @Column(nullable = false)
+    @Pattern(regexp = "^https?://.*\\.(?:png|jpg|jpeg|gif)$", message = "올바른 이미지 URL 형식이 아닙니다.")
     private String postContentImage;
 
     @Builder

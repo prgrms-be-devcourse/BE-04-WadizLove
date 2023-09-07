@@ -48,8 +48,8 @@ class SupporterServiceTest {
         when(supporterRepository.save(any(Supporter.class))).then(AdditionalAnswers.returnsFirstArg());
 
         Supporter supporter1 = Supporter.builder()
-                .name(supporterDTO.name())
-                .email(supporterDTO.email())
+                .supporterName(supporter.getSupporterName())
+                .supporterEmail(supporter.getSupporterEmail())
                 .build();
 
         //when
@@ -72,8 +72,8 @@ class SupporterServiceTest {
 
         SupporterResponseDTO responseDTO = supporterService.signUpSupporter(supporterDTO);
         Supporter supporter1 = Supporter.builder()
-                .name(responseDTO.name())
-                .email(responseDTO.email())
+                .supporterName(responseDTO.supporterName())
+                .supporterEmail(responseDTO.supporterEmail())
                 .build();
 
         Long supporter1Id = supporter1.getSupporterId();
@@ -93,7 +93,7 @@ class SupporterServiceTest {
 
 
         //then
-        assertThat(supporterResponseDTO.name())
+        assertThat(supporterResponseDTO.supporterName())
                 .isEqualTo("update");
     }
 
@@ -110,8 +110,8 @@ class SupporterServiceTest {
 
         SupporterResponseDTO responseDTO = supporterService.signUpSupporter(supporterDTO);
         Supporter supporter1 = Supporter.builder()
-                .name(responseDTO.name())
-                .email(responseDTO.email())
+                .supporterName(responseDTO.supporterName())
+                .supporterEmail(responseDTO.supporterEmail())
                 .build();
 
         Long supporter1Id = supporter1.getSupporterId();

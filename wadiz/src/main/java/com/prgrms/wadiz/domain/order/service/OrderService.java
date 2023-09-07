@@ -120,6 +120,7 @@ public class OrderService {
     @Transactional(readOnly = true)
     public List<OrderResponseDTO> getSupporterPurchaseHistory(Long supporterId) {
         List<Order> orders = orderRepository.findAllBySupporterId(supporterId)
+
                 .orElseThrow(() -> {
                     log.error("Orders are not found by supporterId : {}", supporterId);
 
@@ -159,8 +160,9 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public List<OrderResponseDTO> getMakerProjectOrders(Long projectId, Long makerId) {
+    public List<OrderResponseDTO> getMakerProjectOrders(Long projectId, Long makerId) 
         List<Order> orders = orderRepository.findAllByProjectId(projectId)
+
                 .orElseThrow(() -> {
                     log.error("Orders are not found by projectId : {}", projectId);
 
@@ -201,7 +203,6 @@ public class OrderService {
 
         order.cancel();
     }
-
     private void validateSupporter(Long supporterId, Long orderSupporterId) {
         if (!orderSupporterId.equals(supporterId)){
 

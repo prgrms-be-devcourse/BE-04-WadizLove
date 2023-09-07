@@ -8,6 +8,9 @@ import com.prgrms.wadiz.domain.funding.dto.response.FundingResponseDTO;
 import com.prgrms.wadiz.domain.funding.entity.Funding;
 import com.prgrms.wadiz.domain.funding.repository.FundingRepository;
 import com.prgrms.wadiz.domain.project.dto.ProjectServiceDTO;
+import com.prgrms.wadiz.domain.project.entity.Project;
+import com.prgrms.wadiz.global.util.exception.BaseException;
+import com.prgrms.wadiz.global.util.exception.ErrorCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +22,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
@@ -70,8 +74,10 @@ class FundingServiceFacadeTest {
     void getFundingByProjectId() {
         // given
         Long projectId = 1L;
+        Project readyProject = Project.builder().build();
 
         Funding funding = Funding.builder()
+                .project(readyProject)
                 .fundingCategory(FundingCategory.FOOD)
                 .fundingTargetAmount(500_000)
                 .fundingStartAt(LocalDateTime.now())
@@ -103,26 +109,21 @@ class FundingServiceFacadeTest {
         Long projectId = 1L;
         LocalDateTime fundingStartAt = LocalDateTime.now();
         LocalDateTime fundingEndAt = LocalDateTime.now().plusWeeks(2L);
+        Project readyProject = Project.builder().build();
 
         Funding beforeFunding = Funding.builder()
+                .project(readyProject)
                 .fundingCategory(FundingCategory.FOOD)
                 .fundingTargetAmount(500_000)
                 .fundingStartAt(LocalDateTime.now())
                 .fundingEndAt(LocalDateTime.now().plusWeeks(2L))
                 .build();
 
-        Funding afterFunding = Funding.builder()
-                .fundingCategory(FundingCategory.FASHION)
-                .fundingTargetAmount(500_000)
-                .fundingStartAt(fundingStartAt)
-                .fundingEndAt(fundingEndAt)
-                .build();
-
         FundingUpdateRequestDTO fundingUpdateRequestDTO = new FundingUpdateRequestDTO(
-                FundingCategory.FASHION,
                 500_000,
                 fundingStartAt,
                 fundingEndAt,
+                FundingCategory.FASHION,
                 FundingStatus.OPEN
         );
 
@@ -133,10 +134,73 @@ class FundingServiceFacadeTest {
         fundingServiceFacade.updateFunding(projectId, fundingUpdateRequestDTO);
 
         // then
-        assertThat(fundingUpdateRequestDTO.fundingStatus(), is(afterFunding.getFundingStatus()));
-        assertThat(fundingUpdateRequestDTO.fundingTargetAmount(), is(afterFunding.getFundingTargetAmount()));
-        assertThat(fundingUpdateRequestDTO.fundingCategory(), is(afterFunding.getFundingCategory()));
-        assertThat(fundingUpdateRequestDTO.fundingStartAt(), is(afterFunding.getFundingStartAt()));
-        assertThat(fundingUpdateRequestDTO.fundingEndAt(), is(afterFunding.getFundingEndAt()));
+        assertThat(fundingUpdateRequestDTO.fundingStatus(), is(beforeFunding.getFundingStatus()));
+        assertThat(fundingUpdateRequestDTO.fundingTargetAmount(), is(beforeFunding.getFundingTargetAmount()));
+        assertThat(fundingUpdateRequestDTO.fundingCategory(), is(beforeFunding.getFundingCategory()));
+        assertThat(fundingUpdateRequestDTO.fundingStartAt(), is(beforeFunding.getFundingStartAt()));
+        assertThat(fundingUpdateRequestDTO.fundingEndAt(), is(beforeFunding.getFundingEndAt()));
+    }
+
+    @Test
+    @DisplayName("[예외] Project가 개설된 이후 Funding을 수정하려고 하면 예외가 발생한다.")
+    void updateRFundingAfterProjectSetUp() {
+        // given
+        Long projectId = 1L;
+        Project setUpProject = Project.builder().build();
+        setUpProject.setUpProject();
+
+        LocalDateTime fundingStartAt = LocalDateTime.now();
+        LocalDateTime fundingEndAt = LocalDateTime.now().plusWeeks(2L);
+
+        Funding setUpFunding = Funding.builder()
+                .project(setUpProject)
+                .fundingCategory(FundingCategory.FOOD)
+                .fundingTargetAmount(500_000)
+                .fundingStartAt(LocalDateTime.now())
+                .fundingEndAt(LocalDateTime.now().plusWeeks(2L))
+                .build();
+
+        FundingUpdateRequestDTO fundingUpdateRequestDTO = new FundingUpdateRequestDTO(
+                500_000,
+                fundingStartAt,
+                fundingEndAt,
+                FundingCategory.FASHION,
+                FundingStatus.OPEN
+        );
+
+        // mocking
+        when(fundingRepository.findByProjectId(projectId)).thenReturn(Optional.of(setUpFunding));
+
+        // when
+        // then
+        assertThatThrownBy(() -> fundingServiceFacade.updateFunding(projectId, fundingUpdateRequestDTO))
+                .isInstanceOf(BaseException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.PROJECT_ACCESS_DENY);
+    }
+
+    @Test
+    @DisplayName("[예외] Project가 개설된 이후 Funding을 삭제하려고 하면 예외가 발생한다.")
+    void deleteFundingAfterProjectSetUp() {
+        // given
+        Long projectId = 1L;
+        Project setUpProject = Project.builder().build();
+        setUpProject.setUpProject();
+
+        Funding setUpFunding = Funding.builder()
+                .project(setUpProject)
+                .fundingCategory(FundingCategory.FOOD)
+                .fundingTargetAmount(500_000)
+                .fundingStartAt(LocalDateTime.now())
+                .fundingEndAt(LocalDateTime.now().plusWeeks(2L))
+                .build();
+
+        // mocking
+        when(fundingRepository.findByProjectId(projectId)).thenReturn(Optional.of(setUpFunding));
+
+        // when
+        // then
+        assertThatThrownBy(() -> fundingServiceFacade.deleteFunding(projectId))
+                .isInstanceOf(BaseException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.PROJECT_ACCESS_DENY);
     }
 }

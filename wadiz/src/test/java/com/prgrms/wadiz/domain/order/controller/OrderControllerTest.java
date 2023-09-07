@@ -59,10 +59,7 @@ class OrderControllerTest {
 
         // when
         ResultActions perform = mvc.perform(
-                post(
-                BASE_URL + "new/supporter/{supporterId}",
-                1
-                )
+                post(BASE_URL + "new/supporter/{supporterId}",1))
                 .content(body)
                 .contentType(APPLICATION_JSON));
 

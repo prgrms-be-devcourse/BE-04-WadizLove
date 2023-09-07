@@ -6,6 +6,9 @@ import com.prgrms.wadiz.domain.post.dto.response.PostResponseDTO;
 import com.prgrms.wadiz.domain.post.entity.Post;
 import com.prgrms.wadiz.domain.post.repository.PostRepository;
 import com.prgrms.wadiz.domain.project.dto.ProjectServiceDTO;
+import com.prgrms.wadiz.domain.project.entity.Project;
+import com.prgrms.wadiz.global.util.exception.BaseException;
+import com.prgrms.wadiz.global.util.exception.ErrorCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +19,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
@@ -68,8 +72,10 @@ class PostServiceFacadeTest {
     void getPost() {
         // given
         Long projectId = 1L;
+        Project readyProject = Project.builder().build();
 
         Post post = Post.builder()
+                .project(readyProject)
                 .postTitle("아주 싼 햄버거")
                 .postDescription("아주 싼 우산의 후속작!")
                 .postThumbNailImage("xxx post thumbNail image link xxx")
@@ -98,8 +104,10 @@ class PostServiceFacadeTest {
     void updatePost() {
         // given
         Long projectId = 1L;
+        Project readyProject = Project.builder().build();
 
         Post befoerPost = Post.builder()
+                .project(readyProject)
                 .postTitle("아주 싼 햄버거")
                 .postDescription("아주 싼 우산의 후속작!")
                 .postThumbNailImage("xxx post thumbNail image link xxx")
@@ -107,6 +115,7 @@ class PostServiceFacadeTest {
                 .build();
 
         Post afterPost = Post.builder()
+                .project(readyProject)
                 .postTitle("아주 싼 피자")
                 .postDescription("아주 싼 햄버거의 후속작!")
                 .postThumbNailImage("xxx post thumbNail image link xxx")
@@ -131,5 +140,64 @@ class PostServiceFacadeTest {
         assertThat(postUpdateRequestDTO.postDescription(), is(afterPost.getPostDescription()));
         assertThat(postUpdateRequestDTO.postThumbNailImage(), is(afterPost.getPostThumbNailImage()));
         assertThat(postUpdateRequestDTO.postContentImage(), is(afterPost.getPostContentImage()));
+    }
+
+    @Test
+    @DisplayName("[예외] Project가 개설된 이후 Post를 수정하려고 하면 예외가 발생한다.")
+    void updatePostAfterProjectSetUp() {
+        // given
+        Long projectId = 1L;
+        Project setUpProject = Project.builder().build();
+        setUpProject.setUpProject();
+
+        Post setUpPost = Post.builder()
+                .project(setUpProject)
+                .postTitle("아주 싼 햄버거")
+                .postDescription("아주 싼 우산의 후속작")
+                .postThumbNailImage("xxx post thumbNail image link xxx")
+                .postContentImage("xxx post content image link xxx")
+                .build();
+
+        PostUpdateRequestDTO postUpdateRequestDTO = new PostUpdateRequestDTO(
+                "아주 싼 피자",
+                "아주 싼 햄버거의 후속작!",
+                "xxx post thumbNail image link xxx",
+                "xxx post content image link xxx"
+        );
+
+        // mocking
+        when(postRepository.findByProjectId(projectId)).thenReturn(Optional.of(setUpPost));
+
+        // when
+        // then
+        assertThatThrownBy(() -> postServiceFacade.updatePost(projectId, postUpdateRequestDTO))
+                .isInstanceOf(BaseException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.PROJECT_ACCESS_DENY);
+    }
+
+    @Test
+    @DisplayName("[예외] Project가 개설된 이후 Post를 삭제하려고 하면 예외가 발생한다.")
+    void deletePostAfterProjectSetUp() {
+        // given
+        Long projectId = 1L;
+        Project setUpProject = Project.builder().build();
+        setUpProject.setUpProject();
+
+        Post setUpPost = Post.builder()
+                .project(setUpProject)
+                .postTitle("아주 싼 햄버거")
+                .postDescription("아주 싼 우산의 후속작")
+                .postThumbNailImage("xxx post thumbNail image link xxx")
+                .postContentImage("xxx post content image link xxx")
+                .build();
+
+        // mocking
+        when(postRepository.findByProjectId(projectId)).thenReturn(Optional.of(setUpPost));
+
+        // when
+        // then
+        assertThatThrownBy(() -> postServiceFacade.deletePost(projectId))
+                .isInstanceOf(BaseException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.PROJECT_ACCESS_DENY);
     }
 }
