@@ -16,7 +16,6 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Table(name = "makers")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLDelete(sql = "UPDATE makers SET activated = false WHERE maker_id = ?")
 public class Maker extends BaseEntity{
 
     @Id
@@ -29,7 +28,7 @@ public class Maker extends BaseEntity{
     private String makerName;
 
     @Column(nullable = false)
-    @NotBlank(message = "이름을 입력해주세요.")
+    @NotBlank(message = "브랜드를 입력해주세요.")
     private String makerBrand;
 
     @Column(nullable = false)

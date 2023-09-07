@@ -15,7 +15,7 @@ public record SupporterCreateRequestDTO(
         )
         String supporterName,
 
-        @Email(message = "이메일을 입렬해주세요.")
+        @Email(message = "이메일 형식이 맞지 않습니다.")
         String supporterEmail
 ) {
 }
