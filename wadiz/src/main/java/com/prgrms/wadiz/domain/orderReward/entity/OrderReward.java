@@ -1,5 +1,6 @@
 package com.prgrms.wadiz.domain.orderReward.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.prgrms.wadiz.domain.reward.entity.Reward;
 import com.prgrms.wadiz.domain.order.entity.Order;
 import com.prgrms.wadiz.domain.BaseEntity;
@@ -26,6 +27,7 @@ public class OrderReward extends BaseEntity {
     @JoinColumn(name = "reward_id")
     private Reward reward;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Order order;
