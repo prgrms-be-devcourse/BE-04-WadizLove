@@ -2,6 +2,7 @@ package com.prgrms.wadiz.domain.reward.dto.request;
 
 import com.prgrms.wadiz.domain.reward.RewardStatus.RewardStatus;
 import com.prgrms.wadiz.domain.reward.RewardType.RewardType;
+import com.prgrms.wadiz.global.annotation.ValidEnum;
 import lombok.Builder;
 
 import javax.validation.constraints.Min;
@@ -21,10 +22,12 @@ public record RewardUpdateRequestDTO(
         @Min(value = 10, message = "리워드 가격을 입력해주세요.")
         Integer rewardPrice,
 
-        @NotBlank(message = "리워드 타입을 입력해주세요.")
+        @ValidEnum(enumClass = RewardType.class)
+//        @NotBlank(message = "리워드 타입을 입력해주세요.")
         RewardType rewardType,
 
-        @NotBlank(message = "리워드 상태를 입력해주세요.")
+        @ValidEnum(enumClass = RewardStatus.class)
+//        @NotBlank(message = "리워드 상태를 입력해주세요.")
         RewardStatus rewardStatus
 ) {
 }

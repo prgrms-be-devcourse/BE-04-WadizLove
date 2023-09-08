@@ -18,6 +18,7 @@ public record RewardResponseDTO(
     public static RewardResponseDTO from(Reward reward){
 
         return RewardResponseDTO.builder()
+                .rewardId(reward.getRewardId())
                 .rewardName(reward.getRewardName())
                 .rewardDescription(reward.getRewardDescription())
                 .rewardQuantity(reward.getRewardQuantity())

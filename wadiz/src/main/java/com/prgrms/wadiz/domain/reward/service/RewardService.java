@@ -3,7 +3,6 @@ package com.prgrms.wadiz.domain.reward.service;
 import com.prgrms.wadiz.domain.project.ProjectStatus;
 import com.prgrms.wadiz.domain.project.dto.ProjectServiceDTO;
 import com.prgrms.wadiz.domain.project.entity.Project;
-import com.prgrms.wadiz.domain.project.repository.ProjectRepository;
 import com.prgrms.wadiz.domain.reward.dto.request.RewardCreateRequestDTO;
 import com.prgrms.wadiz.domain.reward.dto.request.RewardUpdateRequestDTO;
 import com.prgrms.wadiz.domain.reward.dto.response.RewardResponseDTO;
@@ -28,7 +27,7 @@ public class RewardService {
     }
 
     @Transactional
-    public Long createReward(
+    public RewardResponseDTO createReward(
             ProjectServiceDTO projectServiceDTO,
             RewardCreateRequestDTO dto
     ) {
@@ -43,7 +42,11 @@ public class RewardService {
                 .rewardType(dto.rewardType())
                 .build();
 
-        return rewardRepository.save(reward).getRewardId();
+        Reward savedReward = rewardRepository.save(reward);
+
+        RewardResponseDTO rewardResponseDTO = RewardResponseDTO.from(savedReward);
+
+        return rewardResponseDTO;
     }
 
     @Transactional
@@ -61,9 +64,7 @@ public class RewardService {
 
         reward.updateReward(dto.rewardName(),dto.rewardDescription(),dto.rewardQuantity(),dto.rewardPrice(),dto.rewardType(),dto.rewardStatus());
 
-        Reward savedReward = rewardRepository.save(reward);
-
-        return RewardResponseDTO.from(savedReward);
+        return RewardResponseDTO.from(reward);
     }
 
     private boolean isProjectBeforeSetUp(Project project) {
@@ -84,7 +85,6 @@ public class RewardService {
         }
 
         reward.deletedStatus();
-        rewardRepository.deleteById(rewardId);
     }
 
     public boolean isRewardsExist(Long projectId) {
@@ -98,4 +98,17 @@ public class RewardService {
 
         return rewards.stream().map(RewardResponseDTO::from).toList();
     }
+
+    @Transactional(readOnly = true)
+    public RewardResponseDTO getReward(Long projectId, Long rewardId){
+        Reward reward = rewardRepository.findById(rewardId)
+                .orElseThrow(() -> new BaseException(ErrorCode.REWARD_NOT_FOUND));
+
+        if (!Objects.equals(reward.getProject().getProjectId(), projectId)) {
+            throw new BaseException(ErrorCode.NOT_MATCH);
+        }
+
+        return RewardResponseDTO.from(reward);
+    }
+
 }

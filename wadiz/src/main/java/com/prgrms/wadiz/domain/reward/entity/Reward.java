@@ -5,6 +5,7 @@ import com.prgrms.wadiz.domain.reward.RewardStatus.RewardStatus;
 import com.prgrms.wadiz.domain.reward.RewardType.RewardType;
 import com.prgrms.wadiz.domain.BaseEntity;
 
+import com.prgrms.wadiz.global.annotation.ValidEnum;
 import com.prgrms.wadiz.global.util.exception.BaseException;
 import com.prgrms.wadiz.global.util.exception.ErrorCode;
 
@@ -16,7 +17,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-
 
 @Entity
 @Getter
@@ -42,21 +42,23 @@ public class Reward extends BaseEntity {
     private String rewardDescription;
 
     @Column(nullable = false)
-    @NotBlank(message = "리워드 재고를 입력해주세요.") @Min(1)
+    @Min(value = 1, message = "리워드 재고를 입력해주세요.")
     private Integer rewardQuantity;
 
     @Column(nullable = false)
-    @NotBlank(message = "리워드 가격을 입력해주세요.") @Min(10)
+    @Min(value = 10, message = "리워드 가격은 10 이상입니다.")
     private Integer rewardPrice;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    @NotBlank(message = "리워드 타입을 입력해주세요.")
+    @ValidEnum(enumClass = RewardType.class)
+//    @NotBlank(message = "리워드 타입을 입력해주세요.")
     private RewardType rewardType;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    @NotBlank(message = "리워드 상태를 입력해주세요.")
+    @ValidEnum(enumClass = RewardStatus.class)
+//    @NotBlank(message = "리워드 상태를 입력해주세요.")
     private RewardStatus rewardStatus;
 
     @Column(nullable = false)
@@ -96,7 +98,8 @@ public class Reward extends BaseEntity {
             Integer rewardQuantity,
             Integer rewardPrice,
             RewardType rewardType,
-            RewardStatus rewardStatus) {
+            RewardStatus rewardStatus
+    ) {
         this.rewardName = rewardName;
         this.rewardDescription = rewardDescription;
         this.rewardQuantity = rewardQuantity;
@@ -108,7 +111,6 @@ public class Reward extends BaseEntity {
     public void deletedStatus() {
         activated = Boolean.FALSE;
     }
-
 
     public void allocateProject(Project project) {
         this.project = project;
