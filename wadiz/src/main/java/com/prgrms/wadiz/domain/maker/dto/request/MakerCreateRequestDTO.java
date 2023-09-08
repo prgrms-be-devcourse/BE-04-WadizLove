@@ -18,7 +18,7 @@ public record MakerCreateRequestDTO(
         @NotBlank(message = "브랜드를 입력해주세요.")
         String makerBrand,
 
-        @Email(message = "이메일을 입렬해주세요.")
+        @Email(message = "이메일 형식이 맞지 않습니다.")
         String makerEmail
 ) {
 }
