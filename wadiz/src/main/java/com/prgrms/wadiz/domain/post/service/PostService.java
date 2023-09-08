@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class PostServiceFacade {
+public class PostService {
     private final PostRepository postRepository;
 
     @Transactional

@@ -42,12 +42,14 @@ public class Post extends BaseEntity {
 
     @Builder
     public Post(
+            Long postId,
             Project project,
             String postTitle,
             String postDescription,
             String postThumbNailImage,
             String postContentImage
     ) {
+        this.postId = postId;
         this.project = project;
         this.postTitle = postTitle;
         this.postDescription = postDescription;
