@@ -18,6 +18,8 @@ public record ProjectServiceDTO(
     }
 
     public static Project toEntity(ProjectServiceDTO projectServiceDTO) {
-        return Project.builder().build();
+        return Project.builder()
+                .projectId(projectServiceDTO.projectId())
+                .build();
     }
 }

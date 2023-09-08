@@ -3,7 +3,7 @@ package com.prgrms.wadiz.domain.project.service;
 import com.prgrms.wadiz.domain.funding.dto.request.FundingCreateRequestDTO;
 import com.prgrms.wadiz.domain.funding.dto.request.FundingUpdateRequestDTO;
 import com.prgrms.wadiz.domain.funding.dto.response.FundingResponseDTO;
-import com.prgrms.wadiz.domain.funding.service.FundingServiceFacade;
+import com.prgrms.wadiz.domain.funding.service.FundingService;
 import com.prgrms.wadiz.domain.maker.dto.MakerServiceDTO;
 import com.prgrms.wadiz.domain.maker.dto.response.MakerResponseDTO;
 import com.prgrms.wadiz.domain.maker.entity.Maker;
@@ -12,13 +12,15 @@ import com.prgrms.wadiz.domain.post.dto.request.PostCreateRequestDTO;
 import com.prgrms.wadiz.domain.post.dto.request.PostUpdateRequestDTO;
 import com.prgrms.wadiz.domain.post.dto.response.PostResponseDTO;
 import com.prgrms.wadiz.domain.project.dto.ProjectServiceDTO;
+import com.prgrms.wadiz.domain.reward.dto.request.RewardCreateRequestDTO;
+import com.prgrms.wadiz.domain.reward.dto.request.RewardUpdateRequestDTO;
 import com.prgrms.wadiz.domain.reward.dto.response.RewardResponseDTO;
+import com.prgrms.wadiz.domain.reward.service.RewardService;
 import com.prgrms.wadiz.global.util.exception.ErrorCode;
-import com.prgrms.wadiz.domain.post.service.PostServiceFacade;
+import com.prgrms.wadiz.domain.post.service.PostService;
 import com.prgrms.wadiz.domain.project.dto.response.ProjectResponseDTO;
 import com.prgrms.wadiz.domain.project.entity.Project;
 import com.prgrms.wadiz.domain.project.repository.ProjectRepository;
-import com.prgrms.wadiz.domain.reward.service.RewardServiceFacade;
 import com.prgrms.wadiz.global.util.exception.BaseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,18 +30,21 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ProjectService {
+public class ProjectUseCase {
     private final MakerService makerService;
-    private final FundingServiceFacade fundingServiceFacade;
-    private final PostServiceFacade postServiceFacade;
-    private final RewardServiceFacade rewardServiceFacade;
+    private final FundingService fundingService;
+    private final PostService postService;
+    private final RewardService rewardService;
 
     private final ProjectRepository projectRepository;
 
+    /**
+     * Project 관련 로직
+     */
     @Transactional
     public ProjectResponseDTO startProject(Long makerId) {
-        MakerServiceDTO makerServiceDTO = makerService.getMakerDTO(makerId);
-        Maker maker = MakerServiceDTO.toEntity(makerServiceDTO);
+         MakerServiceDTO makerServiceDTO = makerService.getMakerDTO(makerId);
+         Maker maker = MakerServiceDTO.toEntity(makerServiceDTO);
 
         Project project = Project.builder()
                 .maker(maker)
@@ -47,6 +52,7 @@ public class ProjectService {
 
         return ProjectResponseDTO.of(projectRepository.save(project).getProjectId());
     }
+
     @Transactional
     public void createProject(Long projectId, Long makerId) {
         Project project = projectRepository.findById(projectId)
@@ -57,9 +63,9 @@ public class ProjectService {
         }
 
         // boolean으로 확인할 부분
-        if (!postServiceFacade.isPostExist(projectId) ||
-            !fundingServiceFacade.isFundingExist(projectId)||
-            !rewardServiceFacade.isRewardsExist(projectId)
+        if (!postService.isPostExist(projectId) ||
+            !fundingService.isFundingExist(projectId)||
+            !rewardService.isRewardsExist(projectId)
         ) {
             throw new BaseException(ErrorCode.UNKNOWN);
         }
@@ -72,9 +78,9 @@ public class ProjectService {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new BaseException(ErrorCode.PROJECT_NOT_FOUND));
 
-        PostResponseDTO postServiceDTO = postServiceFacade.getPostByProjectId(projectId);
-        FundingResponseDTO fundingServiceDTO = fundingServiceFacade.getFundingByProjectId(projectId);
-        List<RewardResponseDTO> rewardServiceDTOs = rewardServiceFacade.getRewardsByProjectId(projectId);
+        PostResponseDTO postServiceDTO = postService.getPostByProjectId(projectId);
+        FundingResponseDTO fundingServiceDTO = fundingService.getFundingByProjectId(projectId);
+        List<RewardResponseDTO> rewardServiceDTOs = rewardService.getRewardsByProjectId(projectId);
 
         Maker maker = project.getMaker();
         MakerResponseDTO makerResponseDTO = MakerResponseDTO.of(maker.getMakerName(), maker.getMakerEmail(), maker.getMakerBrand());
@@ -82,6 +88,9 @@ public class ProjectService {
         return ProjectResponseDTO.of(projectId, makerResponseDTO, postServiceDTO, fundingServiceDTO, rewardServiceDTOs);
     }
 
+    /**
+     * Funding CRUD 서비스
+     */
     @Transactional
     public void createFunding(
             Long projectId, 
@@ -91,12 +100,12 @@ public class ProjectService {
                 .orElseThrow(() -> new BaseException(ErrorCode.PROJECT_NOT_FOUND));
         ProjectServiceDTO projectServiceDTO = ProjectServiceDTO.from(project);
       
-        fundingServiceFacade.createFunding(projectServiceDTO, fundingCreateRequestDTO);
+        fundingService.createFunding(projectServiceDTO, fundingCreateRequestDTO);
     }
 
     @Transactional(readOnly = true)
     public FundingResponseDTO getFunding(Long projectId) {
-        return fundingServiceFacade.getFundingByProjectId(projectId);
+        return fundingService.getFundingByProjectId(projectId);
     }
 
     @Transactional
@@ -104,14 +113,17 @@ public class ProjectService {
             Long projectId,
             FundingUpdateRequestDTO fundingUpdateRequestDTO
     ) {
-        fundingServiceFacade.updateFunding(projectId, fundingUpdateRequestDTO);
+        fundingService.updateFunding(projectId, fundingUpdateRequestDTO);
     }
 
     @Transactional
     public void deleteFunding(Long projectId) {
-        fundingServiceFacade.deleteFunding(projectId);
+        fundingService.deleteFunding(projectId);
     }
-  
+
+    /**
+     * Post CRUD Service
+     */
     @Transactional
     public void createPost(
             Long projectId,
@@ -121,12 +133,12 @@ public class ProjectService {
                 .orElseThrow(() -> new BaseException(ErrorCode.PROJECT_NOT_FOUND));
         ProjectServiceDTO projectServiceDTO = ProjectServiceDTO.from(project);
 
-        postServiceFacade.createPost(projectServiceDTO, postCreateRequestDTO);
+        postService.createPost(projectServiceDTO, postCreateRequestDTO);
     }
 
     @Transactional(readOnly = true)
     public PostResponseDTO getPost(Long projectId) {
-        return postServiceFacade.getPostByProjectId(projectId);
+        return postService.getPostByProjectId(projectId);
     }
 
     @Transactional
@@ -134,11 +146,52 @@ public class ProjectService {
             Long projectId,
             PostUpdateRequestDTO postUpdateRequestDTO
     ) {
-        postServiceFacade.updatePost(projectId, postUpdateRequestDTO);
+        postService.updatePost(projectId, postUpdateRequestDTO);
     }
 
     @Transactional
     public void deletePost(Long projectId) {
-        postServiceFacade.deletePost(projectId);
+        postService.deletePost(projectId);
     }
+
+    /**
+     * Reward Service 관련 로직
+     */
+
+    public void updateReward(
+            Long projectId,
+            Long rewardId,
+            RewardUpdateRequestDTO dto
+    ) {
+        rewardService.updateReward(projectId, rewardId, dto);
+    }
+
+    public void deleteReward(
+            Long projectId,
+            Long rewardId
+    ) {
+        rewardService.deleteReward(projectId, rewardId);
+    }
+
+    @Transactional
+    public RewardResponseDTO createReward(
+            Long projectId,
+            RewardCreateRequestDTO rewardCreateRequestDTO
+    ) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new BaseException(ErrorCode.PROJECT_NOT_FOUND));
+
+        ProjectServiceDTO projectServiceDTO = ProjectServiceDTO.from(project);
+
+        return rewardService.createReward(projectServiceDTO, rewardCreateRequestDTO);
+    }
+
+    @Transactional(readOnly = true)
+    public RewardResponseDTO getReward(
+            Long projectId,
+            Long rewardId
+    ){
+        return rewardService.getReward(projectId, rewardId);
+    }
+
 }

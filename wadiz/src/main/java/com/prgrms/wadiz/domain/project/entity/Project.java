@@ -26,7 +26,8 @@ public class Project extends BaseEntity {
     private ProjectStatus projectStatus;
 
     @Builder
-    public Project(Maker maker) {
+    public Project(Long projectId, Maker maker) {
+        this.projectId = projectId;
         this.maker = maker;
         this.projectStatus = ProjectStatus.READY;
     }
