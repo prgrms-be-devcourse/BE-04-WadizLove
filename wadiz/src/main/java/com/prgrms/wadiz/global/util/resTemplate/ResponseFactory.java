@@ -1,7 +1,10 @@
 package com.prgrms.wadiz.global.util.resTemplate;
 
+import lombok.Getter;
+
 import java.util.List;
 
+@Getter
 public class ResponseFactory {
     // 단일 결과 처리 메소드
     public static  <T> SingleResult<T> getSingleResult(T data) {

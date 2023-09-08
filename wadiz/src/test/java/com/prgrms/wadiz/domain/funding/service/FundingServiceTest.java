@@ -28,9 +28,9 @@ import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class FundingServiceFacadeTest {
+class FundingServiceTest {
     @InjectMocks
-    private FundingServiceFacade fundingServiceFacade;
+    private FundingService fundingService;
     @Mock
     private FundingRepository fundingRepository;
 
@@ -61,7 +61,7 @@ class FundingServiceFacadeTest {
         when(fundingRepository.findById(fundingId)).thenReturn(Optional.of(expectedFunding));
 
         // when
-        Long actualFundingId = fundingServiceFacade.createFunding(projectServiceDTO, requestDTO);
+        Long actualFundingId = fundingService.createFunding(projectServiceDTO, requestDTO);
 
         // then
         Funding actualFunding = fundingRepository.findById(actualFundingId).get();
@@ -96,7 +96,7 @@ class FundingServiceFacadeTest {
         when(fundingRepository.findByProjectId(projectId)).thenReturn(Optional.of(funding));
 
         // when
-        FundingResponseDTO actualFundingResponseDTO = fundingServiceFacade.getFundingByProjectId(projectId);
+        FundingResponseDTO actualFundingResponseDTO = fundingService.getFundingByProjectId(projectId);
 
         // then
         assertThat(actualFundingResponseDTO, samePropertyValuesAs(expectedFundingResponseDTO));
@@ -131,7 +131,7 @@ class FundingServiceFacadeTest {
         when(fundingRepository.findByProjectId(projectId)).thenReturn(Optional.of(beforeFunding));
 
         // when
-        fundingServiceFacade.updateFunding(projectId, fundingUpdateRequestDTO);
+        fundingService.updateFunding(projectId, fundingUpdateRequestDTO);
 
         // then
         assertThat(fundingUpdateRequestDTO.fundingStatus(), is(beforeFunding.getFundingStatus()));
@@ -173,7 +173,7 @@ class FundingServiceFacadeTest {
 
         // when
         // then
-        assertThatThrownBy(() -> fundingServiceFacade.updateFunding(projectId, fundingUpdateRequestDTO))
+        assertThatThrownBy(() -> fundingService.updateFunding(projectId, fundingUpdateRequestDTO))
                 .isInstanceOf(BaseException.class)
                 .hasFieldOrPropertyWithValue("errorCode", ErrorCode.PROJECT_ACCESS_DENY);
     }
@@ -199,7 +199,7 @@ class FundingServiceFacadeTest {
 
         // when
         // then
-        assertThatThrownBy(() -> fundingServiceFacade.deleteFunding(projectId))
+        assertThatThrownBy(() -> fundingService.deleteFunding(projectId))
                 .isInstanceOf(BaseException.class)
                 .hasFieldOrPropertyWithValue("errorCode", ErrorCode.PROJECT_ACCESS_DENY);
     }

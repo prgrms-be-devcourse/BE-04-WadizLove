@@ -25,9 +25,9 @@ import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class PostServiceFacadeTest {
+class PostServiceTest {
     @InjectMocks
-    private PostServiceFacade postServiceFacade;
+    private PostService postService;
 
     @Mock
     private PostRepository postRepository;
@@ -59,7 +59,7 @@ class PostServiceFacadeTest {
         when(postRepository.findById(postId)).thenReturn(Optional.of(expectedPost));
 
         // when
-        Long actualPostId = postServiceFacade.createPost(projectServiceDTO, requestDTO);
+        Long actualPostId = postService.createPost(projectServiceDTO, requestDTO);
 
         // then
         Post actualPost = postRepository.findById(actualPostId).get();
@@ -93,7 +93,7 @@ class PostServiceFacadeTest {
         when(postRepository.findByProjectId(projectId)).thenReturn(Optional.ofNullable(post));
 
         // when
-        PostResponseDTO actualPostResponseDTO = postServiceFacade.getPostByProjectId(projectId);
+        PostResponseDTO actualPostResponseDTO = postService.getPostByProjectId(projectId);
 
         // then
         assertThat(actualPostResponseDTO, samePropertyValuesAs(expectedPostResponseDTO));
@@ -133,7 +133,7 @@ class PostServiceFacadeTest {
         when(postRepository.findByProjectId(projectId)).thenReturn(Optional.of(befoerPost));
 
         // when
-        postServiceFacade.updatePost(projectId, postUpdateRequestDTO);
+        postService.updatePost(projectId, postUpdateRequestDTO);
 
         // then
         assertThat(postUpdateRequestDTO.postTitle(), is(afterPost.getPostTitle()));
@@ -170,7 +170,7 @@ class PostServiceFacadeTest {
 
         // when
         // then
-        assertThatThrownBy(() -> postServiceFacade.updatePost(projectId, postUpdateRequestDTO))
+        assertThatThrownBy(() -> postService.updatePost(projectId, postUpdateRequestDTO))
                 .isInstanceOf(BaseException.class)
                 .hasFieldOrPropertyWithValue("errorCode", ErrorCode.PROJECT_ACCESS_DENY);
     }
@@ -196,7 +196,7 @@ class PostServiceFacadeTest {
 
         // when
         // then
-        assertThatThrownBy(() -> postServiceFacade.deletePost(projectId))
+        assertThatThrownBy(() -> postService.deletePost(projectId))
                 .isInstanceOf(BaseException.class)
                 .hasFieldOrPropertyWithValue("errorCode", ErrorCode.PROJECT_ACCESS_DENY);
     }
