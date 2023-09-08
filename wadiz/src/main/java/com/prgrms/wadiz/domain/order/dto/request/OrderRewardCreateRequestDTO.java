@@ -6,7 +6,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Builder
-public record OrderRewardRequestDTO(
+public record OrderRewardCreateRequestDTO(
         @NotNull(message = "주문 상품 번호를 입력해주세요")
         Long rewardId,
 

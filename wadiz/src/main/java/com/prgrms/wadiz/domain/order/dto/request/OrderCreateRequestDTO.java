@@ -5,6 +5,6 @@ import lombok.Builder;
 import java.util.List;
 
 @Builder
-public record OrderCreateRequestDTO(List<OrderRewardRequestDTO> orderRewards) {
+public record OrderCreateRequestDTO(List<OrderRewardCreateRequestDTO> orderRewards) {
 
 }

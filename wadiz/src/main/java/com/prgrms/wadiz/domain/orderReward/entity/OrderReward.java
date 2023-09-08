@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
@@ -32,9 +33,11 @@ public class OrderReward extends BaseEntity {
     @JoinColumn(name = "order_id")
     private Order order;
 
+    @NotNull
     @Column(nullable = false)
     private Integer orderRewardPrice;
 
+    @NotNull
     @Column(nullable = false)
     private Integer orderRewardQuantity;
 
@@ -61,6 +64,4 @@ public class OrderReward extends BaseEntity {
 
         return orderRewardQuantity;
     }
-
-
 }
