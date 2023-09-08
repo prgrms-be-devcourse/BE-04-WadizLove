@@ -21,7 +21,7 @@ public class MakerController {
     private final MakerService makerService;
 
     @PostMapping("/sign-up")
-    public ResponseEntity<ResponseTemplate> signUpMaker(@RequestBody @Valid MakerCreateRequestDTO dto) {
+    public ResponseEntity<ResponseTemplate> signUpMaker(@Valid @RequestBody MakerCreateRequestDTO dto) {
         makerService.signUpMaker(dto);
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());
     }

@@ -28,7 +28,7 @@ public class Supporter extends BaseEntity {
     private String supporterName;
 
     @Column(nullable = false)
-    @Email @NotBlank(message = "이메일 정보를 입력해 주세요")
+    @Email @NotBlank(message = "이메일 형식이 맞지 않습니다.")
     private String supporterEmail;
   
     @Column(nullable = false)
