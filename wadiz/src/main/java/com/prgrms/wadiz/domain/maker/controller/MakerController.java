@@ -2,6 +2,7 @@ package com.prgrms.wadiz.domain.maker.controller;
 
 import com.prgrms.wadiz.domain.maker.dto.request.MakerCreateRequestDTO;
 import com.prgrms.wadiz.domain.maker.dto.request.MakerUpdateRequestDTO;
+import com.prgrms.wadiz.domain.maker.dto.response.MakerResponseDTO;
 import com.prgrms.wadiz.domain.maker.service.MakerService;
 import com.prgrms.wadiz.global.util.resTemplate.ResponseFactory;
 import com.prgrms.wadiz.global.util.resTemplate.ResponseTemplate;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/makers")
+@RequestMapping("/api/makers")
 @RequiredArgsConstructor
 public class MakerController {
 
@@ -22,8 +23,9 @@ public class MakerController {
 
     @PostMapping("/sign-up")
     public ResponseEntity<ResponseTemplate> signUpMaker(@RequestBody @Valid MakerCreateRequestDTO dto) {
-        makerService.signUpMaker(dto);
-        return ResponseEntity.ok(ResponseFactory.getSuccessResult());
+        MakerResponseDTO makerResponseDTO = makerService.signUpMaker(dto);
+
+        return ResponseEntity.ok(ResponseFactory.getSingleResult(makerResponseDTO));
     }
 
     @PutMapping("/{makerId}")
@@ -40,5 +42,7 @@ public class MakerController {
         makerService.deleteMaker(makerId);
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());
     }
+
+    //TODO : GET 메소드 만들기
 
 }

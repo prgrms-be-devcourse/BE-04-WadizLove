@@ -10,6 +10,7 @@ import javax.validation.constraints.Size;
 
 @Builder
 public record MakerServiceDTO(
+        Long makerId,
         @Size(
                 min = 2,
                 message = "이름은 최소 2자 이상입니다."
@@ -23,7 +24,9 @@ public record MakerServiceDTO(
         String makerEmail
 ) {
     public static Maker toEntity(MakerServiceDTO dto) {
+
         return Maker.builder()
+                .makerId(dto.makerId())
                 .makerName(dto.makerName())
                 .makerBrand(dto.makerBrand())
                 .makerEmail(dto.makerEmail())
@@ -32,6 +35,7 @@ public record MakerServiceDTO(
 
     public static MakerServiceDTO from(Maker findMaker) {
         return MakerServiceDTO.builder()
+                .makerId(findMaker.getMakerId())
                 .makerName(findMaker.getMakerName())
                 .makerBrand(findMaker.getMakerBrand())
                 .makerEmail(findMaker.getMakerEmail())

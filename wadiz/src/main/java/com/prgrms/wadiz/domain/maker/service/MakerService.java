@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class MakerService {
@@ -25,43 +27,45 @@ public class MakerService {
                 .makerEmail(dto.makerEmail())
                 .build();
 
-        Maker savedMaker = makerRepository.save(maker);
+        makerRepository.save(maker);
 
-        return MakerResponseDTO.of(savedMaker.getMakerName(), savedMaker.getMakerBrand(), savedMaker.getMakerEmail());
+        return MakerResponseDTO.from(maker);
     }
 
-    @Transactional(readOnly = true)
-    public MakerResponseDTO getMaker(Long id) {
-        Maker findMaker = makerRepository.findById(id)
+    @Transactional
+    public MakerServiceDTO getMakerDTO(Long makerId) {
+        Maker retrivedMaker = makerRepository.findById(makerId)
                 .orElseThrow(() -> new BaseException(ErrorCode.MAKER_NOT_FOUND));
-        return MakerResponseDTO.of(findMaker.getMakerName(), findMaker.getMakerBrand(), findMaker.getMakerEmail());
+
+        return MakerServiceDTO.from(retrivedMaker);
     }
 
     @Transactional
     public MakerResponseDTO updateMaker(
-            Long id,
+            Long makerId,
             MakerUpdateRequestDTO dto
     ) {
-
-        Maker maker = makerRepository.findById(id)
+        Maker maker = makerRepository.findById(makerId)
                 .orElseThrow(() -> new BaseException(ErrorCode.MAKER_NOT_FOUND));
 
-        maker.changeMakerName(dto.makerName());
-        maker.chaneMakerBrand(dto.makerBrand());
-        maker.changeMakerEmail(dto.makerEmail());
+        maker.updateMaker(
+                dto.makerName(),
+                dto.makerEmail(),
+                dto.makerBrand()
+        );
 
-        Maker savedMaker = makerRepository.save(maker);
-        return MakerResponseDTO.of(savedMaker.getMakerName(), savedMaker.getMakerBrand(), savedMaker.getMakerEmail());
+        return MakerResponseDTO.of(
+                maker.getMakerName(),
+                maker.getMakerBrand(),
+                maker.getMakerEmail()
+        );
     }
 
     @Transactional
-    public void deleteMaker(Long id) {
-        makerRepository.deleteById(id);
-    }
-
-    public MakerServiceDTO getMakerDTO(Long makerId) {
-        Maker findMaker = makerRepository.findById(makerId)
+    public void deleteMaker(Long makerId) {
+        Maker maker = makerRepository.findById(makerId)
                 .orElseThrow(() -> new BaseException(ErrorCode.MAKER_NOT_FOUND));
-        return MakerServiceDTO.from(findMaker);
+
+        maker.deActivateMaker();
     }
 }
