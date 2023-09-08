@@ -11,28 +11,28 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 @Getter
 @Table(name = "supporters")
 @NoArgsConstructor
-// @SQLDelete(sql = "UPDATE supporters SET activated = false WHERE supporter_id = ?")  jpa이용핮기!
 public class Supporter extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long supporterId;
 
     @Column(nullable = false)
-    @NotBlank(message = "이름을 입력해주세요.")
-    @Min(value = 2, message = "최소 2자 이상입니다.")
+    @Size(min = 2, message = "최소 2자 이상입니다.")
     private String supporterName;
 
     @Column(nullable = false)
-    @Email @NotBlank(message = "이메일 정보를 입력해 주세요")
+    @Email(message = "이메일 정보를 입력해 주세요")
     private String supporterEmail;
   
     @Column(nullable = false)
-    private boolean activated = Boolean.TRUE; // 활성화 여부 -> 삭제 시 FALSE //// user 상태를 하나 만들기 (정지,탈퇴 등등)
+    private boolean activated = Boolean.TRUE;
+    // 활성화 여부 -> 삭제 시 FALSE //// user 상태를 하나 만들기 (정지,탈퇴 등등)
 
     @Builder
     public Supporter(
@@ -54,12 +54,12 @@ public class Supporter extends BaseEntity {
         this.activated = isActivated;
     }
 
-    public void changeName(String name) {
-        this.supporterName = name;
+    public void updateSupporter(String supporterName, String supporterEmail) {
+        this.supporterName = supporterName;
+        this.supporterEmail = supporterEmail;
     }
 
-    public void changeEmail(String email) {
-        this.supporterEmail = email;
+    public void deActivateSupporter(){
+        this.activated = Boolean.FALSE;
     }
-
 }

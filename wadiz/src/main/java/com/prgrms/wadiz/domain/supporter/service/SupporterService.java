@@ -11,11 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Service
 @RequiredArgsConstructor
 public class SupporterService {
-
     private final SupporterRepository supporterRepository;
 
     @Transactional
@@ -26,31 +24,47 @@ public class SupporterService {
                 .build();
 
         Supporter savedEntity = supporterRepository.save(supporter);
-        return SupporterResponseDTO.of(savedEntity.getSupporterName(),savedEntity.getSupporterEmail());
+
+        return SupporterResponseDTO.of(
+                savedEntity.getSupporterName(),
+                savedEntity.getSupporterEmail()
+        );
     }
 
-    public SupporterResponseDTO getSupporter(Long id) {
-        Supporter supporter =supporterRepository.findById(id)
+    public SupporterResponseDTO getSupporter(Long supporterId) {
+        Supporter supporter =supporterRepository.findById(supporterId)
                 .orElseThrow(() -> new BaseException(ErrorCode.SUPPORTER_NOT_FOUND));
 
-        return SupporterResponseDTO.of(supporter.getSupporterName(),supporter.getSupporterEmail());
+        return SupporterResponseDTO.of(
+                supporter.getSupporterName(),
+                supporter.getSupporterEmail()
+        );
     }
 
-    public SupporterResponseDTO updateSupporter(Long id, SupporterUpdateRequestDTO dto) {
-        Supporter supporter = supporterRepository.findById(id)
+    public SupporterResponseDTO updateSupporter(
+            Long supporterId,
+            SupporterUpdateRequestDTO dto
+    ) {
+        Supporter supporter = supporterRepository.findById(supporterId)
                 .orElseThrow(() -> new BaseException(ErrorCode.SUPPORTER_NOT_FOUND));
 
-        supporter.changeName(dto.supporterName());
-        supporter.changeEmail(dto.supporterEmail());
+        supporter.updateSupporter(
+                dto.supporterName(),
+                dto.supporterEmail()
+        );
 
-        Supporter savedSupporter = supporterRepository.save(supporter);
-        return SupporterResponseDTO.of(savedSupporter.getSupporterName(),savedSupporter.getSupporterEmail());
+        return SupporterResponseDTO.of(
+                supporter.getSupporterName(),
+                supporter.getSupporterEmail()
+        );
     }
-
 
     @Transactional
-    public void deleteSupporter(Long id) {
-        supporterRepository.deleteById(id);
+    public void deleteSupporter(Long supporterId) {
+        Supporter supporter = supporterRepository.findById(supporterId)
+                .orElseThrow(() -> new BaseException(ErrorCode.SUPPORTER_NOT_FOUND));
+
+        supporter.deActivateSupporter();
     }
 
 }
