@@ -84,14 +84,15 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public OrderResponseDTO getSupporterPurchase(
-            Long supporterId,
-            Long orderId
+            Long orderId,
+            Long supporterId
     ) {
         Order order = getOrderInfo(orderId);
 
         validateSupporter(supporterId, order.getSupporter().getSupporterId());
 
         Long projectId = order.getProject().getProjectId();
+
         String postTitle = postRepository.findByProjectId(projectId)
                 .orElseThrow(() -> {
                     log.error("post is not found");
@@ -160,7 +161,7 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public List<OrderResponseDTO> getMakerProjectOrders(Long projectId, Long makerId) 
+    public List<OrderResponseDTO> getMakerProjectOrders(Long projectId, Long makerId) {
         List<Order> orders = orderRepository.findAllByProjectId(projectId)
 
                 .orElseThrow(() -> {

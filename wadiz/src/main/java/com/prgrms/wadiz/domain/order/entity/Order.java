@@ -32,7 +32,8 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "project_id")
     private Project project;
 
-    @OneToMany(mappedBy = "orderRewards", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderReward> orderRewards = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)

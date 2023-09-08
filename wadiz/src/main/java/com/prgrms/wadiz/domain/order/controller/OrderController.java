@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -18,15 +19,32 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @PostMapping("new/supporter/{supporterId}")
+    /**
+     * Order create, cancel
+     */
+    @PostMapping("supporter/{supporterId}/new")
     public ResponseEntity<ResponseTemplate> createOrder(
             @PathVariable Long supporterId,
-            OrderCreateRequestDTO orderCreateRequestDto
+            @RequestBody @Valid OrderCreateRequestDTO orderCreateRequestDto
     ){
         orderService.createOrder(supporterId, orderCreateRequestDto);
 
+        return ResponseEntity.ok(ResponseFactory.getSuccessResult()); //TODO : Id 값 내뱉어주기
+    }
+
+    @PutMapping("{orderId}/supporters/{supporterId}")
+    public ResponseEntity<ResponseTemplate> cancelOrder(
+            @PathVariable Long orderId,
+            @PathVariable Long supporterId
+    ){
+        orderService.cancelOrder(supporterId, orderId);
+
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());
     }
+
+    /**
+     * 서포터 주문 기록 조회(단건,다건)
+     */
 
     @GetMapping("{orderId}/supporters/{supporterId}")
     public ResponseEntity<ResponseTemplate> getSupporterPurchase(
@@ -44,8 +62,12 @@ public class OrderController {
     ){
         List<OrderResponseDTO> orderResponseDTOs = orderService.getSupporterPurchaseHistory(supporterId);
 
-        return ResponseEntity.ok(ResponseFactory.getSingleResult(orderResponseDTOs));
+        return ResponseEntity.ok(ResponseFactory.getListResult(orderResponseDTOs));
     }
+
+    /**
+     * 메이커 주문 기록 조회
+     */
 
     @GetMapping("projects/{projectId}/makers/{makerId}")
     public ResponseEntity<ResponseTemplate> getMakerProjectOrders(
@@ -54,15 +76,9 @@ public class OrderController {
     ){
         List<OrderResponseDTO> orderResponseDTOs = orderService.getMakerProjectOrders(projectId,makerId);
 
-        return ResponseEntity.ok(ResponseFactory.getSingleResult(orderResponseDTOs));
+        return ResponseEntity.ok(ResponseFactory.getListResult(orderResponseDTOs));
     }
 
-    @PutMapping("{orderId}/supporters/{supporterId}")
-    public void cancelOrder(
-        @PathVariable Long supporterId,
-        @PathVariable Long orderId
-    ){
-        orderService.cancelOrder(supporterId, orderId);
-    }
+
 
 }
