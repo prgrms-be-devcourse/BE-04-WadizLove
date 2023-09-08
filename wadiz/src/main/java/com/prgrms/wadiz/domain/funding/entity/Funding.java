@@ -43,7 +43,7 @@ public class Funding extends BaseEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    @ValidEnum(enumClass = FundingCategory.class, message = "유효하지 않은 펀딩 상태입니다.")
+    @ValidEnum(enumClass = FundingStatus.class, message = "유효하지 않은 펀딩 상태입니다.")
     private FundingStatus fundingStatus;
 
     @Builder

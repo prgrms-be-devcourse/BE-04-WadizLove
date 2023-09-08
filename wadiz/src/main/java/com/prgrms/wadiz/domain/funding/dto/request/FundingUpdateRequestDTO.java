@@ -21,7 +21,7 @@ public record FundingUpdateRequestDTO(
         @ValidEnum(enumClass = FundingCategory.class, message = "존재하지 않는 카테고리 입니다.")
         FundingCategory fundingCategory,
 
-        @ValidEnum(enumClass = FundingCategory.class, message = "유효하지 않은 펀딩 상태입니다.")
+        @ValidEnum(enumClass = FundingStatus.class, message = "유효하지 않은 펀딩 상태입니다.")
         FundingStatus fundingStatus
 ) {
 }

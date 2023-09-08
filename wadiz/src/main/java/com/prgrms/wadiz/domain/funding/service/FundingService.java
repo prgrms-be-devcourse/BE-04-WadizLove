@@ -11,15 +11,16 @@ import com.prgrms.wadiz.domain.project.entity.Project;
 import com.prgrms.wadiz.global.util.exception.BaseException;
 import com.prgrms.wadiz.global.util.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class FundingServiceFacade {
+public class FundingService {
     private final FundingRepository fundingRepository;
 
-    @Transactional
+    @Transactional //TODO : 시작 날짜보다 끝나는 날짜가 더 이후여야 한다. (해당 예외 처리)
     public Long createFunding(
             ProjectServiceDTO projectServiceDTO,
             FundingCreateRequestDTO fundingCreateRequestDTO
