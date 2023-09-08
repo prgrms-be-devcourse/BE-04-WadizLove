@@ -75,7 +75,6 @@ public class OrderService {
         Order order = Order.builder()
                 .supporter(supporter)
                 .project(project)
-                .orderRewards(orderRewards)
                 .build();
 
         orderRewards.forEach(order::addOrderReward);
@@ -93,10 +92,11 @@ public class OrderService {
         validateSupporter(supporterId, order.getSupporter().getSupporterId());
 
         Long projectId = order.getProject().getProjectId();
-        String postTitle = postRepository.findByProjectId(projectId).orElseThrow(() -> {
-            log.error("post is not found");
+        String postTitle = postRepository.findByProjectId(projectId)
+                .orElseThrow(() -> {
+                    log.error("post is not found");
 
-            return new BaseException(ErrorCode.POST_NOT_FOUND);
+                    throw new BaseException(ErrorCode.POST_NOT_FOUND);
         }).getPostTitle();
 
         List<OrderRewardResponseDTO> orderRewardResponseDTOs = order.getOrderRewards().stream()
@@ -119,7 +119,8 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public List<OrderResponseDTO> getSupporterPurchaseHistory(Long supporterId) {
-        List<Order> orders = orderRepository.findBySupporterId(supporterId)
+        List<Order> orders = orderRepository.findAllBySupporterId(supporterId)
+
                 .orElseThrow(() -> {
                     log.error("Orders are not found by supporterId : {}", supporterId);
 
@@ -155,13 +156,13 @@ public class OrderService {
                     );
                 }).collect(Collectors.toList());
 
-
         return orderResponseDTOs;
     }
 
     @Transactional(readOnly = true)
-    public List<OrderResponseDTO> getMakerProjectOrders(Long projectId, Long makerId) {
-        List<Order> orders = orderRepository.findByProjectId(projectId)
+    public List<OrderResponseDTO> getMakerProjectOrders(Long projectId, Long makerId) 
+        List<Order> orders = orderRepository.findAllByProjectId(projectId)
+
                 .orElseThrow(() -> {
                     log.error("Orders are not found by projectId : {}", projectId);
 
@@ -202,7 +203,6 @@ public class OrderService {
 
         order.cancel();
     }
-
     private void validateSupporter(Long supporterId, Long orderSupporterId) {
         if (!orderSupporterId.equals(supporterId)){
 
@@ -223,6 +223,7 @@ public class OrderService {
 
             return new BaseException(ErrorCode.ORDER_NOT_FOUND);
         });
+
         return order;
     }
 
