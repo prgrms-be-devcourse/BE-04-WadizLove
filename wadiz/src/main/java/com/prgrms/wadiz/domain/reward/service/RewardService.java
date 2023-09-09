@@ -88,12 +88,12 @@ public class RewardService {
     }
 
     public boolean isRewardsExist(Long projectId) {
-        Optional<List<Reward>> rewards = rewardRepository.findAllByProjectId(projectId);
+        Optional<List<Reward>> rewards = rewardRepository.findByProjectId(projectId);
         return rewards.isPresent();
     }
 
     public List<RewardResponseDTO> getRewardsByProjectId(Long projectId) {
-        List<Reward> rewards = rewardRepository.findAllByProjectId(projectId)
+        List<Reward> rewards = rewardRepository.findByProjectId(projectId)
                 .orElseThrow(() -> new BaseException(ErrorCode.REWARD_NOT_FOUND));
 
         return rewards.stream().map(RewardResponseDTO::from).toList();

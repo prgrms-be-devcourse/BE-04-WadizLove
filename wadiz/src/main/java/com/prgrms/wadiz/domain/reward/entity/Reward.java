@@ -57,8 +57,7 @@ public class Reward extends BaseEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    @ValidEnum(enumClass = RewardStatus.class)
-//    @NotBlank(message = "리워드 상태를 입력해주세요.")
+    @ValidEnum(enumClass = RewardStatus.class, message = "리워드 상태를 입력해주세요.")
     private RewardStatus rewardStatus;
 
     @Column(nullable = false)
@@ -110,10 +109,6 @@ public class Reward extends BaseEntity {
 
     public void deletedStatus() {
         activated = Boolean.FALSE;
-    }
-
-    public void allocateProject(Project project) {
-        this.project = project;
     }
 
     public void addQuantity(Integer orderRewardQuantity) {
