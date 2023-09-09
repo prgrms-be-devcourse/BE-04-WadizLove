@@ -78,6 +78,7 @@ public class OrderService {
                 .build();
 
         orderRewards.forEach(order::addOrderReward);
+        orderRewards.forEach(order::calculateTotalOrderPrice);
 
         orderRepository.save(order);
     }
@@ -114,6 +115,7 @@ public class OrderService {
                 postTitle,
                 order.getProject().getMaker().getMakerBrand(),
                 orderRewardResponseDTOs,
+                order.getTotalOrderPrice(),
                 order.getOrderStatus()
         );
     }
@@ -186,6 +188,7 @@ public class OrderService {
                     return OrderResponseDTO.of(
                             order.getOrderId(),
                             orderRewardResponseDTOs,
+                            order.getTotalOrderPrice(),
                             order.getOrderStatus()
                     );
                 }).collect(Collectors.toList());

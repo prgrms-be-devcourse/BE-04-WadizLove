@@ -90,6 +90,7 @@ class OrderControllerTest {
                 "맛깔난 참죽 펀딩",
                 "씨제이",
                 orderRewardResponses,
+                10000*10,
                 OrderStatus.COMPLETED
         );
 
@@ -164,6 +165,7 @@ class OrderControllerTest {
         OrderResponseDTO orderRes = OrderResponseDTO.of(
                 1L,
                 orderRewardResponses,
+                10000*10,
                 OrderStatus.REQUESTED
         );
 

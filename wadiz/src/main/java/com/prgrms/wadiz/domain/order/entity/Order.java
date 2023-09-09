@@ -36,6 +36,9 @@ public class Order extends BaseEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderReward> orderRewards = new ArrayList<>();
 
+    @Column(nullable = false)
+    private int totalOrderPrice;
+
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
@@ -49,10 +52,13 @@ public class Order extends BaseEntity {
         this.orderStatus = OrderStatus.REQUESTED;
     }
 
-    //createOrder와 관련된 연관관계 편의 메서드
     public void addOrderReward(OrderReward orderReward) {
         orderRewards.add(orderReward);
         orderReward.changeOrder(this);
+    }
+
+    public void calculateTotalOrderPrice(OrderReward orderReward){
+        this.totalOrderPrice += orderReward.calculateOrderRewardPrice();
     }
 
     public void cancel() {
