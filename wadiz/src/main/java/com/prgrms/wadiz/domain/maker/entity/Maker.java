@@ -1,15 +1,16 @@
 package com.prgrms.wadiz.domain.maker.entity;
 
 import com.prgrms.wadiz.domain.BaseEntity;
+import com.prgrms.wadiz.domain.maker.MakerStatus;
+import com.prgrms.wadiz.domain.reward.RewardStatus.RewardStatus;
+import com.prgrms.wadiz.global.annotation.ValidEnum;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -36,7 +37,9 @@ public class Maker extends BaseEntity{
     private String makerEmail;
 
     @Column(nullable = false)
-    private boolean activated = Boolean.TRUE; // 활성화 여부 -> 삭제 시 FALSE
+    @Enumerated(EnumType.STRING)
+    @ValidEnum(enumClass = MakerStatus.class, message = "해당하는 메이커 상태가 존재하지 않습니다.")
+    private MakerStatus status = MakerStatus.REGISTERED;
 
 //    @Builder // 빌더가 이렇게도 생성될 수 있는지 알아보기 + 추가 설정으로
 //    public Maker(
@@ -87,8 +90,8 @@ public class Maker extends BaseEntity{
         this.makerEmail = makerEmail;
     }
 
-    public void deActivateMaker() {
-        this.activated = Boolean.FALSE;
+    public void unregisteredMaker() {
+        this.status = MakerStatus.UNREGISTERED;
     }
 
 }

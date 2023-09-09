@@ -2,6 +2,9 @@ package com.prgrms.wadiz.domain.supporter.entity;
 
 import com.prgrms.wadiz.domain.BaseEntity;
 
+import com.prgrms.wadiz.domain.maker.MakerStatus;
+import com.prgrms.wadiz.domain.supporter.SupporterStatus;
+import com.prgrms.wadiz.global.annotation.ValidEnum;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -9,8 +12,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -29,10 +30,11 @@ public class Supporter extends BaseEntity {
     @Column(nullable = false)
     @Email(message = "이메일 정보를 입력해 주세요")
     private String supporterEmail;
-  
+
     @Column(nullable = false)
-    private boolean activated = Boolean.TRUE;
-    // 활성화 여부 -> 삭제 시 FALSE //// user 상태를 하나 만들기 (정지,탈퇴 등등)
+    @Enumerated(EnumType.STRING)
+    @ValidEnum(enumClass = SupporterStatus.class, message = "해당하는 서포터 상태가 존재하지 않습니다.")
+    private SupporterStatus status = SupporterStatus.REGISTERED;
 
     @Builder
     public Supporter(
@@ -47,11 +49,11 @@ public class Supporter extends BaseEntity {
     public Supporter(
             String name,
             String email,
-            Boolean isActivated
+            SupporterStatus supporterStatus
     ) {
         this.supporterName = name;
         this.supporterEmail = email;
-        this.activated = isActivated;
+        this.status = supporterStatus;
     }
 
     public void updateSupporter(String supporterName, String supporterEmail) {
@@ -59,7 +61,7 @@ public class Supporter extends BaseEntity {
         this.supporterEmail = supporterEmail;
     }
 
-    public void deActivateSupporter(){
-        this.activated = Boolean.FALSE;
+    public void unregisteredSupporter(){
+        this.status = SupporterStatus.UNREGISTERED;
     }
 }

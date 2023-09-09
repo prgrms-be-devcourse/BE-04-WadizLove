@@ -12,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class MakerService {
@@ -21,6 +19,7 @@ public class MakerService {
 
     @Transactional
     public MakerResponseDTO signUpMaker(MakerCreateRequestDTO dto) {
+        checkDuplicateEmail(dto.makerEmail());
         Maker maker = Maker.builder()
                 .makerName(dto.makerName())
                 .makerBrand(dto.makerBrand())
@@ -66,6 +65,12 @@ public class MakerService {
         Maker maker = makerRepository.findById(makerId)
                 .orElseThrow(() -> new BaseException(ErrorCode.MAKER_NOT_FOUND));
 
-        maker.deActivateMaker();
+        maker.unregisteredMaker();
+    }
+
+    public void checkDuplicateEmail(String email) {
+        if(makerRepository.existsByMakerEmail(email)){
+            throw new BaseException((ErrorCode.DUPLICATED_EMAIL));
+        }
     }
 }

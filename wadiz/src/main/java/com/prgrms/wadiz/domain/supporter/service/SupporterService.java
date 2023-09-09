@@ -18,6 +18,7 @@ public class SupporterService {
 
     @Transactional
     public SupporterResponseDTO signUpSupporter(SupporterCreateRequestDTO dto) {
+        checkDuplicateEmail(dto.supporterEmail());
         Supporter supporter = Supporter.builder()
                 .supporterName(dto.supporterName())
                 .supporterEmail(dto.supporterEmail())
@@ -64,7 +65,13 @@ public class SupporterService {
         Supporter supporter = supporterRepository.findById(supporterId)
                 .orElseThrow(() -> new BaseException(ErrorCode.SUPPORTER_NOT_FOUND));
 
-        supporter.deActivateSupporter();
+        supporter.unregisteredSupporter();
+    }
+
+    public void checkDuplicateEmail(String email) {
+        if(supporterRepository.existsBySupporterEmail(email)){
+            throw new BaseException((ErrorCode.DUPLICATED_EMAIL));
+        }
     }
 
 }
