@@ -1,5 +1,6 @@
 package com.prgrms.wadiz.domain.maker.service;
 
+import com.prgrms.wadiz.domain.maker.MakerStatus;
 import com.prgrms.wadiz.domain.maker.dto.request.MakerCreateRequestDTO;
 import com.prgrms.wadiz.domain.maker.dto.request.MakerUpdateRequestDTO;
 import com.prgrms.wadiz.domain.maker.dto.response.MakerResponseDTO;
@@ -14,9 +15,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -40,7 +42,7 @@ class MakerServiceTest {
     }
 
     @Test
-    @DisplayName("메이커 회원가입을 성공한다.")
+    @DisplayName("[성공] 메이커 회원가입을 성공한다.")
     void signUpMakerTest() {
         //given
         MakerCreateRequestDTO makerCreateRequestDTO = MakerCreateRequestDTO.builder()
@@ -59,18 +61,10 @@ class MakerServiceTest {
     }
 
     @Test
-    @DisplayName("메이커 정보를 수정한다.")
+    @DisplayName("[성공] 메이커 정보를 수정한다.")
     void modifyMakerTest() {
         //given
-        MakerCreateRequestDTO makerCreateRequestDTO = new MakerCreateRequestDTO(
-                maker.getMakerName(),
-                maker.getMakerBrand(),
-                maker.getMakerEmail()
-        );
-
-        when(makerRepository.save(any(Maker.class))).then(AdditionalAnswers.returnsFirstArg());
-
-        MakerResponseDTO makerResponseDTO = makerService.signUpMaker(makerCreateRequestDTO);
+        when(makerRepository.findById(maker.getMakerId())).thenReturn(Optional.of(maker));
 
         MakerUpdateRequestDTO makerUpdateRequestDTO = MakerUpdateRequestDTO.builder()
                 .makerName("update")
@@ -86,23 +80,33 @@ class MakerServiceTest {
     }
 
     @Test
-    @DisplayName("메이커 soft-delete 테스트를 한다.")
+    @DisplayName("[성공] 메이커 soft-delete 테스트를 한다.")
     void softDeleteTest() {
         //given
-        MakerCreateRequestDTO makerCreateRequestDTO = new MakerCreateRequestDTO(
-                maker.getMakerName(),
-                maker.getMakerBrand(),
-                maker.getMakerEmail()
-        );
-
-        when(makerRepository.save(any(Maker.class))).then(AdditionalAnswers.returnsFirstArg());
-
-        MakerResponseDTO makerResponseDTO = makerService.signUpMaker(makerCreateRequestDTO);
+        when(makerRepository.findById(maker.getMakerId())).thenReturn(Optional.of(maker));
 
         //when
         makerService.deleteMaker(maker.getMakerId());
 
         //then
-        verify(makerRepository).deleteById(maker.getMakerId());
+        assertThat(maker.getStatus()).isEqualTo(MakerStatus.UNREGISTERED);
+    }
+
+    @Test
+    @DisplayName("[예외] 중복된 이메일일 경우 예외가 발생한다.")
+    void duplicatedEmailTest() {
+        //given
+        when(makerRepository.existsByMakerEmail(maker.getMakerEmail())).thenReturn(Boolean.TRUE);
+
+        MakerCreateRequestDTO newMakerCreateRequestDTO = MakerCreateRequestDTO.builder()
+                .makerName(maker.getMakerName())
+                .makerBrand(maker.getMakerBrand())
+                .makerEmail(maker.getMakerEmail())
+                .build();
+
+        when(makerRepository.save(any(Maker.class))).then(AdditionalAnswers.returnsFirstArg());
+
+        //when & then
+        makerService.signUpMaker(newMakerCreateRequestDTO);
     }
 }
