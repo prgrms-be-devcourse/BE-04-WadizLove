@@ -22,12 +22,10 @@ public record RewardUpdateRequestDTO(
         @Min(value = 10, message = "리워드 가격을 입력해주세요.")
         Integer rewardPrice,
 
-        @ValidEnum(enumClass = RewardType.class)
-//        @NotBlank(message = "리워드 타입을 입력해주세요.")
+        @ValidEnum(enumClass = RewardType.class, message = "리워드 타입을 입력해주세요.")
         RewardType rewardType,
 
-        @ValidEnum(enumClass = RewardStatus.class)
-//        @NotBlank(message = "리워드 상태를 입력해주세요.")
+        @ValidEnum(enumClass = RewardStatus.class, message = "리워드 상태를 입력해주세요.")
         RewardStatus rewardStatus
 ) {
 }

@@ -51,8 +51,7 @@ public class Reward extends BaseEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    @ValidEnum(enumClass = RewardType.class)
-//    @NotBlank(message = "리워드 타입을 입력해주세요.")
+    @ValidEnum(enumClass = RewardType.class, message = "리워드 타입을 입력해주세요.")
     private RewardType rewardType;
 
     @Column(nullable = false)
