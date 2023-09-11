@@ -27,9 +27,9 @@ public class OrderController {
             @PathVariable Long supporterId,
             @RequestBody @Valid OrderCreateRequestDTO orderCreateRequestDto
     ){
-        orderService.createOrder(supporterId, orderCreateRequestDto);
+        OrderResponseDTO orderREsponseDTO = orderService.createOrder(supporterId, orderCreateRequestDto);
 
-        return ResponseEntity.ok(ResponseFactory.getSuccessResult()); //TODO : Id 값 내뱉어주기
+        return ResponseEntity.ok(ResponseFactory.getSingleResult(orderREsponseDTO));
     }
 
     @PutMapping("{orderId}/supporters/{supporterId}")
@@ -46,7 +46,7 @@ public class OrderController {
      * 서포터 주문 기록 조회(단건,다건)
      */
 
-    @GetMapping("{orderId}/supporters/{supporterId}")
+    @GetMapping("{orderId}/supporters/{supporterId}/purchase")
     public ResponseEntity<ResponseTemplate> getSupporterPurchase(
             @PathVariable Long orderId,
             @PathVariable Long supporterId
@@ -56,10 +56,8 @@ public class OrderController {
         return ResponseEntity.ok(ResponseFactory.getSingleResult(orderResponseDTO));
     }
 
-    @GetMapping("supporters/{supporterId}")
-    public ResponseEntity<ResponseTemplate> getSupporterPurchaseHistory(
-            @PathVariable Long supporterId
-    ){
+    @GetMapping("supporters/{supporterId}/history")
+    public ResponseEntity<ResponseTemplate> getSupporterPurchaseHistory(@PathVariable Long supporterId){
         List<OrderResponseDTO> orderResponseDTOs = orderService.getSupporterPurchaseHistory(supporterId);
 
         return ResponseEntity.ok(ResponseFactory.getListResult(orderResponseDTOs));
@@ -78,7 +76,4 @@ public class OrderController {
 
         return ResponseEntity.ok(ResponseFactory.getListResult(orderResponseDTOs));
     }
-
-
-
 }

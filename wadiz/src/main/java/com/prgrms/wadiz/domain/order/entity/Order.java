@@ -6,6 +6,7 @@ import com.prgrms.wadiz.domain.supporter.entity.Supporter;
 import com.prgrms.wadiz.domain.order.OrderStatus;
 import com.prgrms.wadiz.domain.BaseEntity;
 import com.prgrms.wadiz.domain.orderReward.entity.OrderReward;
+import com.prgrms.wadiz.global.annotation.ValidEnum;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,6 +37,7 @@ public class Order extends BaseEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderReward> orderRewards = new ArrayList<>();
 
+    @ValidEnum(enumClass = OrderStatus.class, message = "존재하지 않는 상태입니다.")
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
@@ -49,7 +51,6 @@ public class Order extends BaseEntity {
         this.orderStatus = OrderStatus.REQUESTED;
     }
 
-    //createOrder와 관련된 연관관계 편의 메서드
     public void addOrderReward(OrderReward orderReward) {
         orderRewards.add(orderReward);
         orderReward.changeOrder(this);

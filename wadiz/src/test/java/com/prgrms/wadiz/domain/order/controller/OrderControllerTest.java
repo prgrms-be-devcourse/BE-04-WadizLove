@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prgrms.wadiz.domain.funding.FundingCategory;
 import com.prgrms.wadiz.domain.order.OrderStatus;
 import com.prgrms.wadiz.domain.order.dto.request.OrderCreateRequestDTO;
-import com.prgrms.wadiz.domain.order.dto.request.OrderRewardRequestDTO;
+import com.prgrms.wadiz.domain.order.dto.request.OrderRewardCreateRequestDTO;
 import com.prgrms.wadiz.domain.order.dto.response.OrderResponseDTO;
 import com.prgrms.wadiz.domain.order.service.OrderService;
 import com.prgrms.wadiz.domain.orderReward.dto.response.OrderRewardResponseDTO;
@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -43,23 +44,26 @@ class OrderControllerTest {
     @DisplayName("[성공] : 주문 생성 요청 및 응답에 성공한다.")
     void createOrder() throws Exception {
         //given
-        OrderRewardRequestDTO orderRewardReq1 = new OrderRewardRequestDTO(
+        OrderRewardCreateRequestDTO orderRewardReq1 = new OrderRewardCreateRequestDTO(
                 1L,
                 10);
-        OrderRewardRequestDTO orderRewardReq2 = new OrderRewardRequestDTO(
+        OrderRewardCreateRequestDTO orderRewardReq2 = new OrderRewardCreateRequestDTO(
                 2L,
                 20);
-        List<OrderRewardRequestDTO> orderRewardReq = Arrays.asList(
+        List<OrderRewardCreateRequestDTO> orderRewardReq = Arrays.asList(
                 orderRewardReq1,
                 orderRewardReq2
         );
         OrderCreateRequestDTO orderCreateReqDTO = new OrderCreateRequestDTO(orderRewardReq);
 
+        OrderResponseDTO orderRes = OrderResponseDTO.of(1L);
+        given(orderService.createOrder(1L,orderCreateReqDTO)).willReturn(orderRes);
+
         String body = objectMapper.writeValueAsString(orderCreateReqDTO);
 
         // when
         ResultActions perform = mvc.perform(
-                post(BASE_URL + "new/supporter/{supporterId}",1)
+                post(BASE_URL + "supporter/{supporterId}/new",1)
                 .content(body)
                 .contentType(APPLICATION_JSON));
 
@@ -67,7 +71,8 @@ class OrderControllerTest {
         perform.andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").isNotEmpty())
-                .andExpect(jsonPath("$.message").isNotEmpty());
+                .andExpect(jsonPath("$.message").isNotEmpty())
+                .andExpect(jsonPath("$.data.orderId").value(orderRes.orderId()));
     }
 
     @Test
@@ -97,7 +102,7 @@ class OrderControllerTest {
 
         // when
         ResultActions perform = mvc.perform(get(
-                BASE_URL + "{orderId}/supporters/{supporterId}",
+                BASE_URL + "{orderId}/supporters/{supporterId}/purchase",
                 1L,
                 2L
         ));
@@ -131,7 +136,7 @@ class OrderControllerTest {
         given(orderService.getSupporterPurchaseHistory(1L)).willReturn(Arrays.asList(orderRes));
 
         ResultActions perform = mvc.perform(get(
-                BASE_URL + "supporters/{supporterId}",
+                BASE_URL + "supporters/{supporterId}/history",
                 1L
         ));
 
