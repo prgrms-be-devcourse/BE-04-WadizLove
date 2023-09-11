@@ -13,6 +13,7 @@ import com.prgrms.wadiz.domain.post.dto.request.PostUpdateRequestDTO;
 import com.prgrms.wadiz.domain.post.dto.response.PostResponseDTO;
 import com.prgrms.wadiz.domain.project.condition.ProjectSearchCondition;
 import com.prgrms.wadiz.domain.project.dto.ProjectServiceDTO;
+import com.prgrms.wadiz.domain.project.dto.response.ProjectPageResponseDTO;
 import com.prgrms.wadiz.domain.project.dto.response.ProjectSummaryResponseDTO;
 import com.prgrms.wadiz.domain.reward.dto.request.RewardCreateRequestDTO;
 import com.prgrms.wadiz.domain.reward.dto.request.RewardUpdateRequestDTO;
@@ -47,8 +48,8 @@ public class ProjectUseCase {
      */
     @Transactional
     public ProjectResponseDTO startProject(Long makerId) {
-         MakerServiceDTO makerServiceDTO = makerService.getMakerDTO(makerId);
-         Maker maker = MakerServiceDTO.toEntity(makerServiceDTO);
+        MakerServiceDTO makerServiceDTO = makerService.getMakerDTO(makerId);
+        Maker maker = MakerServiceDTO.toEntity(makerServiceDTO);
 
         Project project = Project.builder()
                 .maker(maker)
@@ -68,8 +69,8 @@ public class ProjectUseCase {
 
         // boolean으로 확인할 부분
         if (!postService.isPostExist(projectId) ||
-            !fundingService.isFundingExist(projectId)||
-            !rewardService.isRewardsExist(projectId)
+                !fundingService.isFundingExist(projectId) ||
+                !rewardService.isRewardsExist(projectId)
         ) {
             throw new BaseException(ErrorCode.UNKNOWN);
         }
@@ -97,13 +98,13 @@ public class ProjectUseCase {
      */
     @Transactional
     public void createFunding(
-            Long projectId, 
+            Long projectId,
             FundingCreateRequestDTO fundingCreateRequestDTO
     ) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new BaseException(ErrorCode.PROJECT_NOT_FOUND));
         ProjectServiceDTO projectServiceDTO = ProjectServiceDTO.from(project);
-      
+
         fundingService.createFunding(projectServiceDTO, fundingCreateRequestDTO);
     }
 
@@ -194,16 +195,38 @@ public class ProjectUseCase {
     public RewardResponseDTO getReward(
             Long projectId,
             Long rewardId
-    ){
+    ) {
         return rewardService.getReward(projectId, rewardId);
     }
 
     @Transactional(readOnly = true)
-    public Page<ProjectSummaryResponseDTO> getProjects(Long cursorId, int size) {
-        return projectRepository.findAllByCondition(
+    public ProjectSummaryResponseDTO getProjects(Long cursorId, int size) {
+        Page<Project> pageRes = projectRepository.findAllByCondition(
                 cursorId,
                 ProjectSearchCondition.OPEN,
                 PageRequest.of(0, size)
+        );
+
+        List<ProjectPageResponseDTO> projectPages = pageRes.getContent().stream()
+                .map(project -> {
+                    Long projectId = project.getProjectId();
+                    PostResponseDTO postResponseDTO = postService.getPostByProjectId(projectId);
+
+                    return ProjectPageResponseDTO.of(
+                            projectId,
+                            postResponseDTO.postTitle(),
+                            postResponseDTO.postThumbNailImage(),
+                            project.getMaker().getMakerBrand()
+                    );
+                })
+                .toList();
+
+        Long nextCursor = projectPages.size() == 0 ? null : projectPages.get(projectPages.size() - 1).projectId();
+
+        return ProjectSummaryResponseDTO.of(
+                projectPages,
+                pageRes.getNumberOfElements(),
+                nextCursor
         );
     }
 }

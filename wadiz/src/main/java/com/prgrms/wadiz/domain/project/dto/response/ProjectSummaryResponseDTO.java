@@ -1,18 +1,24 @@
 package com.prgrms.wadiz.domain.project.dto.response;
 
-import com.prgrms.wadiz.domain.project.entity.Project;
 import lombok.Builder;
+
+import java.util.List;
 
 @Builder
 public record ProjectSummaryResponseDTO(
-        Long projectId,
-        String title,
-        String thumbNailImage,
-        String makerBrand
+        List<ProjectPageResponseDTO> contents,
+        int numberOfElements,
+        Long nextCursor
 ) {
-    public static ProjectSummaryResponseDTO from(Project project) {
+    public static ProjectSummaryResponseDTO of(
+            List<ProjectPageResponseDTO> projectPages,
+            int numberOfElements,
+            Long nextCursor
+    ) {
         return ProjectSummaryResponseDTO.builder()
-                .projectId(project.getProjectId())
+                .contents(projectPages)
+                .numberOfElements(numberOfElements)
+                .nextCursor(nextCursor)
                 .build();
     }
 }

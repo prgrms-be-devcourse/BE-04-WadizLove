@@ -7,6 +7,7 @@ import com.prgrms.wadiz.domain.funding.dto.request.FundingCreateRequestDTO;
 import com.prgrms.wadiz.domain.funding.dto.request.FundingUpdateRequestDTO;
 import com.prgrms.wadiz.domain.funding.dto.response.FundingResponseDTO;
 import com.prgrms.wadiz.domain.project.dto.response.ProjectResponseDTO;
+import com.prgrms.wadiz.domain.project.dto.response.ProjectPageResponseDTO;
 import com.prgrms.wadiz.domain.project.dto.response.ProjectSummaryResponseDTO;
 import com.prgrms.wadiz.domain.project.service.ProjectUseCase;
 import com.prgrms.wadiz.domain.reward.dto.request.RewardCreateRequestDTO;
@@ -55,9 +56,9 @@ public class ProjectController {
             @RequestParam(required = false) Long cursorId,
             @RequestParam int size
     ) {
-        Page<ProjectSummaryResponseDTO> projects = projectUseCase.getProjects(cursorId, size);
+        ProjectSummaryResponseDTO projectSummaryRes = projectUseCase.getProjects(cursorId, size);
 
-        return ResponseEntity.ok(ResponseFactory.getSingleResult(projects));
+        return ResponseEntity.ok(ResponseFactory.getSingleResult(projectSummaryRes));
     }
 
     /**
