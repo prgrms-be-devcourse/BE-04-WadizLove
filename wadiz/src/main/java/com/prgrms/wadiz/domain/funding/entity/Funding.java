@@ -46,6 +46,18 @@ public class Funding extends BaseEntity {
     @ValidEnum(enumClass = FundingStatus.class, message = "유효하지 않은 펀딩 상태입니다.")
     private FundingStatus fundingStatus;
 
+    @Column(nullable = false)
+    private Integer fundingParticipants;
+
+    @Column(nullable = false)
+    private Integer fundingAmount;
+
+    @Column(nullable = false)
+    private Integer fundingSuccessRate;
+
+    @Column(nullable = false)
+    private Boolean fundingSuccess;
+
     @Builder
     public Funding(
             Project project,
@@ -74,5 +86,18 @@ public class Funding extends BaseEntity {
         this.fundingEndAt = fundingEndAt;
         this.fundingCategory = fundingCategory;
         this.fundingStatus = fundingStatus;
+    }
+
+    public void updateOrderInfo(int totalOrderPrice) { // 보류
+        this.fundingAmount += totalOrderPrice;
+        this.fundingParticipants += 1;
+        this.fundingSuccessRate = (int) Math.round((double) this.fundingAmount / this.fundingTargetAmount);
+        validateFundingSuccess(this.fundingAmount , this.fundingTargetAmount);
+    }
+
+    private void validateFundingSuccess(Integer fundingAmount, Integer fundingTargetAmount) {
+        if (fundingAmount >= fundingTargetAmount){
+            this.fundingSuccess = Boolean.TRUE;
+        }
     }
 }

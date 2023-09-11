@@ -1,6 +1,7 @@
 package com.prgrms.wadiz.domain.order.service;
 
 import com.prgrms.wadiz.domain.funding.FundingCategory;
+import com.prgrms.wadiz.domain.funding.entity.Funding;
 import com.prgrms.wadiz.domain.funding.repository.FundingRepository;
 import com.prgrms.wadiz.domain.order.dto.request.OrderCreateRequestDTO;
 import com.prgrms.wadiz.domain.order.dto.response.OrderResponseDTO;
@@ -45,7 +46,7 @@ public class OrderService {
                 .orElseThrow(() -> {
                     log.error("Supporter {} is not found", supporterId);
 
-                    return new BaseException(ErrorCode.UNKNOWN);
+                    throw new BaseException(ErrorCode.UNKNOWN);
                 });
 
         List<OrderReward> orderRewards = orderCreateRequestDto.orderRewards().stream()
@@ -54,7 +55,7 @@ public class OrderService {
                             .orElseThrow(() -> {
                                 log.error("reward is not found");
 
-                                return new BaseException(ErrorCode.UNKNOWN);
+                                throw new BaseException(ErrorCode.UNKNOWN);
                             });
 
                     Integer orderQuantity = orderRewardRequest.orderQuantity();
@@ -81,6 +82,14 @@ public class OrderService {
         orderRewards.forEach(order::calculateTotalOrderPrice);
 
         orderRepository.save(order);
+
+        // 보류!
+        Funding funding = fundingRepository.findByProjectId(project.getProjectId())
+                .orElseThrow(() -> {
+                    throw new BaseException(ErrorCode.PROJECT_NOT_FOUND);
+                });
+
+        funding.updateOrderInfo(order.getTotalOrderPrice());
     }
 
     @Transactional(readOnly = true)

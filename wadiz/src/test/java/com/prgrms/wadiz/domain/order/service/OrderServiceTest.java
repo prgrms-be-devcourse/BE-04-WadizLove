@@ -142,7 +142,8 @@ class OrderServiceTest {
         given(rewardRepository.findById(anyLong())).willReturn(Optional.of(reward));
 
         //when, then
-        assertThatThrownBy(() ->orderService.createOrder(supporter.getSupporterId(), orderCreateReq)).isInstanceOf(BaseException.class);
+        assertThatThrownBy(() ->orderService.createOrder(supporter.getSupporterId(), orderCreateReq))
+                .isInstanceOf(BaseException.class);
     }
 
     @Test
