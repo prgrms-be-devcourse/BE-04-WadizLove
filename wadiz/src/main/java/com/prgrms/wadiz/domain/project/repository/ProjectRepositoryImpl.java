@@ -1,8 +1,6 @@
 package com.prgrms.wadiz.domain.project.repository;
 
 import com.prgrms.wadiz.domain.project.condition.ProjectSearchCondition;
-import com.prgrms.wadiz.domain.project.dto.response.ProjectResponseDTO;
-import com.prgrms.wadiz.domain.project.dto.response.ProjectSummaryResponseDTO;
 import com.prgrms.wadiz.domain.project.entity.Project;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -20,22 +18,26 @@ public class ProjectRepositoryImpl implements ProjectRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<ProjectSummaryResponseDTO> findAllByCondition(Long cursorId, ProjectSearchCondition projectSearchCondition, Pageable pageable) {
+    public Page<Project> findAllByCondition(
+            Long cursorId,
+            ProjectSearchCondition projectSearchCondition,
+            Pageable pageable
+    ) {
         List<Project> findBoards = jpaQueryFactory.selectFrom(project)
                 .where(cursorId(cursorId))
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        List<ProjectSummaryResponseDTO> responseDTOS = findBoards.stream()
-                .map(ProjectSummaryResponseDTO::from)
-                .toList();
-
-        return PageableExecutionUtils.getPage(responseDTOS, pageable, responseDTOS::size);
+        return PageableExecutionUtils.getPage(
+                findBoards,
+                pageable,
+                findBoards::size
+        );
     }
 
     private BooleanExpression cursorId(Long cursorId){
         if (cursorId == null) {
-            return null;
+            return project.projectId.gt(0L);
         }
 
         return project.projectId.gt(cursorId);
