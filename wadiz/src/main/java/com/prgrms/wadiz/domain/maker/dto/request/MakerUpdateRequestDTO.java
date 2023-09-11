@@ -9,10 +9,7 @@ import javax.validation.constraints.Size;
 
 @Builder
 public record MakerUpdateRequestDTO(
-        @Size(
-                min = 2,
-                message = "이름은 최소 2자 이상입니다."
-        )
+        @Size(min = 2, message = "이름은 최소 2자 이상입니다.")
         String makerName,
 
         @NotBlank(message = "브랜드를 입력해주세요.")
