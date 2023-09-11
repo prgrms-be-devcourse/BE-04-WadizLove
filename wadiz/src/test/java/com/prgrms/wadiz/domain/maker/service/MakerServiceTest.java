@@ -6,6 +6,8 @@ import com.prgrms.wadiz.domain.maker.dto.request.MakerUpdateRequestDTO;
 import com.prgrms.wadiz.domain.maker.dto.response.MakerResponseDTO;
 import com.prgrms.wadiz.domain.maker.entity.Maker;
 import com.prgrms.wadiz.domain.maker.respository.MakerRepository;
+import com.prgrms.wadiz.global.util.exception.BaseException;
+import com.prgrms.wadiz.global.util.exception.ErrorCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -93,20 +97,45 @@ class MakerServiceTest {
     }
 
     @Test
-    @DisplayName("[예외] 중복된 이메일일 경우 예외가 발생한다.")
+    @DisplayName("[실패] 중복된 이메일일 경우 예외가 발생한다.")
     void duplicatedEmailTest() {
         //given
         when(makerRepository.existsByMakerEmail(maker.getMakerEmail())).thenReturn(Boolean.TRUE);
 
         MakerCreateRequestDTO newMakerCreateRequestDTO = MakerCreateRequestDTO.builder()
-                .makerName(maker.getMakerName())
+                .makerName("other")
                 .makerBrand(maker.getMakerBrand())
                 .makerEmail(maker.getMakerEmail())
+                .build();
+
+
+        //when & then
+        assertThatThrownBy(() -> {
+            makerService.signUpMaker(newMakerCreateRequestDTO);
+        }).isInstanceOf(BaseException.class)
+                .hasFieldOrPropertyWithValue("errorCode",ErrorCode.DUPLICATED_EMAIL);
+
+    }
+
+    @Test
+    @DisplayName("[실패] 중복된 이름일 경우 예외가 발생한다.")
+    void duplicatedNameTest() {
+        //given
+        when(makerRepository.existsByMakerName(maker.getMakerName())).thenReturn(Boolean.TRUE);
+
+        MakerCreateRequestDTO newMakerCreateRequestDTO = MakerCreateRequestDTO.builder()
+                .makerName(maker.getMakerName())
+                .makerBrand(maker.getMakerBrand())
+                .makerEmail("other@naver.com")
                 .build();
 
         when(makerRepository.save(any(Maker.class))).then(AdditionalAnswers.returnsFirstArg());
 
         //when & then
-        makerService.signUpMaker(newMakerCreateRequestDTO);
+        assertThatThrownBy(() -> {
+            makerService.signUpMaker(newMakerCreateRequestDTO);
+        }).isInstanceOf(BaseException.class)
+                .hasFieldOrPropertyWithValue("errorCode",ErrorCode.DUPLICATED_NAME);
+
     }
 }
