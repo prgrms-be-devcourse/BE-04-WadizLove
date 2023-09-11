@@ -7,6 +7,8 @@ import com.prgrms.wadiz.domain.funding.dto.request.FundingCreateRequestDTO;
 import com.prgrms.wadiz.domain.funding.dto.request.FundingUpdateRequestDTO;
 import com.prgrms.wadiz.domain.funding.dto.response.FundingResponseDTO;
 import com.prgrms.wadiz.domain.project.dto.response.ProjectResponseDTO;
+import com.prgrms.wadiz.domain.project.dto.response.ProjectPageResponseDTO;
+import com.prgrms.wadiz.domain.project.dto.response.ProjectSummaryResponseDTO;
 import com.prgrms.wadiz.domain.project.service.ProjectUseCase;
 import com.prgrms.wadiz.domain.reward.dto.request.RewardCreateRequestDTO;
 import com.prgrms.wadiz.domain.reward.dto.request.RewardUpdateRequestDTO;
@@ -14,6 +16,7 @@ import com.prgrms.wadiz.domain.reward.dto.response.RewardResponseDTO;
 import com.prgrms.wadiz.global.util.resTemplate.ResponseFactory;
 import com.prgrms.wadiz.global.util.resTemplate.ResponseTemplate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,6 +49,16 @@ public class ProjectController {
         ProjectResponseDTO projectResponseDTO = projectUseCase.getProject(projectId);
 
         return ResponseEntity.ok(ResponseFactory.getSingleResult(projectResponseDTO));
+    }
+
+    @GetMapping
+    public ResponseEntity<ResponseTemplate> getProjects(
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam int size
+    ) {
+        ProjectSummaryResponseDTO projectSummaryRes = projectUseCase.getProjects(cursorId, size);
+
+        return ResponseEntity.ok(ResponseFactory.getSingleResult(projectSummaryRes));
     }
 
     /**

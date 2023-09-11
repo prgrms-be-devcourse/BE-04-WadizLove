@@ -1,6 +1,7 @@
 package com.prgrms.wadiz.domain.reward.service;
 
 import com.prgrms.wadiz.domain.project.dto.ProjectServiceDTO;
+import com.prgrms.wadiz.domain.project.entity.Project;
 import com.prgrms.wadiz.domain.reward.RewardStatus.RewardStatus;
 import com.prgrms.wadiz.domain.reward.RewardType.RewardType;
 import com.prgrms.wadiz.domain.reward.dto.request.RewardCreateRequestDTO;
@@ -49,8 +50,8 @@ class RewardServiceTest {
         when(rewardRepository.save(any(Reward.class))).then(AdditionalAnswers.returnsFirstArg());
 
         //when
-        Long rewardId = rewardService.createReward(projectServiceDTO, createRequestDTO);
-        Optional<Reward> savedReward = rewardRepository.findById(rewardId);
+        RewardResponseDTO reward = rewardService.createReward(projectServiceDTO, createRequestDTO);
+        Optional<Reward> savedReward = rewardRepository.findById(reward.rewardId());
 
         //then
         assertThat(savedReward).isNotNull();
@@ -59,32 +60,20 @@ class RewardServiceTest {
     @Test
     @DisplayName("[성공] 리워드 수정 테스트")
     void rewardUpdateTest() {
-        ProjectServiceDTO projectServiceDTO = ProjectServiceDTO.builder()
+        Project readyProject = Project.builder()
                 .projectId(1L)
                 .build();
 
-        RewardCreateRequestDTO createRequestDTO = RewardCreateRequestDTO.builder()
-                .rewardName("test")
-                .rewardDescription("test")
-                .rewardQuantity(100)
-                .rewardPrice(100)
-                .rewardType(RewardType.SINGLE)
-                .rewardStatus(RewardStatus.IN_STOCK)
-                .build();
-
-        when(rewardRepository.save(any(Reward.class))).then(AdditionalAnswers.returnsFirstArg());
-
-        Long rewardId = rewardService.createReward(projectServiceDTO, createRequestDTO);
-
         Reward reward = Reward.builder()
                 .rewardName("test")
+                .project(readyProject)
                 .rewardDescription("test")
                 .rewardQuantity(100)
                 .rewardPrice(100)
                 .rewardType(RewardType.SINGLE)
                 .build();
 
-        when(rewardRepository.findById(rewardId)).thenReturn(Optional.of(reward));
+        when(rewardRepository.findById(reward.getRewardId())).thenReturn(Optional.of(reward));
 
         RewardUpdateRequestDTO updateRequestDTO = RewardUpdateRequestDTO.builder()
                 .rewardName("update")
@@ -96,7 +85,11 @@ class RewardServiceTest {
                 .build();
 
         //when
-        RewardResponseDTO updateReward = rewardService.updateReward(1L, rewardId, updateRequestDTO);
+        RewardResponseDTO updateReward = rewardService.updateReward(
+                1L,
+                reward.getRewardId(),
+                updateRequestDTO
+        );
 
         //then
         assertThat(updateReward.rewardName()).isEqualTo("update");
@@ -111,34 +104,24 @@ class RewardServiceTest {
     @DisplayName("[성공] 리워드 soft-delete 테스트")
     void deleteRewardTest() {
         //given
-        ProjectServiceDTO projectServiceDTO = ProjectServiceDTO.builder().build();
-
-        RewardCreateRequestDTO createRequestDTO = RewardCreateRequestDTO.builder()
-                .rewardName("test")
-                .rewardDescription("test")
-                .rewardQuantity(100)
-                .rewardPrice(100)
-                .rewardType(RewardType.SINGLE)
-                .rewardStatus(RewardStatus.IN_STOCK)
+        Project readyProject = Project.builder()
+                .projectId(1L)
                 .build();
-
-        when(rewardRepository.save(any(Reward.class))).then(AdditionalAnswers.returnsFirstArg());
-
-        Long rewardId = rewardService.createReward(projectServiceDTO, createRequestDTO);
 
         Reward reward = Reward.builder()
                 .rewardName("test")
+                .project(readyProject)
                 .rewardDescription("test")
                 .rewardQuantity(100)
                 .rewardPrice(100)
                 .rewardType(RewardType.SINGLE)
                 .build();
 
-        when(rewardRepository.findById(rewardId)).thenReturn(Optional.of(reward));
+        when(rewardRepository.findById(reward.getRewardId())).thenReturn(Optional.of(reward));
 
         //when
-        rewardService.deleteReward(rewardId, rewardId);
-        Optional<Reward> findReward = rewardRepository.findById(rewardId);
+        rewardService.deleteReward(readyProject.getProjectId(),reward.getRewardId());
+        Optional<Reward> findReward = rewardRepository.findById(reward.getRewardId());
 
         //then
         assertThat(findReward.get().getActivated()).isEqualTo(Boolean.FALSE);

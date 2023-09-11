@@ -6,6 +6,7 @@ import com.prgrms.wadiz.domain.supporter.entity.Supporter;
 import com.prgrms.wadiz.domain.order.OrderStatus;
 import com.prgrms.wadiz.domain.BaseEntity;
 import com.prgrms.wadiz.domain.orderReward.entity.OrderReward;
+import com.prgrms.wadiz.global.annotation.ValidEnum;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,7 +38,9 @@ public class Order extends BaseEntity {
     private List<OrderReward> orderRewards = new ArrayList<>();
 
     @Column(nullable = false)
-    private int totalOrderPrice;
+    private Integer totalOrderPrice;
+  
+    @ValidEnum(enumClass = OrderStatus.class, message = "존재하지 않는 상태입니다.")
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
@@ -69,6 +72,4 @@ public class Order extends BaseEntity {
     public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
-
-
 }

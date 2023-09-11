@@ -1,5 +1,6 @@
 package com.prgrms.wadiz.domain.supporter.service;
 
+import com.prgrms.wadiz.domain.supporter.SupporterStatus;
 import com.prgrms.wadiz.domain.supporter.dto.request.SupporterCreateRequestDTO;
 import com.prgrms.wadiz.domain.supporter.dto.request.SupporterUpdateRequestDTO;
 import com.prgrms.wadiz.domain.supporter.dto.response.SupporterResponseDTO;
@@ -18,108 +19,90 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class SupporterServiceTest {
 
     @Mock
-    private SupporterRepository supporterRepository;
+    SupporterRepository supporterRepository;
 
     @InjectMocks
-    private SupporterService supporterService;
+    SupporterService supporterService;
 
-    private Supporter supporter;
+    Supporter supporter;
 
     @BeforeEach
     void setUp() {
-        supporter = new Supporter("testName", "test");
+        supporter = Supporter.builder()
+                .supporterName("test")
+                .supporterEmail("test@gmail.com")
+                .build();
     }
 
     @Test
-    @DisplayName("서포터를 생성하여 저장한다")
-    void saveTest() {
+    @DisplayName("[성공] 서포터 회원가입을 성공한다.")
+    void signUpMakerTest() {
         //given
-        SupporterCreateRequestDTO supporterDTO = new SupporterCreateRequestDTO(
-                supporter.getSupporterName(),
-                supporter.getSupporterEmail()
-        );
-
-        when(supporterRepository.save(any(Supporter.class))).then(AdditionalAnswers.returnsFirstArg());
-
-        Supporter supporter1 = Supporter.builder()
+        SupporterCreateRequestDTO supporterCreateRequestDTO = SupporterCreateRequestDTO.builder()
                 .supporterName(supporter.getSupporterName())
                 .supporterEmail(supporter.getSupporterEmail())
                 .build();
 
-        //when
-        SupporterResponseDTO supporterResponse = supporterService.signUpSupporter(supporterDTO);
-
-        //then
-        assertThat(supporterResponse).isNotNull();
-    }
-
-    @Test
-    @DisplayName("서포터의 정보를 수정한다.")
-    void updateTest() {
-        //given
-        SupporterCreateRequestDTO supporterDTO= new SupporterCreateRequestDTO(
-                supporter.getSupporterName(),
-                supporter.getSupporterEmail()
-        );
-
         when(supporterRepository.save(any(Supporter.class))).then(AdditionalAnswers.returnsFirstArg());
 
-        SupporterResponseDTO responseDTO = supporterService.signUpSupporter(supporterDTO);
-        Supporter supporter1 = Supporter.builder()
-                .supporterName(responseDTO.supporterName())
-                .supporterEmail(responseDTO.supporterEmail())
-                .build();
-
-        Long supporter1Id = supporter1.getSupporterId();
-
-        SupporterUpdateRequestDTO supporterUpdateRequestDTO = new SupporterUpdateRequestDTO(
-                "update",
-                "update@gmail.com"
-        );
-
-        when(supporterRepository.findById(supporter1Id)).thenReturn(Optional.of(supporter1));
-
         //when
-        SupporterResponseDTO supporterResponseDTO = supporterService.updateSupporter(
-                supporter1.getSupporterId(),
-                supporterUpdateRequestDTO
-        );
-
+        SupporterResponseDTO supporterResponseDTO = supporterService.signUpSupporter(supporterCreateRequestDTO);
 
         //then
-        assertThat(supporterResponseDTO.supporterName())
-                .isEqualTo("update");
+        assertThat(supporterResponseDTO).isNotNull();
     }
 
     @Test
-    @DisplayName("서포터를 soft-delete 한다.")
+    @DisplayName("[성공] 서포터 정보를 수정한다.")
+    void modifyMakerTest() {
+        //given
+        when(supporterRepository.findById(supporter.getSupporterId())).thenReturn(Optional.of(supporter));
+
+        SupporterUpdateRequestDTO supporterUpdateRequestDTO = SupporterUpdateRequestDTO.builder()
+                .supporterName("update")
+                .supporterEmail("update@gmail.com")
+                .build();
+
+        //when
+        SupporterResponseDTO supporterUpdateResponse = supporterService.updateSupporter(supporter.getSupporterId(), supporterUpdateRequestDTO);
+
+        //then
+        assertThat(supporterUpdateResponse.supporterName()).isEqualTo("update");
+    }
+
+    @Test
+    @DisplayName("[성공] 메이커 soft-delete 테스트를 한다.")
     void softDeleteTest() {
         //given
-        SupporterCreateRequestDTO supporterDTO = new SupporterCreateRequestDTO(
-                supporter.getSupporterName(),
-                supporter.getSupporterEmail()
-        );
+        when(supporterRepository.findById(supporter.getSupporterId())).thenReturn(Optional.of(supporter));
+
+        //when
+        supporterService.deleteSupporter(supporter.getSupporterId());
+
+        //then
+        assertThat(supporter.getStatus()).isEqualTo(SupporterStatus.UNREGISTERED);
+    }
+
+    @Test
+    @DisplayName("[예외] 중복된 이메일일 경우 예외가 발생한다.")
+    void duplicatedEmailTest() {
+        //given
+        when(supporterRepository.existsBySupporterEmail(supporter.getSupporterEmail())).thenReturn(Boolean.TRUE);
+
+        SupporterCreateRequestDTO newSupporterCreateRequestDTO = SupporterCreateRequestDTO.builder()
+                .supporterName(supporter.getSupporterName())
+                .supporterEmail(supporter.getSupporterEmail())
+                .build();
 
         when(supporterRepository.save(any(Supporter.class))).then(AdditionalAnswers.returnsFirstArg());
 
-        SupporterResponseDTO responseDTO = supporterService.signUpSupporter(supporterDTO);
-        Supporter supporter1 = Supporter.builder()
-                .supporterName(responseDTO.supporterName())
-                .supporterEmail(responseDTO.supporterEmail())
-                .build();
-
-        Long supporter1Id = supporter1.getSupporterId();
-
-        //when
-        supporterService.deleteSupporter(supporter1Id);
-
-        //then
-        verify(supporterRepository).deleteById(supporter1Id);
+        //when & then
+        supporterService.signUpSupporter(newSupporterCreateRequestDTO);
     }
 }

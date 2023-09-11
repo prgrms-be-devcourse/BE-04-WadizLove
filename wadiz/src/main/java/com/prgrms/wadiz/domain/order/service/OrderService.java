@@ -1,7 +1,6 @@
 package com.prgrms.wadiz.domain.order.service;
 
 import com.prgrms.wadiz.domain.funding.FundingCategory;
-import com.prgrms.wadiz.domain.funding.entity.Funding;
 import com.prgrms.wadiz.domain.funding.repository.FundingRepository;
 import com.prgrms.wadiz.domain.order.dto.request.OrderCreateRequestDTO;
 import com.prgrms.wadiz.domain.order.dto.response.OrderResponseDTO;

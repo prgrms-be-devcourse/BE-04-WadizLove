@@ -42,10 +42,6 @@ public class PostService {
         Post post = postRepository.findByProjectId(projectId)
                 .orElseThrow(() -> new BaseException(ErrorCode.POST_NOT_FOUND));
 
-        if (!isProjectBeforeSetUp(post.getProject())) {
-            throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
-        }
-
         return PostResponseDTO.from(post);
     }
 

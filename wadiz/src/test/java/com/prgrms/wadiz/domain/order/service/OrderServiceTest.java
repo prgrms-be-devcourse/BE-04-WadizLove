@@ -7,7 +7,7 @@ import com.prgrms.wadiz.domain.maker.entity.Maker;
 import com.prgrms.wadiz.domain.order.OrderStatus;
 import com.prgrms.wadiz.domain.order.dto.request.OrderCreateRequestDTO;
 import com.prgrms.wadiz.domain.order.dto.response.OrderResponseDTO;
-import com.prgrms.wadiz.domain.order.dto.request.OrderRewardRequestDTO;
+import com.prgrms.wadiz.domain.order.dto.request.OrderRewardCreateRequestDTO;
 import com.prgrms.wadiz.domain.order.entity.Order;
 import com.prgrms.wadiz.domain.order.repository.OrderRepository;
 import com.prgrms.wadiz.domain.orderReward.dto.response.OrderRewardResponseDTO;
@@ -38,7 +38,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class OrderServiceTest {
@@ -87,8 +86,8 @@ class OrderServiceTest {
         }
 
         // make request
-        List<OrderRewardRequestDTO> orderRewardReqs = Arrays.asList(
-                OrderRewardRequestDTO.builder()
+        List<OrderRewardCreateRequestDTO> orderRewardReqs = Arrays.asList(
+                OrderRewardCreateRequestDTO.builder()
                 .rewardId(1L)
                 .orderQuantity(orderQuantity)
                 .build());
@@ -127,12 +126,12 @@ class OrderServiceTest {
         Reward reward = createReward();
 
         // make request
-        OrderRewardRequestDTO orderRewardReq = OrderRewardRequestDTO.builder()
+        OrderRewardCreateRequestDTO orderRewardReq = OrderRewardCreateRequestDTO.builder()
                 .rewardId(1L)
                 .orderQuantity(orderQuantity)
                 .build();
 
-        List<OrderRewardRequestDTO> orderRewardReqs = Arrays.asList(orderRewardReq);
+        List<OrderRewardCreateRequestDTO> orderRewardReqs = Arrays.asList(orderRewardReq);
 
         OrderCreateRequestDTO orderCreateReq = OrderCreateRequestDTO.builder()
                 .orderRewards(orderRewardReqs)
