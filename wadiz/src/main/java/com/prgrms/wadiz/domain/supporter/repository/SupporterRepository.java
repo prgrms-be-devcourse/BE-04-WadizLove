@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 public interface SupporterRepository extends JpaRepository<Supporter, Long> {
     boolean existsBySupporterEmail(String email);
+
+    boolean existsBySupporterName(String name);
 }

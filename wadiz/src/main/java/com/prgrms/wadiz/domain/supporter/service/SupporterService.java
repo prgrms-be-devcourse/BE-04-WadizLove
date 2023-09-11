@@ -74,4 +74,10 @@ public class SupporterService {
         }
     }
 
+    public void checkDuplicateName(String name) {
+        if(supporterRepository.existsBySupporterName(name)){
+            throw new BaseException((ErrorCode.DUPLICATED_NAME));
+        }
+    }
+
 }
