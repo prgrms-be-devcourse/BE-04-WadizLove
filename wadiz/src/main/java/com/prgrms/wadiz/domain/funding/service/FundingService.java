@@ -15,17 +15,23 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class FundingService {
     private final FundingRepository fundingRepository;
 
-    @Transactional //TODO : 시작 날짜보다 끝나는 날짜가 더 이후여야 한다. (해당 예외 처리)
+    @Transactional
     public Long createFunding(
             ProjectServiceDTO projectServiceDTO,
             FundingCreateRequestDTO fundingCreateRequestDTO
     ) {
         Project project = ProjectServiceDTO.toEntity(projectServiceDTO);
+
+        if (!isFundingStartAtBeforeFundingEndAt(fundingCreateRequestDTO.fundingStartAt(), fundingCreateRequestDTO.fundingEndAt())) {
+            throw new BaseException(ErrorCode.INVALID_FUNDING_DURATION);
+        }
 
         Funding funding = Funding.builder()
                 .project(project)
@@ -43,10 +49,6 @@ public class FundingService {
         Funding funding = fundingRepository.findByProjectId(projectId)
                 .orElseThrow(() -> new BaseException(ErrorCode.FUNDING_NOT_FOUND));
 
-        if (!isProjectBeforeSetUp(funding.getProject())) {
-            throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
-        }
-
         return FundingResponseDTO.from(funding);
     }
 
@@ -55,6 +57,10 @@ public class FundingService {
             Long projectId,
             FundingUpdateRequestDTO fundingUpdateRequestDTO
     ) {
+        if (!isFundingStartAtBeforeFundingEndAt(fundingUpdateRequestDTO.fundingStartAt(), fundingUpdateRequestDTO.fundingEndAt())) {
+            throw new BaseException(ErrorCode.INVALID_FUNDING_DURATION);
+        }
+
         Funding funding = fundingRepository.findByProjectId(projectId)
                 .orElseThrow(() -> new BaseException(ErrorCode.FUNDING_NOT_FOUND));
 
@@ -90,5 +96,12 @@ public class FundingService {
 
     private boolean isProjectBeforeSetUp(Project project) {
         return project.getProjectStatus() == ProjectStatus.READY;
+    }
+
+    private boolean isFundingStartAtBeforeFundingEndAt(
+            LocalDateTime fundingStartAt,
+            LocalDateTime fundingEndAt
+    ) {
+       return fundingStartAt.isBefore(fundingEndAt);
     }
 }
