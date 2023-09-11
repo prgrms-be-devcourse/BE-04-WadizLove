@@ -10,6 +10,6 @@ import java.util.Optional;
 
 public interface RewardRepository extends JpaRepository<Reward,Long> {
     @Query("SELECT r FROM Reward r WHERE r.project.projectId = :projectId")
-    Optional<List<Reward>> findByProjectId(Long projectId);
+    Optional<List<Reward>> findAllByProjectId(Long projectId);
 
 }
