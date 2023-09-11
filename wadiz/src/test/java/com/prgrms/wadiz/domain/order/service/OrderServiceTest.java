@@ -207,6 +207,7 @@ class OrderServiceTest {
                 post.getPostTitle(),
                 maker.getMakerBrand(),
                 orderRewardResponseDTOS,
+                order.getTotalOrderPrice(),
                 OrderStatus.COMPLETED
         );
 
@@ -357,6 +358,7 @@ class OrderServiceTest {
         OrderResponseDTO orderRes = OrderResponseDTO.of(
                 order.getOrderId(),
                 orderRewardResponseDTOS,
+                order.getTotalOrderPrice(),
                 order.getOrderStatus()
         );
 

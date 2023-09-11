@@ -7,7 +7,8 @@ public record OrderRewardResponseDTO(
         String rewardName,
         String rewardDescription,
         Integer orderRewardPrice,
-        Integer orderRewardQuantity
+        Integer orderRewardQuantity,
+        Integer totalOrderRewardPrice
 ){
     public static OrderRewardResponseDTO of(
             String rewardName,
@@ -21,6 +22,7 @@ public record OrderRewardResponseDTO(
                 .rewardDescription(rewardDescription)
                 .orderRewardPrice(orderRewardPrice)
                 .orderRewardQuantity(orderRewardQuantity)
+                .totalOrderRewardPrice(orderRewardPrice * orderRewardQuantity)
                 .build();
     }
 }

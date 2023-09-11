@@ -37,7 +37,11 @@ public class Order extends BaseEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderReward> orderRewards = new ArrayList<>();
 
+    @Column(nullable = false)
+    private Integer totalOrderPrice;
+  
     @ValidEnum(enumClass = OrderStatus.class, message = "존재하지 않는 상태입니다.")
+
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
@@ -56,6 +60,10 @@ public class Order extends BaseEntity {
         orderReward.changeOrder(this);
     }
 
+    public void calculateTotalOrderPrice(OrderReward orderReward){
+        this.totalOrderPrice += orderReward.calculateOrderRewardPrice();
+    }
+
     public void cancel() {
         this.setOrderStatus(OrderStatus.CANCELED);
         orderRewards.forEach(OrderReward::cancel);
@@ -64,6 +72,4 @@ public class Order extends BaseEntity {
     public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
-
-
 }

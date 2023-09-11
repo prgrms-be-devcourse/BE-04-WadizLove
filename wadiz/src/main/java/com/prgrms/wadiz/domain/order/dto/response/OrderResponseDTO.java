@@ -14,6 +14,7 @@ public record OrderResponseDTO(
         String makerBrand,
         List<OrderRewardResponseDTO> orderRewardResponseDTOs,
         FundingCategory fundingCategory,
+        Integer totalOrderPrice,
         LocalDateTime createdAt,
         OrderStatus orderStatus
 ) {
@@ -28,6 +29,7 @@ public record OrderResponseDTO(
             String postTitle,
             String makerBrand,
             List<OrderRewardResponseDTO> orderRewardResponseDTOs,
+            Integer totalOrderPrice,
             OrderStatus orderStatus
     ){
         return OrderResponseDTO.builder()
@@ -35,6 +37,7 @@ public record OrderResponseDTO(
                 .postTitle(postTitle)
                 .makerBrand(makerBrand)
                 .orderRewardResponseDTOs(orderRewardResponseDTOs)
+                .totalOrderPrice(totalOrderPrice)
                 .orderStatus(orderStatus)
                 .build();
     }
@@ -42,11 +45,13 @@ public record OrderResponseDTO(
     public static OrderResponseDTO of(
             Long orderId,
             List<OrderRewardResponseDTO> orderRewardResponseDTOs,
+            Integer totalOrderPrice,
             OrderStatus orderStatus
     ){
         return OrderResponseDTO.builder()
                 .orderId(orderId)
                 .orderRewardResponseDTOs(orderRewardResponseDTOs)
+                .totalOrderPrice(totalOrderPrice)
                 .orderStatus(orderStatus)
                 .build();
     }
