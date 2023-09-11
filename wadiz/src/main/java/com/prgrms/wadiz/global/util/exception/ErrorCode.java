@@ -23,7 +23,8 @@ public enum ErrorCode {
     POST_NOT_FOUND(-2000, "게시글 정보를 찾을 수 없습니다."),
     ORDER_NOT_FOUND(-2001,"주문 정보를 찾을 수 없습니다." ),
     NOT_MATCH(-2002, "리워드의 프로젝트 아이디에 매치할 수 없습니다."),
-    DUPLICATED_EMAIL(-2003, "중복된 이메일이 이미 존재합니다.");
+    DUPLICATED_EMAIL(-2003, "중복된 이메일이 이미 존재합니다."),
+    DUPLICATED_NAME(-2004, "중복된 이름이 이미 존재합니다." );
 
     private int code;
     private String errorMessage;
