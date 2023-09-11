@@ -19,6 +19,8 @@ public class SupporterService {
     @Transactional
     public SupporterResponseDTO signUpSupporter(SupporterCreateRequestDTO dto) {
         checkDuplicateEmail(dto.supporterEmail());
+        checkDuplicateName(dto.supporterName());
+
         Supporter supporter = Supporter.builder()
                 .supporterName(dto.supporterName())
                 .supporterEmail(dto.supporterEmail())
@@ -46,6 +48,10 @@ public class SupporterService {
             Long supporterId,
             SupporterUpdateRequestDTO dto
     ) {
+
+        checkDuplicateEmail(dto.supporterEmail());
+        checkDuplicateName(dto.supporterName());
+
         Supporter supporter = supporterRepository.findById(supporterId)
                 .orElseThrow(() -> new BaseException(ErrorCode.SUPPORTER_NOT_FOUND));
 

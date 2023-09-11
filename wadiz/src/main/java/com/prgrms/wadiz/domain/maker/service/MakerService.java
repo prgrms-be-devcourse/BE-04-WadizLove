@@ -52,6 +52,9 @@ public class MakerService {
             Long makerId,
             MakerUpdateRequestDTO dto
     ) {
+        checkDuplicateName(dto.makerName());
+        checkDuplicateEmail(dto.makerEmail());
+
         Maker maker = makerRepository.findById(makerId)
                 .orElseThrow(() -> new BaseException(ErrorCode.MAKER_NOT_FOUND));
 
