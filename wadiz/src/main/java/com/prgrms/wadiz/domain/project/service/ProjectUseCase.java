@@ -11,7 +11,9 @@ import com.prgrms.wadiz.domain.maker.service.MakerService;
 import com.prgrms.wadiz.domain.post.dto.request.PostCreateRequestDTO;
 import com.prgrms.wadiz.domain.post.dto.request.PostUpdateRequestDTO;
 import com.prgrms.wadiz.domain.post.dto.response.PostResponseDTO;
+import com.prgrms.wadiz.domain.project.condition.ProjectSearchCondition;
 import com.prgrms.wadiz.domain.project.dto.ProjectServiceDTO;
+import com.prgrms.wadiz.domain.project.dto.response.ProjectSummaryResponseDTO;
 import com.prgrms.wadiz.domain.reward.dto.request.RewardCreateRequestDTO;
 import com.prgrms.wadiz.domain.reward.dto.request.RewardUpdateRequestDTO;
 import com.prgrms.wadiz.domain.reward.dto.response.RewardResponseDTO;
@@ -23,6 +25,8 @@ import com.prgrms.wadiz.domain.project.entity.Project;
 import com.prgrms.wadiz.domain.project.repository.ProjectRepository;
 import com.prgrms.wadiz.global.util.exception.BaseException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -194,4 +198,12 @@ public class ProjectUseCase {
         return rewardService.getReward(projectId, rewardId);
     }
 
+    @Transactional(readOnly = true)
+    public Page<ProjectSummaryResponseDTO> getProjects(Long cursorId, int size) {
+        return projectRepository.findAllByCondition(
+                cursorId,
+                ProjectSearchCondition.OPEN,
+                PageRequest.of(0, size)
+        );
+    }
 }
