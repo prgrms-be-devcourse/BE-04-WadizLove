@@ -8,19 +8,25 @@ public record ProjectPageResponseDTO(
         Long projectId,
         String title,
         String thumbNailImage,
-        String makerBrand
+        String makerBrand,
+        int fundingSuccessRate,
+        int fundingAmount
 ) {
     public static ProjectPageResponseDTO of(
             Long projectId,
             String title,
             String thumbNailImage,
-            String makerBrand
+            String makerBrand,
+            int fundingSuccessRate,
+            int fundingAmount
     ) {
        return ProjectPageResponseDTO.builder()
                .projectId(projectId)
                .title(title)
                .thumbNailImage(thumbNailImage)
                .makerBrand(makerBrand)
+               .fundingSuccessRate(fundingSuccessRate)
+               .fundingAmount(fundingAmount)
                .build();
     }
 }

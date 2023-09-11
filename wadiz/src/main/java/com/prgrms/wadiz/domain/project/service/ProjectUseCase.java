@@ -211,12 +211,15 @@ public class ProjectUseCase {
                 .map(project -> {
                     Long projectId = project.getProjectId();
                     PostResponseDTO postResponseDTO = postService.getPostByProjectId(projectId);
+                    FundingResponseDTO fundingResponseDTO = fundingService.getFundingByProjectId(projectId);
 
                     return ProjectPageResponseDTO.of(
                             projectId,
                             postResponseDTO.postTitle(),
                             postResponseDTO.postThumbNailImage(),
-                            project.getMaker().getMakerBrand()
+                            project.getMaker().getMakerBrand(),
+                            fundingResponseDTO.fundingSuccessRate(),
+                            fundingResponseDTO.fundingAmount()
                     );
                 })
                 .toList();
