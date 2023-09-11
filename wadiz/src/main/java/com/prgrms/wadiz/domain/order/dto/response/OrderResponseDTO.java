@@ -18,6 +18,11 @@ public record OrderResponseDTO(
         LocalDateTime createdAt,
         OrderStatus orderStatus
 ) {
+    public static OrderResponseDTO of(Long orderId){
+        return OrderResponseDTO.builder()
+                .orderId(orderId)
+                .build();
+    }
 
     public static OrderResponseDTO of(
             Long orderId,

@@ -37,7 +37,7 @@ public class OrderService {
 
     // 주문 생성
     @Transactional
-    public void createOrder(
+    public OrderResponseDTO createOrder(
             Long supporterId,
             OrderCreateRequestDTO orderCreateRequestDto
     ) {
@@ -80,7 +80,7 @@ public class OrderService {
         orderRewards.forEach(order::addOrderReward);
         orderRewards.forEach(order::calculateTotalOrderPrice);
 
-        orderRepository.save(order);
+        return OrderResponseDTO.of(orderRepository.save(order).getOrderId());
     }
 
     @Transactional(readOnly = true)
