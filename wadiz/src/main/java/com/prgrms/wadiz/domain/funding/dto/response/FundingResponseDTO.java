@@ -13,10 +13,10 @@ public record FundingResponseDTO(
         Integer fundingTargetAmount,
         LocalDateTime fundingStartAt,
         LocalDateTime fundingEndAt,
-        int fundingParticipants,
-        int fundingAmount,
-        int fundingSuccessRate,
-        boolean fundingSuccess,
+        Integer fundingParticipants,
+        Integer fundingAmount,
+        Integer fundingSuccessRate,
+        Boolean fundingSuccess,
         FundingCategory fundingCategory,
         FundingStatus fundingStatus
 ) {
@@ -28,8 +28,8 @@ public record FundingResponseDTO(
                 .fundingEndAt(funding.getFundingEndAt())
                 .fundingParticipants(funding.getFundingParticipants())
                 .fundingAmount(funding.getFundingAmount())
-                .fundingSuccessRate(funding.getFundingSuccessRate())
-                .fundingSuccess(funding.isFundingSuccess())
+                .fundingSuccessRate(funding.calculateSuccessRate())
+                .fundingSuccess(funding.getFundingSuccess())
                 .fundingCategory(funding.getFundingCategory())
                 .fundingStatus(funding.getFundingStatus())
                 .build();

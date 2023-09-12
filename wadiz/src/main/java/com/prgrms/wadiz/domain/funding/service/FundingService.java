@@ -38,6 +38,7 @@ public class FundingService {
                 .fundingCategory(fundingCreateRequestDTO.fundingCategory())
                 .fundingTargetAmount(fundingCreateRequestDTO.fundingTargetAmount())
                 .fundingStartAt(fundingCreateRequestDTO.fundingStartAt())
+
                 .fundingEndAt(fundingCreateRequestDTO.fundingEndAt())
                 .build();
 

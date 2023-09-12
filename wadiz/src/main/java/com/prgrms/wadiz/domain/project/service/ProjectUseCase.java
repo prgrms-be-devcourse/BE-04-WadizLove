@@ -25,9 +25,11 @@ import com.prgrms.wadiz.domain.project.dto.response.ProjectResponseDTO;
 import com.prgrms.wadiz.domain.project.entity.Project;
 import com.prgrms.wadiz.domain.project.repository.ProjectRepository;
 import com.prgrms.wadiz.global.util.exception.BaseException;
+import com.querydsl.core.types.Order;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -88,9 +90,19 @@ public class ProjectUseCase {
         List<RewardResponseDTO> rewardServiceDTOs = rewardService.getRewardsByProjectId(projectId);
 
         Maker maker = project.getMaker();
-        MakerResponseDTO makerResponseDTO = MakerResponseDTO.of(maker.getMakerName(), maker.getMakerEmail(), maker.getMakerBrand());
+        MakerResponseDTO makerResponseDTO = MakerResponseDTO.of(
+                maker.getMakerName(),
+                maker.getMakerEmail(),
+                maker.getMakerBrand()
+        );
 
-        return ProjectResponseDTO.of(projectId, makerResponseDTO, postServiceDTO, fundingServiceDTO, rewardServiceDTOs);
+        return ProjectResponseDTO.of(
+                projectId,
+                makerResponseDTO,
+                postServiceDTO,
+                fundingServiceDTO,
+                rewardServiceDTOs
+        );
     }
 
     /**
@@ -201,13 +213,13 @@ public class ProjectUseCase {
 
     @Transactional(readOnly = true)
     public ProjectSummaryResponseDTO getProjects(Long cursorId, int size) {
-        Page<Project> pageRes = projectRepository.findAllByCondition(
+        List<Project> pageRes = projectRepository.findAllByCondition(
                 cursorId,
                 ProjectSearchCondition.OPEN,
-                PageRequest.of(0, size)
+                PageRequest.of(0, size, Sort.by(Sort.Direction.ASC,"projectId"))
         );
 
-        List<ProjectPageResponseDTO> projectPages = pageRes.getContent().stream()
+        List<ProjectPageResponseDTO> projectPages = pageRes.stream()
                 .map(project -> {
                     Long projectId = project.getProjectId();
                     PostResponseDTO postResponseDTO = postService.getPostByProjectId(projectId);
@@ -228,7 +240,7 @@ public class ProjectUseCase {
 
         return ProjectSummaryResponseDTO.of(
                 projectPages,
-                pageRes.getNumberOfElements(),
+                pageRes.size(),
                 nextCursor
         );
     }
