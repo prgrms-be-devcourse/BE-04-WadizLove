@@ -44,10 +44,6 @@ public class FundingService {
         Funding funding = fundingRepository.findByProjectId(projectId)
                 .orElseThrow(() -> new BaseException(ErrorCode.FUNDING_NOT_FOUND));
 
-        if (!isProjectBeforeSetUp(funding.getProject())) {
-            throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
-        }
-
         return FundingResponseDTO.from(funding);
     }
 
