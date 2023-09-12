@@ -37,13 +37,10 @@ public class Funding extends BaseEntity {
     private LocalDateTime fundingEndAt;
 
     @Column(nullable = false)
-    private int fundingParticipants;
+    private Integer fundingParticipants;
 
     @Column(nullable = false)
-    private int fundingAmount;
-
-    @Column(nullable = false) //수정 : booleantype은 tinyint로 0 1로 구분되어 저장된다.
-    private int fundingSuccessRate;
+    private Integer fundingAmount;
 
     @Column(nullable = false)
     private boolean fundingSuccess = Boolean.FALSE;
@@ -88,21 +85,23 @@ public class Funding extends BaseEntity {
         this.fundingStatus = fundingStatus;
     }
 
-    public void addOrderInfo(int totalOrderPrice) {
+    public void addOrderInfo(Integer totalOrderPrice) {
         this.fundingAmount += totalOrderPrice;
         this.fundingParticipants += 1;
-        this.fundingSuccessRate = (int) Math.round((this.fundingAmount /(double) this.fundingTargetAmount) * 100);
         validateFundingSuccess(this.fundingAmount , this.fundingTargetAmount);
     }
 
-    public void removeOrderInfo(int totalOrderPrice) {
+    public void removeOrderInfo(Integer totalOrderPrice) {
         this.fundingAmount -= totalOrderPrice;
         this.fundingParticipants -= 1;
-        this.fundingSuccessRate = (int) Math.round((this.fundingAmount /(double) this.fundingTargetAmount) * 100);
         validateFundingSuccess(this.fundingAmount , this.fundingTargetAmount);
     }
 
     private void validateFundingSuccess(Integer fundingAmount, Integer fundingTargetAmount) {
         this.fundingSuccess = (fundingAmount >= fundingTargetAmount) ? Boolean.TRUE : Boolean.FALSE;
+    }
+
+    public Integer calculateSuccessRate(){
+        return (int) Math.round((this.fundingAmount /(double) this.fundingTargetAmount) * 100);
     }
 }

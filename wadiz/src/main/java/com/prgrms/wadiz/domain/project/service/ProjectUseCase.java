@@ -88,9 +88,19 @@ public class ProjectUseCase {
         List<RewardResponseDTO> rewardServiceDTOs = rewardService.getRewardsByProjectId(projectId);
 
         Maker maker = project.getMaker();
-        MakerResponseDTO makerResponseDTO = MakerResponseDTO.of(maker.getMakerName(), maker.getMakerEmail(), maker.getMakerBrand());
+        MakerResponseDTO makerResponseDTO = MakerResponseDTO.of(
+                maker.getMakerName(),
+                maker.getMakerEmail(),
+                maker.getMakerBrand()
+        );
 
-        return ProjectResponseDTO.of(projectId, makerResponseDTO, postServiceDTO, fundingServiceDTO, rewardServiceDTOs);
+        return ProjectResponseDTO.of(
+                projectId,
+                makerResponseDTO,
+                postServiceDTO,
+                fundingServiceDTO,
+                rewardServiceDTOs
+        );
     }
 
     /**
