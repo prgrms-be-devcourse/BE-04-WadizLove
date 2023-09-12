@@ -27,9 +27,9 @@ public class OrderController {
             @PathVariable Long supporterId,
             @RequestBody @Valid OrderCreateRequestDTO orderCreateRequestDto
     ){
-        OrderResponseDTO orderREsponseDTO = orderService.createOrder(supporterId, orderCreateRequestDto);
+        OrderResponseDTO orderResponseDTO = orderService.createOrder(supporterId, orderCreateRequestDto);
 
-        return ResponseEntity.ok(ResponseFactory.getSingleResult(orderREsponseDTO));
+        return ResponseEntity.ok(ResponseFactory.getSingleResult(orderResponseDTO));
     }
 
     @PutMapping("{orderId}/supporters/{supporterId}")

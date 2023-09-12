@@ -37,6 +37,18 @@ public class Funding extends BaseEntity {
     private LocalDateTime fundingEndAt;
 
     @Column(nullable = false)
+    private int fundingParticipants;
+
+    @Column(nullable = false)
+    private int fundingAmount;
+
+    @Column(nullable = false) //수정 : booleantype은 tinyint로 0 1로 구분되어 저장된다.
+    private int fundingSuccessRate;
+
+    @Column(nullable = false)
+    private boolean fundingSuccess = Boolean.FALSE;
+
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     @ValidEnum(enumClass = FundingCategory.class, message = "존재하지 않는 카테고리 입니다.")
     private FundingCategory fundingCategory;
@@ -74,5 +86,23 @@ public class Funding extends BaseEntity {
         this.fundingEndAt = fundingEndAt;
         this.fundingCategory = fundingCategory;
         this.fundingStatus = fundingStatus;
+    }
+
+    public void addOrderInfo(int totalOrderPrice) {
+        this.fundingAmount += totalOrderPrice;
+        this.fundingParticipants += 1;
+        this.fundingSuccessRate = (int) Math.round((this.fundingAmount /(double) this.fundingTargetAmount) * 100);
+        validateFundingSuccess(this.fundingAmount , this.fundingTargetAmount);
+    }
+
+    public void removeOrderInfo(int totalOrderPrice) {
+        this.fundingAmount -= totalOrderPrice;
+        this.fundingParticipants -= 1;
+        this.fundingSuccessRate = (int) Math.round((this.fundingAmount /(double) this.fundingTargetAmount) * 100);
+        validateFundingSuccess(this.fundingAmount , this.fundingTargetAmount);
+    }
+
+    private void validateFundingSuccess(Integer fundingAmount, Integer fundingTargetAmount) {
+        this.fundingSuccess = (fundingAmount >= fundingTargetAmount) ? Boolean.TRUE : Boolean.FALSE;
     }
 }

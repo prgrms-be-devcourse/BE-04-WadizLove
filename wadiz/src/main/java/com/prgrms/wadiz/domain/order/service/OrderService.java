@@ -1,6 +1,7 @@
 package com.prgrms.wadiz.domain.order.service;
 
 import com.prgrms.wadiz.domain.funding.FundingCategory;
+import com.prgrms.wadiz.domain.funding.entity.Funding;
 import com.prgrms.wadiz.domain.funding.repository.FundingRepository;
 import com.prgrms.wadiz.domain.order.dto.request.OrderCreateRequestDTO;
 import com.prgrms.wadiz.domain.order.dto.response.OrderResponseDTO;
@@ -45,7 +46,7 @@ public class OrderService {
                 .orElseThrow(() -> {
                     log.error("Supporter {} is not found", supporterId);
 
-                    return new BaseException(ErrorCode.UNKNOWN);
+                    throw new BaseException(ErrorCode.UNKNOWN);
                 });
 
         List<OrderReward> orderRewards = orderCreateRequestDto.orderRewards().stream()
@@ -54,7 +55,7 @@ public class OrderService {
                             .orElseThrow(() -> {
                                 log.error("reward is not found");
 
-                                return new BaseException(ErrorCode.UNKNOWN);
+                                throw new BaseException(ErrorCode.UNKNOWN);
                             });
 
                     Integer orderQuantity = orderRewardRequest.orderQuantity();
@@ -79,6 +80,13 @@ public class OrderService {
 
         orderRewards.forEach(order::addOrderReward);
         orderRewards.forEach(order::calculateTotalOrderPrice);
+
+        Funding funding = fundingRepository.findByProjectId(project.getProjectId())
+                .orElseThrow(() -> {
+                    throw new BaseException(ErrorCode.PROJECT_NOT_FOUND);
+                });
+
+        funding.addOrderInfo(order.getTotalOrderPrice());
 
         return OrderResponseDTO.of(orderRepository.save(order).getOrderId());
     }
@@ -196,7 +204,7 @@ public class OrderService {
         return orderResponseDTOs;
     }
 
-    @Transactional
+    @Transactional //수정 취소될때 참여자 수, 참여 금액, 퍼센트 모두 빼줘야 한다.
     public void cancelOrder(
             Long supporterId,
             Long orderId
@@ -205,8 +213,19 @@ public class OrderService {
 
         validateSupporter(supporterId, order.getSupporter().getSupporterId());
 
+        Funding funding = fundingRepository.findByProjectId(order.getProject().getProjectId())
+                .orElseThrow(() -> {
+                    log.error("Funding is not found");
+
+                    throw new BaseException(ErrorCode.ORDER_NOT_FOUND);
+                });
+
+        funding.removeOrderInfo(order.getTotalOrderPrice());
+
         order.cancel();
     }
+
+
     private void validateSupporter(Long supporterId, Long orderSupporterId) {
         if (!orderSupporterId.equals(supporterId)){
 
@@ -225,7 +244,7 @@ public class OrderService {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> {
             log.error("Order {} is not found", orderId);
 
-            return new BaseException(ErrorCode.ORDER_NOT_FOUND);
+            throw new BaseException(ErrorCode.ORDER_NOT_FOUND);
         });
 
         return order;

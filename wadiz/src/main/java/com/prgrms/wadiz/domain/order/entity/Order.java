@@ -38,7 +38,7 @@ public class Order extends BaseEntity {
     private List<OrderReward> orderRewards = new ArrayList<>();
 
     @Column(nullable = false)
-    private Integer totalOrderPrice;
+    private int totalOrderPrice;
   
     @ValidEnum(enumClass = OrderStatus.class, message = "존재하지 않는 상태입니다.")
 
