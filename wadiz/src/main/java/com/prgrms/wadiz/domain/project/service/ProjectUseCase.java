@@ -28,6 +28,7 @@ import com.prgrms.wadiz.global.util.exception.BaseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -211,13 +212,13 @@ public class ProjectUseCase {
 
     @Transactional(readOnly = true)
     public ProjectSummaryResponseDTO getProjects(Long cursorId, int size) {
-        Page<Project> pageRes = projectRepository.findAllByCondition(
+        List<Project> pageRes = projectRepository.findAllByCondition(
                 cursorId,
                 ProjectSearchCondition.OPEN,
-                PageRequest.of(0, size)
+                PageRequest.of(0, size, Sort.by(Sort.Direction.ASC,"projectId"))
         );
 
-        List<ProjectPageResponseDTO> projectPages = pageRes.getContent().stream()
+        List<ProjectPageResponseDTO> projectPages = pageRes.stream()
                 .map(project -> {
                     Long projectId = project.getProjectId();
                     PostResponseDTO postResponseDTO = postService.getPostByProjectId(projectId);
@@ -228,7 +229,7 @@ public class ProjectUseCase {
                             postResponseDTO.postTitle(),
                             postResponseDTO.postThumbNailImage(),
                             project.getMaker().getMakerBrand(),
-                            fundingResponseDTO.fundingSuccessRate(),
+//                            fundingResponseDTO.fundingSuccessRate(),
                             fundingResponseDTO.fundingAmount()
                     );
                 })
