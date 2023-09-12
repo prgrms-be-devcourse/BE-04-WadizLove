@@ -23,7 +23,7 @@ public class ProjectRepositoryImpl implements ProjectRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<Project> findAllByCondition(
+    public List<Project> findAllByCondition(
             Long cursorId,
             ProjectSearchCondition projectSearchCondition,
             Pageable pageable
@@ -35,12 +35,8 @@ public class ProjectRepositoryImpl implements ProjectRepositoryCustom {
                         .stream()
                         .toArray(OrderSpecifier[]::new))
                 .fetch();
-    //수정 list 형태로 반환하게 + 정렬을 명시적으로 처리
-        return PageableExecutionUtils.getPage(
-                findBoards,
-                pageable,
-                findBoards::size
-        );
+
+        return findBoards;
     }
     
     private List<OrderSpecifier> getOrderSpecifier(Sort sort){
@@ -58,7 +54,7 @@ public class ProjectRepositoryImpl implements ProjectRepositoryCustom {
 
     private BooleanExpression cursorId(Long cursorId){
         if (cursorId == null) {
-            return project.projectId.gt(0L); // 0L 부분 수정 동적 쿼리 짱!
+            return null;
         }
 
         return project.projectId.gt(cursorId);

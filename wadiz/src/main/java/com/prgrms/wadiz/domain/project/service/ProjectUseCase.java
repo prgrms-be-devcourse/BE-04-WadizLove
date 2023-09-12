@@ -25,6 +25,7 @@ import com.prgrms.wadiz.domain.project.dto.response.ProjectResponseDTO;
 import com.prgrms.wadiz.domain.project.entity.Project;
 import com.prgrms.wadiz.domain.project.repository.ProjectRepository;
 import com.prgrms.wadiz.global.util.exception.BaseException;
+import com.querydsl.core.types.Order;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -239,7 +240,7 @@ public class ProjectUseCase {
 
         return ProjectSummaryResponseDTO.of(
                 projectPages,
-                pageRes.getNumberOfElements(),
+                pageRes.size(),
                 nextCursor
         );
     }
