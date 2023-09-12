@@ -203,4 +203,51 @@ class FundingServiceTest {
                 .isInstanceOf(BaseException.class)
                 .hasFieldOrPropertyWithValue("errorCode", ErrorCode.PROJECT_ACCESS_DENY);
     }
+
+    @Test
+    @DisplayName("[예외] Funding 정보를 생성할 때, 종료 시각이 시작 시각보다 앞선 경우 예외가 발생한다.")
+    void createFundingWithWrongTime() {
+        // given
+        ProjectServiceDTO projectServiceDTO = ProjectServiceDTO.builder().build();
+
+        LocalDateTime wrongStartAt = LocalDateTime.now().plusWeeks(2L);
+        LocalDateTime wrongEndAt = LocalDateTime.now();
+
+        FundingCreateRequestDTO wrongRequestDTO = FundingCreateRequestDTO.builder()
+                .fundingTargetAmount(1_000_000)
+                .fundingCategory(FundingCategory.FOOD)
+                .fundingStartAt(wrongStartAt)
+                .fundingEndAt(wrongEndAt)
+                .build();
+
+        // when
+        // then
+        assertThatThrownBy(() -> fundingService.createFunding(projectServiceDTO, wrongRequestDTO))
+                .isInstanceOf(BaseException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.INVALID_FUNDING_DURATION);
+    }
+
+    @Test
+    @DisplayName("[예외] Funding 정보를 수정할 때, 종료 시각이 시작 시각보다 앞선 경우 예외가 발생한다.")
+    void updateFundingWithWrongTime() {
+        // given
+        Long projectId = 1L;
+
+        LocalDateTime wrongStartAt = LocalDateTime.now().plusWeeks(2L);
+        LocalDateTime wrongEndAt = LocalDateTime.now();
+
+        FundingUpdateRequestDTO wrongRequestDTO = new FundingUpdateRequestDTO(
+                500_000,
+                wrongStartAt,
+                wrongEndAt,
+                FundingCategory.FASHION,
+                FundingStatus.OPEN
+        );
+
+        // when
+        // then
+        assertThatThrownBy(() -> fundingService.updateFunding(projectId, wrongRequestDTO))
+                .isInstanceOf(BaseException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.INVALID_FUNDING_DURATION);
+    }
 }
