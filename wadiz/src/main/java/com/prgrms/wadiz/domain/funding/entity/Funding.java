@@ -43,7 +43,7 @@ public class Funding extends BaseEntity {
     private Integer fundingAmount;
 
     @Column(nullable = false)
-    private boolean fundingSuccess = Boolean.FALSE;
+    private Boolean fundingSuccess = Boolean.FALSE;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -67,6 +67,8 @@ public class Funding extends BaseEntity {
         this.fundingTargetAmount = fundingTargetAmount;
         this.fundingStartAt = fundingStartAt;
         this.fundingEndAt = fundingEndAt;
+        this.fundingParticipants = 0;
+        this.fundingAmount = 0;
         this.fundingCategory = fundingCategory;
         this.fundingStatus = FundingStatus.OPEN;
     }
@@ -102,6 +104,6 @@ public class Funding extends BaseEntity {
     }
 
     public Integer calculateSuccessRate(){
-        return (int) Math.round((this.fundingAmount /(double) this.fundingTargetAmount) * 100);
+        return Math.round((this.fundingAmount / this.fundingTargetAmount) * 100);
     }
 }

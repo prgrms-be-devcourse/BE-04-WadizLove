@@ -9,16 +9,16 @@ public record ProjectPageResponseDTO(
         String title,
         String thumbNailImage,
         String makerBrand,
-        int fundingSuccessRate,
-        int fundingAmount
+        Integer fundingSuccessRate,
+        Integer fundingAmount
 ) {
     public static ProjectPageResponseDTO of(
             Long projectId,
             String title,
             String thumbNailImage,
             String makerBrand,
-            int fundingSuccessRate,
-            int fundingAmount
+            Integer fundingSuccessRate,
+            Integer fundingAmount
     ) {
        return ProjectPageResponseDTO.builder()
                .projectId(projectId)

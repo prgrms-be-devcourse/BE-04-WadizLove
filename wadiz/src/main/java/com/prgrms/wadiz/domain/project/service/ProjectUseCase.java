@@ -229,7 +229,7 @@ public class ProjectUseCase {
                             postResponseDTO.postTitle(),
                             postResponseDTO.postThumbNailImage(),
                             project.getMaker().getMakerBrand(),
-//                            fundingResponseDTO.fundingSuccessRate(),
+                            fundingResponseDTO.fundingSuccessRate(),
                             fundingResponseDTO.fundingAmount()
                     );
                 })
