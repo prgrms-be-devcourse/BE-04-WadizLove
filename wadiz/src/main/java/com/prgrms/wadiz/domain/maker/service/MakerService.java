@@ -24,7 +24,7 @@ public class MakerService {
     private JPAQueryFactory jpaQueryFactory;
 
     @Transactional
-    public MakerResponseDTO signUpMaker(MakerCreateRequestDTO dto) {
+    public Long signUpMaker(MakerCreateRequestDTO dto) {
         checkDuplicateName(dto.makerName());
         checkDuplicateEmail(dto.makerEmail());
 
@@ -34,9 +34,8 @@ public class MakerService {
                 .makerEmail(dto.makerEmail())
                 .build();
 
-        makerRepository.save(maker);
-
-        return MakerResponseDTO.from(maker);
+        Maker savedMaker = makerRepository.save(maker);
+        return savedMaker.getMakerId();
     }
 
     @Transactional
