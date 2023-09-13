@@ -89,4 +89,11 @@ public class MakerService {
             throw new BaseException((ErrorCode.DUPLICATED_NAME));
         }
     }
+
+    public MakerResponseDTO getMaker(Long makerId) {
+        Maker maker = makerRepository.findById(makerId)
+                .orElseThrow(() -> new BaseException(ErrorCode.MAKER_NOT_FOUND));
+
+        return MakerResponseDTO.from(maker);
+    }
 }
