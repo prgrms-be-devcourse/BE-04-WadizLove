@@ -30,7 +30,7 @@ public class ResponseFactory {
     }
 
     // 결과'만' 반환 (실패)
-    public static ResponseTemplate getFailResult(int code, String message) {
+    public static ResponseTemplate getFailResult(String code, String message) {
         ResponseTemplate result = new ResponseTemplate();
         setFailResult(result, code, message);
         return result;
@@ -43,7 +43,7 @@ public class ResponseFactory {
     }
 
     // API 요청 성공 시 공통 응답 모델을 실패 데이터로 세팅
-    private static void setFailResult(ResponseTemplate result, int code, String message) {
+    private static void setFailResult(ResponseTemplate result, String code, String message) {
         result.setCode(code);
         result.setMessage(message);
     }

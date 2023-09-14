@@ -60,7 +60,7 @@ public class Reward extends BaseEntity {
     private RewardStatus rewardStatus;
 
     @Column(nullable = false)
-    private Boolean activated = Boolean.TRUE; // 활성화 여부, 삭제 시 -> false
+    private Boolean activated = Boolean.TRUE;
 
     public void removeStock(Integer rewardQuantity) {
         int restQuantity = this.rewardQuantity - rewardQuantity;

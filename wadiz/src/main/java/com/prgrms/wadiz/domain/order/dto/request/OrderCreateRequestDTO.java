@@ -1,10 +1,15 @@
 package com.prgrms.wadiz.domain.order.dto.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
 import java.util.List;
 
+@Schema(description = "주문 생성 요청 DTO")
 @Builder
-public record OrderCreateRequestDTO(List<OrderRewardCreateRequestDTO> orderRewards) {
+public record OrderCreateRequestDTO(
+        @Schema(description = "주문 생성 요청 DTO 리스트")
+        List<OrderRewardCreateRequestDTO> orderRewards
+) {
 
 }

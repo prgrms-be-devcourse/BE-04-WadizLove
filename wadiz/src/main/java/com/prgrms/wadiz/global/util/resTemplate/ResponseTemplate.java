@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 public class ResponseTemplate {
 
-    private int code;
+    private String code;
     private String message;
 
 }
