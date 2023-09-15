@@ -25,9 +25,7 @@ import com.prgrms.wadiz.domain.project.dto.response.ProjectResponseDTO;
 import com.prgrms.wadiz.domain.project.entity.Project;
 import com.prgrms.wadiz.domain.project.repository.ProjectRepository;
 import com.prgrms.wadiz.global.util.exception.BaseException;
-import com.querydsl.core.types.Order;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -212,12 +210,18 @@ public class ProjectUseCase {
     }
 
     @Transactional(readOnly = true)
-    public ProjectSummaryResponseDTO getProjects(Long cursorId, int size) {
-        List<Project> pageRes = projectRepository.findAllByCondition(
-                cursorId,
-                ProjectSearchCondition.OPEN,
-                PageRequest.of(0, size, Sort.by(Sort.Direction.ASC,"projectId"))
+    public ProjectSummaryResponseDTO getProjects(
+            Long cursorId,
+            int size,
+            ProjectSearchCondition searchCondition,
+            String criterion
+    ) {
+        PageRequest pageRequest = PageRequest.of(0,
+                size,
+                Sort.by(new Sort.Order(Sort.Direction.DESC, criterion))
         );
+
+        List<Project> pageRes = projectRepository.findAllByCondition(cursorId, searchCondition, pageRequest);
 
         List<ProjectPageResponseDTO> projectPages = pageRes.stream()
                 .map(project -> {

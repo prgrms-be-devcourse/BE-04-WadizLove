@@ -1,7 +1,6 @@
 package com.prgrms.wadiz.domain.funding.entity;
 
 import com.prgrms.wadiz.domain.funding.FundingCategory;
-import com.prgrms.wadiz.domain.funding.FundingStatus;
 import com.prgrms.wadiz.domain.project.entity.Project;
 import com.prgrms.wadiz.domain.BaseEntity;
 import com.prgrms.wadiz.global.annotation.ValidEnum;
@@ -22,7 +21,7 @@ public class Funding extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fundingId;
 
-    @OneToOne
+    @OneToOne(optional = false,fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
     private Project project;
 
@@ -50,11 +49,6 @@ public class Funding extends BaseEntity {
     @ValidEnum(enumClass = FundingCategory.class, message = "존재하지 않는 카테고리 입니다.")
     private FundingCategory fundingCategory;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    @ValidEnum(enumClass = FundingStatus.class, message = "유효하지 않은 펀딩 상태입니다.")
-    private FundingStatus fundingStatus;
-
     @Builder
     public Funding(
             Project project,
@@ -70,21 +64,18 @@ public class Funding extends BaseEntity {
         this.fundingParticipants = 0;
         this.fundingAmount = 0;
         this.fundingCategory = fundingCategory;
-        this.fundingStatus = FundingStatus.OPEN;
     }
 
     public void updateFunding(
             Integer fundingTargetAmount,
             LocalDateTime fundingStartAt,
             LocalDateTime fundingEndAt,
-            FundingCategory fundingCategory,
-            FundingStatus fundingStatus
+            FundingCategory fundingCategory
     ) {
         this.fundingTargetAmount = fundingTargetAmount;
         this.fundingStartAt = fundingStartAt;
         this.fundingEndAt = fundingEndAt;
         this.fundingCategory = fundingCategory;
-        this.fundingStatus = fundingStatus;
     }
 
     public void addOrderInfo(Integer totalOrderPrice) {
@@ -99,11 +90,11 @@ public class Funding extends BaseEntity {
         validateFundingSuccess(this.fundingAmount , this.fundingTargetAmount);
     }
 
-    private void validateFundingSuccess(Integer fundingAmount, Integer fundingTargetAmount) {
-        this.fundingSuccess = (fundingAmount >= fundingTargetAmount) ? Boolean.TRUE : Boolean.FALSE;
-    }
-
     public Integer calculateSuccessRate(){
         return Math.round((this.fundingAmount / this.fundingTargetAmount) * 100);
+    }
+
+    private void validateFundingSuccess(Integer fundingAmount, Integer fundingTargetAmount) {
+        this.fundingSuccess = (fundingAmount >= fundingTargetAmount) ? Boolean.TRUE : Boolean.FALSE;
     }
 }

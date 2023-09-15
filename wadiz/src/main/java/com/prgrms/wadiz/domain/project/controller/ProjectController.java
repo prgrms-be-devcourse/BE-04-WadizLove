@@ -6,6 +6,7 @@ import com.prgrms.wadiz.domain.post.dto.response.PostResponseDTO;
 import com.prgrms.wadiz.domain.funding.dto.request.FundingCreateRequestDTO;
 import com.prgrms.wadiz.domain.funding.dto.request.FundingUpdateRequestDTO;
 import com.prgrms.wadiz.domain.funding.dto.response.FundingResponseDTO;
+import com.prgrms.wadiz.domain.project.condition.ProjectSearchCondition;
 import com.prgrms.wadiz.domain.project.dto.response.ProjectResponseDTO;
 import com.prgrms.wadiz.domain.project.dto.response.ProjectPageResponseDTO;
 import com.prgrms.wadiz.domain.project.dto.response.ProjectSummaryResponseDTO;
@@ -54,9 +55,16 @@ public class ProjectController {
     @GetMapping
     public ResponseEntity<ResponseTemplate> getProjects(
             @RequestParam(required = false) Long cursorId,
-            @RequestParam int size
-    ) {
-        ProjectSummaryResponseDTO projectSummaryRes = projectUseCase.getProjects(cursorId, size);
+            @RequestParam int size,
+            @RequestParam ProjectSearchCondition searchCondition,
+            @RequestParam(required = false) String criterion
+            ) {
+        ProjectSummaryResponseDTO projectSummaryRes = projectUseCase.getProjects(
+                cursorId,
+                size,
+                searchCondition,
+                criterion
+        );
 
         return ResponseEntity.ok(ResponseFactory.getSingleResult(projectSummaryRes));
     }
