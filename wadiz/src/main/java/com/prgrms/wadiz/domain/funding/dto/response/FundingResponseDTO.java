@@ -20,7 +20,7 @@ public record FundingResponseDTO(
         FundingCategory fundingCategory,
         FundingStatus fundingStatus
 ) {
-    public static FundingResponseDTO from(Funding funding) {
+    public static FundingResponseDTO of(Funding funding, FundingStatus fundingStatus) {
         return FundingResponseDTO.builder()
                 .fundingId(funding.getFundingId())
                 .fundingTargetAmount(funding.getFundingTargetAmount())
@@ -31,7 +31,7 @@ public record FundingResponseDTO(
                 .fundingSuccessRate(funding.calculateSuccessRate())
                 .fundingSuccess(funding.getFundingSuccess())
                 .fundingCategory(funding.getFundingCategory())
-                .fundingStatus(funding.getFundingStatus())
+                .fundingStatus(fundingStatus)
                 .build();
     }
 }

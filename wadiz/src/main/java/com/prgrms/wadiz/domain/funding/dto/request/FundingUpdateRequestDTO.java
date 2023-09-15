@@ -1,7 +1,6 @@
 package com.prgrms.wadiz.domain.funding.dto.request;
 
 import com.prgrms.wadiz.domain.funding.FundingCategory;
-import com.prgrms.wadiz.domain.funding.FundingStatus;
 import com.prgrms.wadiz.global.annotation.ValidEnum;
 
 import javax.validation.constraints.FutureOrPresent;
@@ -19,9 +18,6 @@ public record FundingUpdateRequestDTO(
         LocalDateTime fundingEndAt,
 
         @ValidEnum(enumClass = FundingCategory.class, message = "존재하지 않는 카테고리 입니다.")
-        FundingCategory fundingCategory,
-
-        @ValidEnum(enumClass = FundingStatus.class, message = "유효하지 않은 펀딩 상태입니다.")
-        FundingStatus fundingStatus
+        FundingCategory fundingCategory
 ) {
 }

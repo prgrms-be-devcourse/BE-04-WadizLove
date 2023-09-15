@@ -1,5 +1,6 @@
 package com.prgrms.wadiz.domain.funding.service;
 
+import com.prgrms.wadiz.domain.funding.FundingStatus;
 import com.prgrms.wadiz.domain.funding.dto.request.FundingCreateRequestDTO;
 import com.prgrms.wadiz.domain.funding.dto.request.FundingUpdateRequestDTO;
 import com.prgrms.wadiz.domain.funding.dto.response.FundingResponseDTO;
@@ -11,7 +12,6 @@ import com.prgrms.wadiz.domain.project.entity.Project;
 import com.prgrms.wadiz.global.util.exception.BaseException;
 import com.prgrms.wadiz.global.util.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,7 +50,9 @@ public class FundingService {
         Funding funding = fundingRepository.findByProjectId(projectId)
                 .orElseThrow(() -> new BaseException(ErrorCode.FUNDING_NOT_FOUND));
 
-        return FundingResponseDTO.from(funding);
+        FundingStatus fundingStatus = validateFundingDeadline(funding);
+
+        return FundingResponseDTO.of(funding,fundingStatus);
     }
 
     @Transactional
@@ -73,8 +75,7 @@ public class FundingService {
                 fundingUpdateRequestDTO.fundingTargetAmount(),
                 fundingUpdateRequestDTO.fundingStartAt(),
                 fundingUpdateRequestDTO.fundingEndAt(),
-                fundingUpdateRequestDTO.fundingCategory(),
-                fundingUpdateRequestDTO.fundingStatus()
+                fundingUpdateRequestDTO.fundingCategory()
         );
     }
 
@@ -104,5 +105,13 @@ public class FundingService {
             LocalDateTime fundingEndAt
     ) {
        return fundingStartAt.isBefore(fundingEndAt);
+    }
+
+    private FundingStatus validateFundingDeadline(Funding funding){
+        if (funding.getFundingEndAt().isBefore(LocalDateTime.now())) {
+            return FundingStatus.CLOSED;
+        }
+
+        return FundingStatus.OPENED;
     }
 }

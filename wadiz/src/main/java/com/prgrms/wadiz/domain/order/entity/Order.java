@@ -59,6 +59,7 @@ public class Order extends BaseEntity {
         this.supporter = supporter;
         this.project = project;
         this.orderStatus = OrderStatus.REQUESTED;
+        this.totalOrderPrice = 0;
     }
 
     public void addOrderReward(OrderReward orderReward) {

@@ -1,7 +1,6 @@
 package com.prgrms.wadiz.domain.funding.service;
 
 import com.prgrms.wadiz.domain.funding.FundingCategory;
-import com.prgrms.wadiz.domain.funding.FundingStatus;
 import com.prgrms.wadiz.domain.funding.dto.request.FundingCreateRequestDTO;
 import com.prgrms.wadiz.domain.funding.dto.request.FundingUpdateRequestDTO;
 import com.prgrms.wadiz.domain.funding.dto.response.FundingResponseDTO;
@@ -87,7 +86,6 @@ class FundingServiceTest {
         FundingResponseDTO expectedFundingResponseDTO = FundingResponseDTO.builder()
                 .fundingCategory(FundingCategory.FOOD)
                 .fundingTargetAmount(500_000)
-                .fundingStatus(FundingStatus.OPEN)
                 .fundingStartAt(LocalDateTime.now())
                 .fundingEndAt(LocalDateTime.now().plusWeeks(2L))
                 .build();
@@ -123,8 +121,7 @@ class FundingServiceTest {
                 500_000,
                 fundingStartAt,
                 fundingEndAt,
-                FundingCategory.FASHION,
-                FundingStatus.OPEN
+                FundingCategory.FASHION
         );
 
         // mocking
@@ -134,7 +131,6 @@ class FundingServiceTest {
         fundingService.updateFunding(projectId, fundingUpdateRequestDTO);
 
         // then
-        assertThat(fundingUpdateRequestDTO.fundingStatus(), is(beforeFunding.getFundingStatus()));
         assertThat(fundingUpdateRequestDTO.fundingTargetAmount(), is(beforeFunding.getFundingTargetAmount()));
         assertThat(fundingUpdateRequestDTO.fundingCategory(), is(beforeFunding.getFundingCategory()));
         assertThat(fundingUpdateRequestDTO.fundingStartAt(), is(beforeFunding.getFundingStartAt()));
@@ -164,8 +160,7 @@ class FundingServiceTest {
                 500_000,
                 fundingStartAt,
                 fundingEndAt,
-                FundingCategory.FASHION,
-                FundingStatus.OPEN
+                FundingCategory.FASHION
         );
 
         // mocking
@@ -240,8 +235,7 @@ class FundingServiceTest {
                 500_000,
                 wrongStartAt,
                 wrongEndAt,
-                FundingCategory.FASHION,
-                FundingStatus.OPEN
+                FundingCategory.FASHION
         );
 
         // when
