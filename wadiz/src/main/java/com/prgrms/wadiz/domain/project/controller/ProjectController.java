@@ -8,7 +8,6 @@ import com.prgrms.wadiz.domain.funding.dto.request.FundingUpdateRequestDTO;
 import com.prgrms.wadiz.domain.funding.dto.response.FundingResponseDTO;
 import com.prgrms.wadiz.domain.project.condition.ProjectSearchCondition;
 import com.prgrms.wadiz.domain.project.dto.response.ProjectResponseDTO;
-import com.prgrms.wadiz.domain.project.dto.response.ProjectPageResponseDTO;
 import com.prgrms.wadiz.domain.project.dto.response.ProjectSummaryResponseDTO;
 import com.prgrms.wadiz.domain.project.service.ProjectUseCase;
 import com.prgrms.wadiz.domain.reward.dto.request.RewardCreateRequestDTO;
@@ -17,7 +16,6 @@ import com.prgrms.wadiz.domain.reward.dto.response.RewardResponseDTO;
 import com.prgrms.wadiz.global.util.resTemplate.ResponseFactory;
 import com.prgrms.wadiz.global.util.resTemplate.ResponseTemplate;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +27,7 @@ import javax.validation.Valid;
 public class ProjectController {
     private final ProjectUseCase projectUseCase;
 
-    @PostMapping("/maker/{makerId}")    // TODO: api 좀 더 명확히
+    @PostMapping("/maker/{makerId}")
     public ResponseEntity<ResponseTemplate> startProject(@PathVariable Long makerId) {
         ProjectResponseDTO projectResponseDTO = projectUseCase.startProject(makerId);
 
@@ -48,7 +46,6 @@ public class ProjectController {
     @GetMapping("/{projectId}")
     public ResponseEntity<ResponseTemplate> getProject(@PathVariable Long projectId) {
         ProjectResponseDTO projectResponseDTO = projectUseCase.getProject(projectId);
-
         return ResponseEntity.ok(ResponseFactory.getSingleResult(projectResponseDTO));
     }
 

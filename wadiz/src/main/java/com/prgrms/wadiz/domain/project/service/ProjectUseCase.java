@@ -26,6 +26,7 @@ import com.prgrms.wadiz.domain.project.entity.Project;
 import com.prgrms.wadiz.domain.project.repository.ProjectRepository;
 import com.prgrms.wadiz.global.util.exception.BaseException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -78,6 +79,7 @@ public class ProjectUseCase {
         project.setUpProject();
     }
 
+    @Cacheable(value = "projects",key = "#projectId")
     @Transactional(readOnly = true)
     public ProjectResponseDTO getProject(Long projectId) {
         Project project = projectRepository.findById(projectId)
@@ -172,7 +174,7 @@ public class ProjectUseCase {
     /**
      * Reward Service 관련 로직
      */
-
+    @Transactional
     public void updateReward(
             Long projectId,
             Long rewardId,
@@ -181,6 +183,7 @@ public class ProjectUseCase {
         rewardService.updateReward(projectId, rewardId, dto);
     }
 
+    @Transactional
     public void deleteReward(
             Long projectId,
             Long rewardId
@@ -209,6 +212,7 @@ public class ProjectUseCase {
         return rewardService.getReward(projectId, rewardId);
     }
 
+    @Cacheable(value = "projects")
     @Transactional(readOnly = true)
     public ProjectSummaryResponseDTO getProjects(
             Long cursorId,
