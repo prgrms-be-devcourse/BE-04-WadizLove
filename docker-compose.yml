@@ -1,0 +1,41 @@
+version: "3"
+
+services:
+  wadiz_apiserver:
+    container_name: wadiz_apiserver
+    build:
+      context: ./wadiz
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://wadiz_mysql:3306/sample
+      SPRING_DATASOURCE_USERNAME: sample
+      SPRING_DATASOURCE_PASSWORD: sample!
+    restart: on-failure
+    ports:
+      - 8080:8080
+    networks:
+      - wadiz
+    depends_on:
+      - wadiz_mysql
+
+  wadiz_mysql:
+    image: mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_general_ci
+    container_name: wadiz_mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./config/my.cnf:/etc/mysql/conf.d/my.cnf
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=sample
+      - MYSQL_USER=sample
+      - MYSQL_PASSWORD=sample!
+      - TZ=Asia/Seoul
+    networks:
+      - wadiz
+
+networks:
+  wadiz:
+    driver: bridge
