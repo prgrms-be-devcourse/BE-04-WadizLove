@@ -1,7 +1,7 @@
 package com.prgrms.wadiz.domain.reward.dto.request;
 
-import com.prgrms.wadiz.domain.reward.RewardStatus.RewardStatus;
-import com.prgrms.wadiz.domain.reward.RewardType.RewardType;
+import com.prgrms.wadiz.domain.reward.RewardStatus;
+import com.prgrms.wadiz.domain.reward.RewardType;
 import com.prgrms.wadiz.global.annotation.ValidEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -9,6 +9,7 @@ import lombok.Builder;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
+@Schema(description = "리워드 수정 요청 DTO")
 @Builder
 public record RewardUpdateRequestDTO(
         @Schema(description = "리워드명")

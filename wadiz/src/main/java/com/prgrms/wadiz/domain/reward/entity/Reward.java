@@ -1,8 +1,8 @@
 package com.prgrms.wadiz.domain.reward.entity;
 
 import com.prgrms.wadiz.domain.project.entity.Project;
-import com.prgrms.wadiz.domain.reward.RewardStatus.RewardStatus;
-import com.prgrms.wadiz.domain.reward.RewardType.RewardType;
+import com.prgrms.wadiz.domain.reward.RewardStatus;
+import com.prgrms.wadiz.domain.reward.RewardType;
 import com.prgrms.wadiz.domain.BaseEntity;
 
 import com.prgrms.wadiz.global.annotation.ValidEnum;

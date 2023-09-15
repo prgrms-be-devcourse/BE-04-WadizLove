@@ -2,7 +2,6 @@ package com.prgrms.wadiz.domain.maker.entity;
 
 import com.prgrms.wadiz.domain.BaseEntity;
 import com.prgrms.wadiz.domain.maker.MakerStatus;
-import com.prgrms.wadiz.domain.reward.RewardStatus.RewardStatus;
 import com.prgrms.wadiz.global.annotation.ValidEnum;
 import lombok.AccessLevel;
 import lombok.Builder;

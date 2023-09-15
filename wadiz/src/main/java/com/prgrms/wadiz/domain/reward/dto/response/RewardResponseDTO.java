@@ -1,11 +1,12 @@
 package com.prgrms.wadiz.domain.reward.dto.response;
 
-import com.prgrms.wadiz.domain.reward.RewardStatus.RewardStatus;
-import com.prgrms.wadiz.domain.reward.RewardType.RewardType;
+import com.prgrms.wadiz.domain.reward.RewardStatus;
+import com.prgrms.wadiz.domain.reward.RewardType;
 import com.prgrms.wadiz.domain.reward.entity.Reward;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
+@Schema(description = "리워드 응답 DTO")
 @Builder
 public record RewardResponseDTO(
 
