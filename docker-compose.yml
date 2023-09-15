@@ -36,6 +36,21 @@ services:
     networks:
       - wadiz
 
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    ports:
+      - 8090:8090
+    restart: unless-stopped
+    # volumes:
+    #   - static_volume:/backend/staticfiles
+    #   - media_volume:/backend/mediafiles
+    #   - build_folder:/var/www/frontend
+    depends_on:
+      - wadiz_apiserver
+    networks:
+      - wadiz
+
 networks:
   wadiz:
     driver: bridge
