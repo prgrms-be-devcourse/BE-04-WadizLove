@@ -1,13 +1,14 @@
 package com.prgrms.wadiz.domain.supporter.dto.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 
 @Builder
 public record SupporterResponseDTO(
+        @Schema(description = "서포터 이름")
         String supporterName,
+
+        @Schema(description = "서포터 이메일")
         String supporterEmail
 ) {
     public static SupporterResponseDTO of(

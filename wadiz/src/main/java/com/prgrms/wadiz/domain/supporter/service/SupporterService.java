@@ -17,7 +17,7 @@ public class SupporterService {
     private final SupporterRepository supporterRepository;
 
     @Transactional
-    public SupporterResponseDTO signUpSupporter(SupporterCreateRequestDTO dto) {
+    public Long signUpSupporter(SupporterCreateRequestDTO dto) {
         checkDuplicateEmail(dto.supporterEmail());
         checkDuplicateName(dto.supporterName());
 
@@ -28,10 +28,7 @@ public class SupporterService {
 
         Supporter savedEntity = supporterRepository.save(supporter);
 
-        return SupporterResponseDTO.of(
-                savedEntity.getSupporterName(),
-                savedEntity.getSupporterEmail()
-        );
+        return savedEntity.getSupporterId();
     }
 
     public SupporterResponseDTO getSupporter(Long supporterId) {

@@ -1,19 +1,17 @@
 package com.prgrms.wadiz.domain.reward.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.prgrms.wadiz.domain.reward.RewardStatus.RewardStatus;
-import com.prgrms.wadiz.domain.reward.RewardType.RewardType;
+import com.prgrms.wadiz.domain.reward.RewardStatus;
+import com.prgrms.wadiz.domain.reward.RewardType;
 import com.prgrms.wadiz.domain.reward.dto.request.RewardCreateRequestDTO;
 import com.prgrms.wadiz.domain.reward.dto.request.RewardUpdateRequestDTO;
 import com.prgrms.wadiz.domain.reward.entity.Reward;
 import com.prgrms.wadiz.domain.reward.service.RewardService;
-import com.prgrms.wadiz.domain.supporter.dto.request.SupporterCreateRequestDTO;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
