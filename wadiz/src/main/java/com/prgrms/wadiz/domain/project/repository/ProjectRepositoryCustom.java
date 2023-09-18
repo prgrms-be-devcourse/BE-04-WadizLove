@@ -7,5 +7,5 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface ProjectRepositoryCustom {
-    List<PagingDTO> findAllByCondition(Long cursorId, ProjectSearchCondition projectSearchCondition, Pageable pageable);
+    List<PagingDTO> findAllByCondition(String customCursor, ProjectSearchCondition projectSearchCondition, Pageable pageable);
 }

@@ -51,13 +51,13 @@ public class ProjectController {
 
     @GetMapping
     public ResponseEntity<ResponseTemplate> getProjects(
-            @RequestParam(required = false) Long cursorId,
+            @RequestParam(required = false) String customCursor,
             @RequestParam int size,
             @RequestParam ProjectSearchCondition searchCondition,
             @RequestParam(required = false) String criterion
             ) {
         ProjectSummaryResponseDTO projectSummaryRes = projectUseCase.getProjects(
-                cursorId,
+                customCursor,
                 size,
                 searchCondition,
                 criterion

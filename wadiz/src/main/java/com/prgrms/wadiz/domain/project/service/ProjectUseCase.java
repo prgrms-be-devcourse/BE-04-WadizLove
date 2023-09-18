@@ -217,21 +217,23 @@ public class ProjectUseCase {
     @Cacheable(value = "projects")
     @Transactional(readOnly = true)
     public ProjectSummaryResponseDTO getProjects(
-            Long cursorId,
+            String customCursor,
             int size,
             ProjectSearchCondition searchCondition,
             String criterion
     ) {
-        PageRequest pageRequest = PageRequest.of(0,
+        Sort sort = (criterion != null)
+                ? Sort.by(Sort.Order.desc(criterion))
+                : Sort.by(Sort.Order.desc("fundingParticipants"));
+
+        PageRequest pageRequest = PageRequest.of(
+                0,
                 size,
-                Sort.by(new Sort.Order(
-                        Sort.Direction.DESC,
-                        criterion
-                ))
+                sort
         );
 
         List<PagingDTO> pagingRes = projectRepository.findAllByCondition(
-                cursorId,
+                customCursor,
                 searchCondition,
                 pageRequest
         );
@@ -250,7 +252,9 @@ public class ProjectUseCase {
                 ))
                 .toList();
 
-        Long nextCursor = projectPages.size() == 0 ? null : projectPages.get(projectPages.size() - 1).projectId();
+
+        Long nextCursor = projectPages.size() == 0 ? null : projectPages.get(projectPages.size() - 1).projectId(); // 수정
+        // 지금 마지막으로 받아온 값듣 ,amount, 날짜, + id cursorId를 생성해주는 로직을 만들어야한다.
 
         return ProjectSummaryResponseDTO.of(
                 projectPages,
