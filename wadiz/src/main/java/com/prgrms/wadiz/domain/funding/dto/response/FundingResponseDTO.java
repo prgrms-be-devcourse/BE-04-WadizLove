@@ -28,7 +28,10 @@ public record FundingResponseDTO(
                 .fundingEndAt(funding.getFundingEndAt())
                 .fundingParticipants(funding.getFundingParticipants())
                 .fundingAmount(funding.getFundingAmount())
-                .fundingSuccessRate(funding.calculateSuccessRate())
+                .fundingSuccessRate(Funding.calculateSuccessRate(
+                        funding.getFundingAmount(),
+                        funding.getFundingTargetAmount())
+                )
                 .fundingSuccess(funding.getFundingSuccess())
                 .fundingCategory(funding.getFundingCategory())
                 .fundingStatus(fundingStatus)

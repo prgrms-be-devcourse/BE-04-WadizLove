@@ -90,8 +90,8 @@ public class Funding extends BaseEntity {
         validateFundingSuccess(this.fundingAmount , this.fundingTargetAmount);
     }
 
-    public Integer calculateSuccessRate(){
-        return Math.round((this.fundingAmount / this.fundingTargetAmount) * 100);
+    public static Integer calculateSuccessRate(Integer fundingAmount, Integer fundingTargetAmount){
+        return Math.round((fundingAmount / fundingTargetAmount) * 100);
     }
 
     private void validateFundingSuccess(Integer fundingAmount, Integer fundingTargetAmount) {

@@ -3,6 +3,7 @@ package com.prgrms.wadiz.domain.project.service;
 import com.prgrms.wadiz.domain.funding.dto.request.FundingCreateRequestDTO;
 import com.prgrms.wadiz.domain.funding.dto.request.FundingUpdateRequestDTO;
 import com.prgrms.wadiz.domain.funding.dto.response.FundingResponseDTO;
+import com.prgrms.wadiz.domain.funding.entity.Funding;
 import com.prgrms.wadiz.domain.funding.service.FundingService;
 import com.prgrms.wadiz.domain.maker.dto.MakerServiceDTO;
 import com.prgrms.wadiz.domain.maker.dto.response.MakerResponseDTO;
@@ -13,6 +14,7 @@ import com.prgrms.wadiz.domain.post.dto.request.PostUpdateRequestDTO;
 import com.prgrms.wadiz.domain.post.dto.response.PostResponseDTO;
 import com.prgrms.wadiz.domain.project.condition.ProjectSearchCondition;
 import com.prgrms.wadiz.domain.project.dto.ProjectServiceDTO;
+import com.prgrms.wadiz.domain.project.dto.response.PagingDTO;
 import com.prgrms.wadiz.domain.project.dto.response.ProjectPageResponseDTO;
 import com.prgrms.wadiz.domain.project.dto.response.ProjectSummaryResponseDTO;
 import com.prgrms.wadiz.domain.reward.dto.request.RewardCreateRequestDTO;
@@ -79,7 +81,7 @@ public class ProjectUseCase {
         project.setUpProject();
     }
 
-    @Cacheable(value = "projects",key = "#projectId")
+    @Cacheable(value = "projects", key = "#projectId")
     @Transactional(readOnly = true)
     public ProjectResponseDTO getProject(Long projectId) {
         Project project = projectRepository.findById(projectId)
@@ -222,33 +224,37 @@ public class ProjectUseCase {
     ) {
         PageRequest pageRequest = PageRequest.of(0,
                 size,
-                Sort.by(new Sort.Order(Sort.Direction.DESC, criterion))
+                Sort.by(new Sort.Order(
+                        Sort.Direction.DESC,
+                        criterion
+                ))
         );
 
-        List<Project> pageRes = projectRepository.findAllByCondition(cursorId, searchCondition, pageRequest);
+        List<PagingDTO> pagingRes = projectRepository.findAllByCondition(
+                cursorId,
+                searchCondition,
+                pageRequest
+        );
 
-        List<ProjectPageResponseDTO> projectPages = pageRes.stream()
-                .map(project -> {
-                    Long projectId = project.getProjectId();
-                    PostResponseDTO postResponseDTO = postService.getPostByProjectId(projectId);
-                    FundingResponseDTO fundingResponseDTO = fundingService.getFundingByProjectId(projectId);
-
-                    return ProjectPageResponseDTO.of(
-                            projectId,
-                            postResponseDTO.postTitle(),
-                            postResponseDTO.postThumbNailImage(),
-                            project.getMaker().getMakerBrand(),
-                            fundingResponseDTO.fundingSuccessRate(),
-                            fundingResponseDTO.fundingAmount()
-                    );
-                })
+        List<ProjectPageResponseDTO> projectPages = pagingRes.stream()
+                .map(pagingDTO -> ProjectPageResponseDTO.of(
+                        pagingDTO.getProjectId(),
+                        pagingDTO.getTitle(),
+                        pagingDTO.getThumbNailImage(),
+                        pagingDTO.getMakerBrand(),
+                        Funding.calculateSuccessRate(
+                                pagingDTO.getFundingAmount(),
+                                pagingDTO.getTargetFundingAmount()
+                        ),
+                        pagingDTO.getFundingAmount()
+                ))
                 .toList();
 
         Long nextCursor = projectPages.size() == 0 ? null : projectPages.get(projectPages.size() - 1).projectId();
 
         return ProjectSummaryResponseDTO.of(
                 projectPages,
-                pageRes.size(),
+                pagingRes.size(),
                 nextCursor
         );
     }
