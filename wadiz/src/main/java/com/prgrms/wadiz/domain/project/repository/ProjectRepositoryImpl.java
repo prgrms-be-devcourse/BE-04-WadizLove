@@ -2,7 +2,6 @@ package com.prgrms.wadiz.domain.project.repository;
 
 import com.prgrms.wadiz.domain.project.condition.ProjectSearchCondition;
 import com.prgrms.wadiz.domain.project.dto.response.PagingDTO;
-import com.prgrms.wadiz.domain.project.dto.response.QExampleClass;
 import com.prgrms.wadiz.domain.project.dto.response.QPagingDTO;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
