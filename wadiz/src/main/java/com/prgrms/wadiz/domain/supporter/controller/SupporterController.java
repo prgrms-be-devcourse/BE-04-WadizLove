@@ -48,7 +48,8 @@ public class SupporterController {
                     content = @Content(schema = @Schema(implementation = BaseException.class)))
     })
     @Operation(summary = "서포터 정보 수정", description = "id를 통해 서포터를 조회한 후, 서포터 정보를 수정한다.")
-    @PutMapping("/{supporterId}")
+    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Supporter")
+    @PutMapping(value = "/{supporterId}")
     public ResponseEntity<ResponseTemplate> updateSupporter(
             @PathVariable Long supporterId,
             @RequestBody @Valid SupporterUpdateRequestDTO dto
