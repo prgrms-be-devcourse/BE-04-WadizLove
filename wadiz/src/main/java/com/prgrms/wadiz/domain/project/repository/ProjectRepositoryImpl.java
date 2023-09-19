@@ -6,28 +6,27 @@ import com.prgrms.wadiz.domain.project.dto.response.QPagingDTO;
 import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.StringExpressions;
-import com.querydsl.core.types.dsl.StringTemplate;
+import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.prgrms.wadiz.domain.funding.entity.QFunding.funding;
 import static com.prgrms.wadiz.domain.post.entity.QPost.post;
-
+@Slf4j
 @RequiredArgsConstructor
 public class ProjectRepositoryImpl implements ProjectRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
     public List<PagingDTO> findAllByCondition(
-            String customCursor,
+            String cursorId,
             ProjectSearchCondition searchCondition,
             Pageable pageable
     ) {
@@ -38,12 +37,15 @@ public class ProjectRepositoryImpl implements ProjectRepositoryCustom {
                                 post.postThumbNailImage,
                                 funding.project.maker.makerBrand,
                                 funding.fundingTargetAmount,
-                                funding.fundingAmount
+                                funding.fundingAmount,
+                                funding.project.modifiedAt,
+                                funding.fundingEndAt,
+                                funding.fundingParticipants
                         ))
                 .from(funding)
                 .join(post).on(funding.project.projectId.eq(post.project.projectId))
                 .where(
-                        cursorId(pageable, customCursor),
+                        cursorId(pageable, cursorId),
                         isDeclined(searchCondition)
                 )
                 .limit(pageable.getPageSize())
@@ -62,67 +64,74 @@ public class ProjectRepositoryImpl implements ProjectRepositoryCustom {
         return null;
     }
 
-    private BooleanExpression cursorId(Pageable page, String customCursor) {
-        if (customCursor == null) {
+    private BooleanExpression cursorId(Pageable page, String cursorId) {
+        if (cursorId == null) {
 
             return null;
         }
 
         StringTemplate stringTemplate = Expressions.stringTemplate(
-                "DATE_FORMAT({0},{1})",
-                funding.fundingEndAt,
-                ConstantImpl.create("%y%m%d%H%i%s")
+                "DATE_FORMAT({0}, {1})",
+                funding.fundingEndAt
+                ,ConstantImpl.create("%Y%m%d%H%i%s")
         );
 
         StringTemplate stringTemplate2 = Expressions.stringTemplate(
-                "DATE_FORMAT({0},{1})",
-                funding.createdAt,
-                ConstantImpl.create("%y%m%d%H%i%s")
+                "DATE_FORMAT({0}, {1})",
+                funding.project.modifiedAt,
+                ConstantImpl.create("%Y%m%d%H%i%s")
         );
 
         for (Sort.Order order : page.getSort()) {
             switch (order.getProperty()) {
                 case "fundingAmount":   // 펀딩 금액 순
-                    return StringExpressions.lpad(funding.fundingAmount.stringValue(), 10, '0')
-//                .concat(StringExpressions.lpad(stringTemplate,12,'0')
-                            .concat(StringExpressions.lpad(funding.fundingId.stringValue(), 8, '0'))
-                            .lt(customCursor);
+                    return StringExpressions.lpad(funding.fundingAmount.stringValue(), 12, '0')
+                            .concat(StringExpressions.lpad(funding.project.projectId.stringValue(), 8, '0'))
+                            .lt(cursorId);
+
                 case "fundingEndAt":   // 마감 임박 순
-                    return StringExpressions.lpad(stringTemplate, 12, '0')
-                            .concat(StringExpressions.lpad(funding.fundingId.stringValue(), 8, '0'))
-                            .lt(customCursor);
-                case "createdAt": // 최신 순
-                    return StringExpressions.lpad(stringTemplate2, 12, '0')
-                            .concat(StringExpressions.lpad(funding.fundingId.stringValue(), 8, '0'))
-                            .lt(customCursor);
+                    return stringTemplate
+                            .concat(StringExpressions.lpad(funding.project.projectId.stringValue(), 8, '0'))
+                            .lt(cursorId);
+
+                case "modifiedAt": // 최신 순
+                    return stringTemplate2
+                            .concat(StringExpressions.lpad(funding.project.projectId.stringValue(), 8, '0'))
+                            .lt(cursorId);
+
                 default:
                     return StringExpressions.lpad(funding.fundingParticipants.stringValue(), 12, '0')
-                            .concat(StringExpressions.lpad(funding.fundingId.stringValue(), 8, '0'))
-                            .lt(customCursor);
+                            .concat(StringExpressions.lpad(funding.project.projectId.stringValue(), 8, '0'))
+                            .lt(cursorId);
             }
         }
 
         return null;
     }
 
-    private OrderSpecifier<?> criterionSort(Pageable page) {
-        if (!page.getSort().isEmpty()) {
-            for (Sort.Order order : page.getSort()) {
-                Order direction = order.getDirection().isAscending() ? Order.ASC : Order.DESC;
+    private OrderSpecifier[] criterionSort(Pageable page) {
 
-                switch (order.getProperty()) {
-                    case "fundingAmount":   // 펀딩 금액 순
-                        return new OrderSpecifier(direction, funding.fundingAmount);
-                    case "fundingEndAt":   // 마감 임박 순
-                        return new OrderSpecifier(direction, funding.fundingEndAt);
-                    case "createdAt": // 최신 순
-                        return new OrderSpecifier(direction, funding.project.createdAt);
-                    default:
-                        return new OrderSpecifier(direction, funding.fundingParticipants);
-                }
+        List<OrderSpecifier> orderSpecifiers = new ArrayList<>();
+
+        for (Sort.Order order : page.getSort()) {
+            Order direction = order.getDirection().isAscending() ? Order.ASC : Order.DESC;
+            switch (order.getProperty()) {
+                case "fundingAmount":   // 펀딩 금액 순
+                    orderSpecifiers.add(new OrderSpecifier(direction, funding.fundingAmount));
+                    break;
+                case "fundingEndAt":   // 마감 임박 순
+                    orderSpecifiers.add(new OrderSpecifier(direction, funding.fundingEndAt));
+                    break;
+                case "modifiedAt": // 최신 순
+                    orderSpecifiers.add(new OrderSpecifier(direction, funding.project.modifiedAt));
+                    break;
+                default:
+                    orderSpecifiers.add(new OrderSpecifier(direction, funding.fundingParticipants));
+                    break;
             }
+            orderSpecifiers.add(new OrderSpecifier(direction, funding.project.projectId));
         }
 
-        return null;
+        return orderSpecifiers.toArray(new OrderSpecifier[orderSpecifiers.size()]);
     }
 }
