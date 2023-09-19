@@ -80,7 +80,7 @@ public class SwaggerConfig {
                         .map(
                                 errorCode -> {
                                     return ExampleHolder.builder()
-                                            .statusCode(400)
+                                            .statusCode(404)
                                             .holder(getSwaggerExample(errorCode))
                                             .errorCode((errorCode.getCode()))
                                             .errorMessage(errorCode.getErrorMessage())
@@ -97,11 +97,9 @@ public class SwaggerConfig {
         example.description(errorCode.getErrorMessage());
         //example.setValue(errorCode.getCode());
         example.setValue(
-                new ResponseEntity<>(
                 ResponseFactory.getFailResult(errorCode.getCode(),
-                        errorCode.getErrorMessage()),
-                HttpStatus.INTERNAL_SERVER_ERROR
-        ));
+                        errorCode.getErrorMessage())
+        );
 
         return example;
     }

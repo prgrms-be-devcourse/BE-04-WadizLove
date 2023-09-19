@@ -8,20 +8,17 @@ import com.prgrms.wadiz.domain.maker.entity.Maker;
 import com.prgrms.wadiz.domain.maker.respository.MakerRepository;
 import com.prgrms.wadiz.global.util.exception.BaseException;
 import com.prgrms.wadiz.global.util.exception.ErrorCode;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MakerService {
-    private final MakerRepository makerRepository;
 
-    private JPAQueryFactory jpaQueryFactory;
+    private final MakerRepository makerRepository;
 
     @Transactional
     public Long signUpMaker(MakerCreateRequestDTO dto) {
@@ -35,13 +32,18 @@ public class MakerService {
                 .build();
 
         Maker savedMaker = makerRepository.save(maker);
+
         return savedMaker.getMakerId();
     }
 
     @Transactional
     public MakerServiceDTO getMakerDTO(Long makerId) {
         Maker retrivedMaker = makerRepository.findById(makerId)
-                .orElseThrow(() -> new BaseException(ErrorCode.MAKER_NOT_FOUND));
+                .orElseThrow(() -> {
+                    log.warn("Maker {} is not found", makerId);
+
+                    throw new BaseException(ErrorCode.MAKER_NOT_FOUND);
+                });
 
         return MakerServiceDTO.from(retrivedMaker);
     }
@@ -55,7 +57,11 @@ public class MakerService {
         checkDuplicateEmail(dto.makerEmail());
 
         Maker maker = makerRepository.findById(makerId)
-                .orElseThrow(() -> new BaseException(ErrorCode.MAKER_NOT_FOUND));
+                .orElseThrow(() -> {
+                    log.warn("Maker {} is not found", makerId);
+
+                    throw new BaseException(ErrorCode.MAKER_NOT_FOUND);
+                });
 
         maker.updateMaker(
                 dto.makerName(),
@@ -73,26 +79,37 @@ public class MakerService {
     @Transactional
     public void deleteMaker(Long makerId) {
         Maker maker = makerRepository.findById(makerId)
-                .orElseThrow(() -> new BaseException(ErrorCode.MAKER_NOT_FOUND));
+                .orElseThrow(() -> {
+                    log.warn("Maker {} is not found", makerId);
+
+                    throw new BaseException(ErrorCode.MAKER_NOT_FOUND);
+                });
 
         maker.unregisteredMaker();
+    }
+    public MakerResponseDTO getMaker(Long makerId) {
+        Maker maker = makerRepository.findById(makerId)
+                .orElseThrow(() -> {
+                    log.warn("Maker {} is not found", makerId);
+
+                    throw new BaseException(ErrorCode.MAKER_NOT_FOUND);
+                });
+
+        return MakerResponseDTO.from(maker);
     }
 
     public void checkDuplicateEmail(String email) {
         if(makerRepository.existsByMakerEmail(email)){
+
             throw new BaseException((ErrorCode.DUPLICATED_EMAIL));
         }
     }
+
     public void checkDuplicateName(String name) {
         if(makerRepository.existsByMakerName(name)){
+
             throw new BaseException((ErrorCode.DUPLICATED_NAME));
         }
     }
 
-    public MakerResponseDTO getMaker(Long makerId) {
-        Maker maker = makerRepository.findById(makerId)
-                .orElseThrow(() -> new BaseException(ErrorCode.MAKER_NOT_FOUND));
-
-        return MakerResponseDTO.from(maker);
-    }
 }
