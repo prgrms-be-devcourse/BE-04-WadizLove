@@ -8,9 +8,11 @@ import com.prgrms.wadiz.domain.supporter.repository.SupporterRepository;
 import com.prgrms.wadiz.global.util.exception.BaseException;
 import com.prgrms.wadiz.global.util.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SupporterService {
@@ -33,7 +35,11 @@ public class SupporterService {
 
     public SupporterResponseDTO getSupporter(Long supporterId) {
         Supporter supporter =supporterRepository.findById(supporterId)
-                .orElseThrow(() -> new BaseException(ErrorCode.SUPPORTER_NOT_FOUND));
+                .orElseThrow(() -> {
+                    log.warn("Supporter {} is not found", supporterId);
+
+                    throw new BaseException(ErrorCode.SUPPORTER_NOT_FOUND);
+                });
 
         return SupporterResponseDTO.of(
                 supporter.getSupporterName(),
@@ -50,7 +56,11 @@ public class SupporterService {
         checkDuplicateName(dto.supporterName());
 
         Supporter supporter = supporterRepository.findById(supporterId)
-                .orElseThrow(() -> new BaseException(ErrorCode.SUPPORTER_NOT_FOUND));
+                .orElseThrow(() -> {
+                    log.warn("Supporter {} is not found", supporterId);
+
+                    throw new BaseException(ErrorCode.SUPPORTER_NOT_FOUND);
+                });
 
         supporter.updateSupporter(
                 dto.supporterName(),
@@ -66,19 +76,25 @@ public class SupporterService {
     @Transactional
     public void deleteSupporter(Long supporterId) {
         Supporter supporter = supporterRepository.findById(supporterId)
-                .orElseThrow(() -> new BaseException(ErrorCode.SUPPORTER_NOT_FOUND));
+                .orElseThrow(() -> {
+                    log.warn("Supporter {} is not found", supporterId);
+
+                    throw new BaseException(ErrorCode.SUPPORTER_NOT_FOUND);
+                });
 
         supporter.unregisteredSupporter();
     }
 
     public void checkDuplicateEmail(String email) {
         if(supporterRepository.existsBySupporterEmail(email)){
+
             throw new BaseException((ErrorCode.DUPLICATED_EMAIL));
         }
     }
 
     public void checkDuplicateName(String name) {
         if(supporterRepository.existsBySupporterName(name)){
+
             throw new BaseException((ErrorCode.DUPLICATED_NAME));
         }
     }
