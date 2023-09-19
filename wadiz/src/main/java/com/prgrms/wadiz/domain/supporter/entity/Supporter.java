@@ -2,7 +2,6 @@ package com.prgrms.wadiz.domain.supporter.entity;
 
 import com.prgrms.wadiz.domain.BaseEntity;
 
-import com.prgrms.wadiz.domain.maker.MakerStatus;
 import com.prgrms.wadiz.domain.supporter.SupporterStatus;
 import com.prgrms.wadiz.global.annotation.ValidEnum;
 import lombok.Builder;
