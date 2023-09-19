@@ -8,12 +8,12 @@ import java.util.List;
 public record ProjectSummaryResponseDTO(
         List<ProjectPageResponseDTO> contents,
         int numberOfElements,
-        Long nextCursor
+        String nextCursor
 ) {
     public static ProjectSummaryResponseDTO of(
             List<ProjectPageResponseDTO> projectPages,
             int numberOfElements,
-            Long nextCursor
+            String nextCursor
     ) {
         return ProjectSummaryResponseDTO.builder()
                 .contents(projectPages)

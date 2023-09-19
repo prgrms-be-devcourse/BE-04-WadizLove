@@ -12,30 +12,31 @@ import com.prgrms.wadiz.domain.maker.service.MakerService;
 import com.prgrms.wadiz.domain.post.dto.request.PostCreateRequestDTO;
 import com.prgrms.wadiz.domain.post.dto.request.PostUpdateRequestDTO;
 import com.prgrms.wadiz.domain.post.dto.response.PostResponseDTO;
+import com.prgrms.wadiz.domain.post.service.PostService;
 import com.prgrms.wadiz.domain.project.condition.ProjectSearchCondition;
 import com.prgrms.wadiz.domain.project.dto.ProjectServiceDTO;
 import com.prgrms.wadiz.domain.project.dto.response.PagingDTO;
 import com.prgrms.wadiz.domain.project.dto.response.ProjectPageResponseDTO;
+import com.prgrms.wadiz.domain.project.dto.response.ProjectResponseDTO;
 import com.prgrms.wadiz.domain.project.dto.response.ProjectSummaryResponseDTO;
+import com.prgrms.wadiz.domain.project.entity.Project;
+import com.prgrms.wadiz.domain.project.repository.ProjectRepository;
 import com.prgrms.wadiz.domain.reward.dto.request.RewardCreateRequestDTO;
 import com.prgrms.wadiz.domain.reward.dto.request.RewardUpdateRequestDTO;
 import com.prgrms.wadiz.domain.reward.dto.response.RewardResponseDTO;
 import com.prgrms.wadiz.domain.reward.service.RewardService;
-import com.prgrms.wadiz.global.util.exception.ErrorCode;
-import com.prgrms.wadiz.domain.post.service.PostService;
-import com.prgrms.wadiz.domain.project.dto.response.ProjectResponseDTO;
-import com.prgrms.wadiz.domain.project.entity.Project;
-import com.prgrms.wadiz.domain.project.repository.ProjectRepository;
 import com.prgrms.wadiz.global.util.exception.BaseException;
+import com.prgrms.wadiz.global.util.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
+import java.util.stream.IntStream;
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProjectUseCase {
@@ -81,7 +82,7 @@ public class ProjectUseCase {
         project.setUpProject();
     }
 
-    @Cacheable(value = "projects", key = "#projectId")
+//    @Cacheable(value = "projects", key = "#projectId")
     @Transactional(readOnly = true)
     public ProjectResponseDTO getProject(Long projectId) {
         Project project = projectRepository.findById(projectId)
@@ -214,43 +215,55 @@ public class ProjectUseCase {
         return rewardService.getReward(projectId, rewardId);
     }
 
-    @Cacheable(value = "projects")
+
+//    @Cacheable(value = "projects")
     @Transactional(readOnly = true)
     public ProjectSummaryResponseDTO getProjects(
-            Long cursorId,
+            String cursorId,
             int size,
             ProjectSearchCondition searchCondition,
             String criterion
     ) {
-        PageRequest pageRequest = PageRequest.of(0,
-                size,
-                Sort.by(new Sort.Order(
-                        Sort.Direction.DESC,
-                        criterion
-                ))
-        );
+        Sort sort = (criterion != null)
+                ? Sort.by(Sort.Order.desc(criterion))
+                : Sort.by(Sort.Order.desc("fundingParticipants"));
 
+        PageRequest pageRequest = PageRequest.of(
+                0,
+                size,
+                sort
+        );
         List<PagingDTO> pagingRes = projectRepository.findAllByCondition(
                 cursorId,
                 searchCondition,
                 pageRequest
         );
 
-        List<ProjectPageResponseDTO> projectPages = pagingRes.stream()
-                .map(pagingDTO -> ProjectPageResponseDTO.of(
-                        pagingDTO.getProjectId(),
-                        pagingDTO.getTitle(),
-                        pagingDTO.getThumbNailImage(),
-                        pagingDTO.getMakerBrand(),
-                        Funding.calculateSuccessRate(
-                                pagingDTO.getFundingAmount(),
-                                pagingDTO.getTargetFundingAmount()
-                        ),
-                        pagingDTO.getFundingAmount()
-                ))
+        List<String> gotCursorIds = pagingRes.stream()
+                .map(pagingDTO -> {
+                    return generateCursor(criterion, pagingDTO);
+                })
                 .toList();
 
-        Long nextCursor = projectPages.size() == 0 ? null : projectPages.get(projectPages.size() - 1).projectId();
+        String nextCursor = gotCursorIds.size() == 0 ? null : gotCursorIds.get(gotCursorIds.size()-1);
+
+        List<ProjectPageResponseDTO> projectPages = IntStream.range(0, pagingRes.size())
+                .mapToObj(i -> {
+                    PagingDTO pagingDTO = pagingRes.get(i);
+                    String gotCursorId = gotCursorIds.get(i);
+                    return ProjectPageResponseDTO.of(
+                            gotCursorId,
+                            pagingDTO.getProjectId(),
+                            pagingDTO.getTitle(),
+                            pagingDTO.getThumbNailImage(),
+                            pagingDTO.getMakerBrand(),
+                            Funding.calculateSuccessRate(
+                                    pagingDTO.getFundingAmount(),
+                                    pagingDTO.getTargetFundingAmount()
+                            ),
+                            pagingDTO.getFundingAmount()
+                    );
+                }).toList();
 
         return ProjectSummaryResponseDTO.of(
                 projectPages,
@@ -258,4 +271,34 @@ public class ProjectUseCase {
                 nextCursor
         );
     }
+    private String generateCursor(String criterion,PagingDTO pagingDTO){
+        if (criterion == null){
+            return String.format("%012d",pagingDTO.getFundingParticipants())
+                    +String.format("%08d",pagingDTO.getProjectId());
+        }
+
+        switch (criterion) {
+            case "fundingAmount":// 펀딩 금액 순
+                return String.format("%012d",pagingDTO.getFundingAmount())
+                        +String.format("%08d",pagingDTO.getProjectId());
+
+            case "fundingEndAt": // 마감 임박 순
+                return pagingDTO.getFundingEndAt().toString()
+                        .replace("T","")
+                        .replace("-","")
+                        .replace(":","")
+                        +String.format("%08d",pagingDTO.getProjectId());
+            case "modifiedAt": // 최신 순
+                return pagingDTO.getModifiedAt().toString()
+                        .replace("T","")
+                        .replace("-","")
+                        .replace(":","")
+                        +String.format("%08d",pagingDTO.getProjectId());
+            default:
+                return String.format("%012d",pagingDTO.getFundingParticipants())
+                        +String.format("%08d",pagingDTO.getProjectId());
+        }
+
+    }
+
 }
