@@ -4,14 +4,11 @@ import com.prgrms.wadiz.domain.order.dto.request.OrderCreateRequestDTO;
 import com.prgrms.wadiz.domain.order.dto.response.OrderResponseDTO;
 import com.prgrms.wadiz.domain.order.service.OrderService;
 import com.prgrms.wadiz.global.annotation.ApiErrorCodeExample;
-import com.prgrms.wadiz.global.util.exception.BaseException;
 import com.prgrms.wadiz.global.util.exception.ErrorCode;
 import com.prgrms.wadiz.global.util.resTemplate.ResponseFactory;
 import com.prgrms.wadiz.global.util.resTemplate.ResponseTemplate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -46,7 +43,7 @@ public class OrderController {
     @ApiErrorCodeExample(value = ErrorCode.class, domain = "Order")
     @Operation(
             summary = "주문 생성",
-            description = "서포터 id와 주문 요청 양식(OrderCreateRequestDTO)을 이용하여 주문을 생성한다."
+            description = "서포터 id와 주문 요청 양식(OrderCreateRequestDTO)을 이용하여 주문을 생성합니다."
     )
     @PostMapping("supporter/{supporterId}/new")
     public ResponseEntity<ResponseTemplate> createOrder(
@@ -74,7 +71,7 @@ public class OrderController {
     @ApiErrorCodeExample(value = ErrorCode.class, domain = "Order")
     @Operation(
             summary = "주문 취소",
-            description = "주문 Id와 주문한 서포터 Id를 이용하여 주문을 취소한다."
+            description = "주문 Id와 주문한 서포터 Id를 이용하여 주문을 취소합니다."
     )
     @PutMapping("{orderId}/supporters/{supporterId}")
     public ResponseEntity<ResponseTemplate> cancelOrder(
@@ -102,7 +99,7 @@ public class OrderController {
     @ApiErrorCodeExample(value = ErrorCode.class, domain = "Order")
     @Operation(
             summary = "서포터 주문 기록 조호(단건)",
-            description = "주문 Id와 주문한 서포터 Id를 이용하여 특정 주문 정보를 조회한다."
+            description = "주문 Id와 주문한 서포터 Id를 이용하여 특정 주문 정보를 조회합니다."
     )
     @GetMapping("{orderId}/supporters/{supporterId}/purchase")
     public ResponseEntity<ResponseTemplate> getSupporterPurchase(
@@ -130,7 +127,7 @@ public class OrderController {
     @ApiErrorCodeExample(value = ErrorCode.class, domain = "Order")
     @Operation(
             summary = "서포터 주문 기록 조회(다건)",
-            description = "주문한 서포터 Id를 이용하여 주문 정보 목록을 조회한다."
+            description = "주문한 서포터 Id를 이용하여 주문 정보 목록을 조회합니다."
     )
     @GetMapping("supporters/{supporterId}/history")
     public ResponseEntity<ResponseTemplate> getSupporterPurchaseHistory(@Parameter(description = "서포터 id") @PathVariable Long supporterId){
@@ -155,7 +152,7 @@ public class OrderController {
     @ApiErrorCodeExample(value = ErrorCode.class, domain = "Order")
     @Operation(
             summary = "메이커 프로젝트 기록 조회(다건)",
-            description = "프로젝트 Id와 메이커 Id를 이용하여 메이커 주문 목록을 조회한다."
+            description = "프로젝트 Id와 메이커 Id를 이용하여 메이커 주문 목록을 조회합니다."
     )
     @GetMapping("projects/{projectId}/makers/{makerId}")
     public ResponseEntity<ResponseTemplate> getMakerProjectOrders(

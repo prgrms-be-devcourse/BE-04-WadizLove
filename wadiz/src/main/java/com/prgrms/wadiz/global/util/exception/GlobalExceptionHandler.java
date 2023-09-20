@@ -15,8 +15,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<ResponseTemplate> defaultException() {
         return new ResponseEntity<>(
-                ResponseFactory.getFailResult(ErrorCode.UNKNOWN.getCode(),
-                        ErrorCode.UNKNOWN.getErrorMessage()),
+                ResponseFactory.getFailResult(
+                        ErrorCode.UNKNOWN.getCode(),
+                        ErrorCode.UNKNOWN.getErrorMessage()
+                ),
                 HttpStatus.INTERNAL_SERVER_ERROR
         );
     }
@@ -28,8 +30,9 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(
                 ResponseFactory.getFailResult(
                         errorCode.getCode(),
-                        errorCode.getErrorMessage()),
-                        HttpStatus.INTERNAL_SERVER_ERROR
+                        errorCode.getErrorMessage()
+                ),
+                HttpStatus.INTERNAL_SERVER_ERROR
         );
     }
 

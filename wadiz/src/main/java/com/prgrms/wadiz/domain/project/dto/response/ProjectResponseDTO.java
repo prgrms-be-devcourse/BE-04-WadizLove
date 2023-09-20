@@ -3,7 +3,6 @@ package com.prgrms.wadiz.domain.project.dto.response;
 import com.prgrms.wadiz.domain.funding.dto.response.FundingResponseDTO;
 import com.prgrms.wadiz.domain.maker.dto.response.MakerResponseDTO;
 import com.prgrms.wadiz.domain.post.dto.response.PostResponseDTO;
-import com.prgrms.wadiz.domain.project.entity.Project;
 import com.prgrms.wadiz.domain.reward.dto.response.RewardResponseDTO;
 import lombok.Builder;
 

@@ -28,16 +28,23 @@ public class RewardController {
     private final ProjectUseCase projectUseCase;
 
     /**
-     * Reward 정보 CURD
+     * Reward create
      */
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "리워드 생성 성공"),
-            @ApiResponse(responseCode = "404",
-                    description = "리워드 생성 실패")
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "리워드 생성 성공"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "리워드 생성 실패"
+            )
     })
     @ApiErrorCodeExample(value = ErrorCode.class, domain = "Reward")
-    @Operation(summary = "리워드 생성", description = "프로젝트 id를 받고, 리워드명, 리워드 설명, 재고, 가격, 타입, 상태를 입력하여 리워드를 생성한다.")
+    @Operation(
+            summary = "리워드 생성",
+            description = "프로젝트 id와, 리워드 요청 양식(RewardCreateRequestDTO)을 이용하여 리워드를 생성한다."
+    )
     @PostMapping("/{projectId}/rewards")
     public ResponseEntity<ResponseTemplate> createReward(
             @Parameter(description = "프로젝트 id") @PathVariable Long projectId,
@@ -48,14 +55,24 @@ public class RewardController {
         return ResponseEntity.ok(ResponseFactory.getSingleResult(rewardId));
     }
 
+    /**
+     * Reward 단건 조회
+     */
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "리워드 조회 성공"),
-            @ApiResponse(responseCode = "404",
-                    description = "리워드 조회 실패")
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "리워드 조회 성공"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "리워드 조회 실패"
+            )
     })
     @ApiErrorCodeExample(value = ErrorCode.class, domain = "Reward")
-    @Operation(summary = "리워드 조회", description = "프로젝트 id, 리워드 id를 통해 리워드를 조회한다.")
+    @Operation(
+            summary = "리워드 조회",
+            description = "프로젝트 id, 리워드 id를 이용하여 리워드를 조회합니다."
+    )
     @GetMapping("/{projectId}/rewards/{rewardId}")
     public ResponseEntity<ResponseTemplate> getReward(
             @Parameter(description = "프로젝트 id") @PathVariable Long projectId,
@@ -66,14 +83,24 @@ public class RewardController {
         return ResponseEntity.ok(ResponseFactory.getSingleResult(rewardResponseDTO));
     }
 
+    /**
+     * Reward update
+     */
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "리워드 수정 성공"),
-            @ApiResponse(responseCode = "404",
-                    description = "리워드 수정 실패")
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "리워드 수정 성공"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "리워드 수정 실패"
+            )
     })
     @ApiErrorCodeExample(value = ErrorCode.class, domain = "Reward")
-    @Operation(summary = "리워드 수정", description = "프로젝트 id, 리워드 id를 통해 리워드를 조회한후 리워드 정보를 수정한다.")
+    @Operation(
+            summary = "리워드 수정",
+            description = "프로젝트 id, 리워드 id를 통해 리워드를 조회한 후 리워드 정보를 수정합니다."
+    )
     @PutMapping("/{projectId}/rewards/{rewardId}")
     public ResponseEntity<ResponseTemplate> updateReward(
             @Parameter(description = "프로젝트 id") @PathVariable Long projectId,
@@ -85,14 +112,24 @@ public class RewardController {
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());
     }
 
+    /**
+     * Reward delete
+     */
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "리워드 삭제 성공"),
-            @ApiResponse(responseCode = "404",
-                    description = "리워드 삭제 실패")
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "리워드 삭제 성공"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "리워드 삭제 실패"
+            )
     })
     @ApiErrorCodeExample(value = ErrorCode.class, domain = "Reward")
-    @Operation(summary = "리워드 삭제", description = "프로젝트 id, 리워드 id를 통해 리워드를 삭제한다.")
+    @Operation(
+            summary = "리워드 삭제",
+            description = "프로젝트 id, 리워드 id를 이용하여 리워드를 삭제합니다."
+    )
     @DeleteMapping("/{projectId}/rewards/{rewardId}")
     public ResponseEntity<ResponseTemplate> deleteReward(
             @Parameter(description = "프로젝트 id") @PathVariable Long projectId,

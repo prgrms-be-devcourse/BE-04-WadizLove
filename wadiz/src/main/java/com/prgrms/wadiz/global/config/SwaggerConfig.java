@@ -19,8 +19,6 @@ import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.method.HandlerMethod;
 
 import javax.servlet.ServletContext;
@@ -33,7 +31,6 @@ import static java.util.stream.Collectors.groupingBy;
 @Configuration
 @RequiredArgsConstructor
 public class SwaggerConfig {
-    private final ApplicationContext applicationContext;
 
     @Bean
     public OpenAPI openAPI(ServletContext servletContext) {

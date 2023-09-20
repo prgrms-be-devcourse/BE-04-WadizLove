@@ -11,5 +11,4 @@ public record OrderCreateRequestDTO(
         @Schema(description = "주문 생성 요청 DTO 리스트")
         List<OrderRewardCreateRequestDTO> orderRewards
 ) {
-
 }

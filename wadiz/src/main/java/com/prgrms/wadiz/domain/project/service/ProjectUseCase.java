@@ -66,7 +66,11 @@ public class ProjectUseCase {
     @Transactional
     public void createProject(Long projectId, Long makerId) {
         Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new BaseException(ErrorCode.PROJECT_NOT_FOUND));
+                .orElseThrow(() -> {
+                    log.warn("Project {} is not found", projectId);
+
+                    return new BaseException(ErrorCode.PROJECT_NOT_FOUND);
+                });
 
         if (!project.getMaker().getMakerId().equals(makerId)) {
             throw new BaseException(ErrorCode.MAKER_NOT_FOUND);
@@ -87,7 +91,11 @@ public class ProjectUseCase {
     @Transactional(readOnly = true)
     public ProjectResponseDTO getProject(Long projectId) {
         Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new BaseException(ErrorCode.PROJECT_NOT_FOUND));
+                .orElseThrow(() -> {
+                    log.warn("Project {} is not found", projectId);
+
+                    return new BaseException(ErrorCode.PROJECT_NOT_FOUND);
+                });
 
         PostResponseDTO postServiceDTO = postService.getPostByProjectId(projectId);
         FundingResponseDTO fundingServiceDTO = fundingService.getFundingByProjectId(projectId);
@@ -118,7 +126,11 @@ public class ProjectUseCase {
             FundingCreateRequestDTO fundingCreateRequestDTO
     ) {
         Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new BaseException(ErrorCode.PROJECT_NOT_FOUND));
+                .orElseThrow(() -> {
+                    log.warn("Project {} is not found", projectId);
+
+                    return new BaseException(ErrorCode.PROJECT_NOT_FOUND);
+                });
 
         ProjectServiceDTO projectServiceDTO = ProjectServiceDTO.from(project);
 
@@ -152,7 +164,11 @@ public class ProjectUseCase {
             PostCreateRequestDTO postCreateRequestDTO
     ) {
         Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new BaseException(ErrorCode.PROJECT_NOT_FOUND));
+                .orElseThrow(() -> {
+                    log.warn("Project {} is not found", projectId);
+
+                    return new BaseException(ErrorCode.PROJECT_NOT_FOUND);
+                });
 
         ProjectServiceDTO projectServiceDTO = ProjectServiceDTO.from(project);
 
@@ -203,7 +219,11 @@ public class ProjectUseCase {
             RewardCreateRequestDTO rewardCreateRequestDTO
     ) {
         Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new BaseException(ErrorCode.PROJECT_NOT_FOUND));
+                .orElseThrow(() -> {
+                    log.warn("Project {} is not found", projectId);
+
+                    return new BaseException(ErrorCode.PROJECT_NOT_FOUND);
+                });
 
         ProjectServiceDTO projectServiceDTO = ProjectServiceDTO.from(project);
 
@@ -299,7 +319,6 @@ public class ProjectUseCase {
     private boolean isProjectBeforeSetUp(Project project) {
         return project.getProjectStatus() == ProjectStatus.READY;
     }
-
 
     private String generateCursor(String criterion,PagingDTO pagingDTO){
         if (criterion == null){

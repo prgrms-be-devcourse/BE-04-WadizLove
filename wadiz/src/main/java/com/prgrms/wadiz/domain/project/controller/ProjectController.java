@@ -22,16 +22,27 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/projects")
 @RequiredArgsConstructor
 public class ProjectController {
+
     private final ProjectUseCase projectUseCase;
 
+    /**
+     * Project 개설
+     */
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "프로젝트 개설 성공"),
-            @ApiResponse(responseCode = "404",
-                    description = "프로젝트 개설 실패")
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "프로젝트 개설 성공"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "프로젝트 개설 실패"
+            )
     })
     @ApiErrorCodeExample(value = ErrorCode.class, domain = "Project")
-    @Operation(summary = "프로젝트 개설 시작", description = "매이커의 id를 입력받아 프로젝트 개설을 시작한다.")
+    @Operation(
+            summary = "프로젝트 개설 시작",
+            description = "매이커의 id를 이용하여 프로젝트 개설을 시작합니다."
+    )
     @PostMapping("/maker/{makerId}")
     public ResponseEntity<ResponseTemplate> startProject(@Parameter(description = "메이커 id")@PathVariable Long makerId) {
         ProjectResponseDTO projectResponseDTO = projectUseCase.startProject(makerId);
@@ -39,14 +50,24 @@ public class ProjectController {
         return ResponseEntity.ok(ResponseFactory.getSingleResult(projectResponseDTO));
     }
 
+    /**
+     * Project 생성
+     */
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "프로젝트 생성 성공"),
-            @ApiResponse(responseCode = "404",
-                    description = "프로젝트 생성 실패")
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "프로젝트 생성 성공"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "프로젝트 생성 실패"
+            )
     })
     @ApiErrorCodeExample(value = ErrorCode.class, domain = "Project")
-    @Operation(summary = "프로젝트 생성", description = "프로젝트와 매이커의 id를 받아 프로젝트를 생성한다.")
+    @Operation(
+            summary = "프로젝트 생성",
+            description = "프로젝트 id와 매이커의 id를 이용하여 프로젝트를 생성합니다."
+    )
     @PostMapping("/{projectId}/maker/{makerId}/launching")
     public ResponseEntity<ResponseTemplate> createProject(
             @Parameter(description = "프로젝트 id") @PathVariable Long projectId,
@@ -57,14 +78,24 @@ public class ProjectController {
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());
     }
 
+    /**
+     * Project 단건 조회
+     */
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "프로젝트 조회 성공"),
-            @ApiResponse(responseCode = "404",
-                    description = "프로젝트 조회 실패")
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "프로젝트 조회 성공"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "프로젝트 조회 실패"
+            )
     })
     @ApiErrorCodeExample(value = ErrorCode.class, domain = "Project")
-    @Operation(summary = "프로젝트 조회", description = "프로젝트의 id로 프로젝트를 조회한다.")
+    @Operation(
+            summary = "프로젝트 조회",
+            description = "프로젝트의 id를 이용하여 프로젝트를 조회합니다."
+    )
     @GetMapping("/{projectId}")
     public ResponseEntity<ResponseTemplate> getProject(@Parameter(description = "프로젝트 id")@PathVariable Long projectId) {
         ProjectResponseDTO projectResponseDTO = projectUseCase.getProject(projectId);
@@ -72,14 +103,24 @@ public class ProjectController {
         return ResponseEntity.ok(ResponseFactory.getSingleResult(projectResponseDTO));
     }
 
+    /**
+     * Project 다건 목록 조회 (커서 기반)
+     */
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "프로젝트 목록 조회 성공"),
-            @ApiResponse(responseCode = "404",
-                    description = "프로젝트 목록 조회 실패")
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "프로젝트 목록 조회 성공"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "프로젝트 목록 조회 실패"
+            )
     })
     @ApiErrorCodeExample(value = ErrorCode.class, domain = "Project")
-    @Operation(summary = "프로젝트 목록 조회", description = "커서 id, 페이지 size, 검색 조건, 분류를 받아 프로젝트 목록을 조회한다.")
+    @Operation(
+            summary = "프로젝트 목록 조회",
+            description = "커서 id, 페이지 size, 검색 조건, 분류를 이용하여 프로젝트 목록을 조회합니다."
+    )
     @GetMapping
     public ResponseEntity<ResponseTemplate> getProjects(
             @Parameter(description = "커서 id")

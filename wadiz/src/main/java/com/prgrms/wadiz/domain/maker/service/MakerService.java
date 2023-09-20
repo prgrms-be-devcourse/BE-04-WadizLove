@@ -42,7 +42,7 @@ public class MakerService {
                 .orElseThrow(() -> {
                     log.warn("Maker {} is not found", makerId);
 
-                    throw new BaseException(ErrorCode.MAKER_NOT_FOUND);
+                    return new BaseException(ErrorCode.MAKER_NOT_FOUND);
                 });
 
         return MakerServiceDTO.from(retrivedMaker);
@@ -60,7 +60,7 @@ public class MakerService {
                 .orElseThrow(() -> {
                     log.warn("Maker {} is not found", makerId);
 
-                    throw new BaseException(ErrorCode.MAKER_NOT_FOUND);
+                    return new BaseException(ErrorCode.MAKER_NOT_FOUND);
                 });
 
         maker.updateMaker(
@@ -82,7 +82,7 @@ public class MakerService {
                 .orElseThrow(() -> {
                     log.warn("Maker {} is not found", makerId);
 
-                    throw new BaseException(ErrorCode.MAKER_NOT_FOUND);
+                    return new BaseException(ErrorCode.MAKER_NOT_FOUND);
                 });
 
         maker.unregisteredMaker();
@@ -92,7 +92,7 @@ public class MakerService {
                 .orElseThrow(() -> {
                     log.warn("Maker {} is not found", makerId);
 
-                    throw new BaseException(ErrorCode.MAKER_NOT_FOUND);
+                    return new BaseException(ErrorCode.MAKER_NOT_FOUND);
                 });
 
         return MakerResponseDTO.from(maker);

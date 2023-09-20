@@ -27,16 +27,20 @@ public class PostController {
     private final ProjectUseCase projectUseCase;
 
     /**
-     * Post 정보 CURD
+     * Post create
      */
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "게시글 생성 성공"),
-            @ApiResponse(responseCode = "404",
-                    description = "게시글 생성 실패")
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "게시글 생성 성공"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "게시글 생성 실패"
+            )
     })
     @ApiErrorCodeExample(value = ErrorCode.class, domain = "Board")
-    @Operation(summary = "게시글 생성", description = "프로젝트 id를 받고, 게시글 제목, 상세 설명, 썸네일 url, 컨텐트 url 을 입력하여 게시글을 삭제한다.")
+    @Operation(summary = "게시글 생성", description = "프로젝트 id와, 게시글 요청 양식(PostCreateRequestDTO)을 이용하여 게시글을 생성합니다.")
     @PostMapping("/{projectId}/posts/new")
     public ResponseEntity<ResponseTemplate> createPost(
             @Parameter(description = "프로젝트 id") @PathVariable Long projectId,
@@ -47,14 +51,24 @@ public class PostController {
         return ResponseEntity.ok(ResponseFactory.getSingleResult(postId));
     }
 
+    /**
+     * Post 조회
+     */
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "게시글 조회 성공"),
-            @ApiResponse(responseCode = "404",
-                    description = "게시글 조회 실패")
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "게시글 조회 성공"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "게시글 조회 실패"
+            )
     })
     @ApiErrorCodeExample(value = ErrorCode.class, domain = "Board")
-    @Operation(summary = "게시글 조회", description = "프로젝트 id를 통해 게시글읗 조회한다.")
+    @Operation(
+            summary = "게시글 조회",
+            description = "프로젝트 id를 이용하여 게시글읗 조회합니다."
+    )
     @GetMapping("/{projectId}/posts")
     public ResponseEntity<ResponseTemplate> getPost(@Parameter(description = "프로젝트 id")@PathVariable Long projectId) {
         PostResponseDTO postResponseDTO = projectUseCase.getPost(projectId);
@@ -62,14 +76,24 @@ public class PostController {
         return ResponseEntity.ok(ResponseFactory.getSingleResult(postResponseDTO));
     }
 
+    /**
+     * Post update
+     */
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "게시글 수정 성공"),
-            @ApiResponse(responseCode = "404",
-                    description = "게시글 수정 실패")
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "게시글 수정 성공"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "게시글 수정 실패"
+            )
     })
     @ApiErrorCodeExample(value = ErrorCode.class, domain = "Board")
-    @Operation(summary = "게시글 수정", description = "프로젝트 id를 통해 게시글을 조회한 후, 게시글을 수정한다.")
+    @Operation(
+            summary = "게시글 수정",
+            description = "프로젝트 id를 이용하여 게시글을 조회한 후, 게시글을 수정합니다."
+    )
     @PutMapping("/{projectId}/posts")
     public ResponseEntity<ResponseTemplate> updatePost(
             @Parameter(description = "프로젝트 id") @PathVariable Long projectId,
@@ -80,14 +104,24 @@ public class PostController {
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());
     }
 
+    /**
+     * Post delete
+     */
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200",
-                    description = "게시글 삭제 성공"),
-            @ApiResponse(responseCode = "404",
-                    description = "게시글 삭제 실패")
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "게시글 삭제 성공"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "게시글 삭제 실패"
+            )
     })
     @ApiErrorCodeExample(value = ErrorCode.class, domain = "Board")
-    @Operation(summary = "게시글 삭제", description = "프로젝트 id를 통해 게시글을 조회한 후, 게시글을 삭제한다.")
+    @Operation(
+            summary = "게시글 삭제",
+            description = "프로젝트 id를 이용하여 게시글을 조회한 후, 게시글을 삭제합니다."
+    )
     @DeleteMapping("/{projectId}/posts")
     public ResponseEntity<ResponseTemplate> deletePost(@Parameter(description = "프로젝트 id") @PathVariable Long projectId) {
         projectUseCase.deletePost(projectId);

@@ -57,7 +57,7 @@ public class RewardService {
                 .orElseThrow(() -> {
                     log.warn("Reward {} is not found", rewardId);
 
-                    throw new BaseException(ErrorCode.REWARD_NOT_FOUND);
+                    return new BaseException(ErrorCode.REWARD_NOT_FOUND);
                 });
 
         if (!Objects.equals(reward.getProject().getProjectId(), projectId)) {
@@ -92,7 +92,7 @@ public class RewardService {
                 .orElseThrow(() -> {
                     log.warn("Reward {} is not found", rewardId);
 
-                    throw new BaseException(ErrorCode.REWARD_NOT_FOUND);
+                    return new BaseException(ErrorCode.REWARD_NOT_FOUND);
                 });
 
         if (!Objects.equals(reward.getProject().getProjectId(), projectId)) {
@@ -124,7 +124,7 @@ public class RewardService {
                 .orElseThrow(() -> {
                     log.warn("Rewards for Project {} is not found", projectId);
 
-                    throw new BaseException(ErrorCode.REWARD_NOT_FOUND);
+                    return new BaseException(ErrorCode.REWARD_NOT_FOUND);
                 });
 
         return rewards.stream().map(RewardResponseDTO::from).toList();
@@ -136,7 +136,7 @@ public class RewardService {
                 .orElseThrow(() -> {
                     log.warn("Reward {} is not found", rewardId);
 
-                    throw new BaseException(ErrorCode.REWARD_NOT_FOUND);
+                    return new BaseException(ErrorCode.REWARD_NOT_FOUND);
                 });
 
         if (!Objects.equals(reward.getProject().getProjectId(), projectId)) {
