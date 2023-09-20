@@ -10,6 +10,7 @@ public enum ErrorCode {
     INVALID_ACCESS("G0002", "잘못된 접근잊니다."),
     DUPLICATED_EMAIL("G0003", "중복된 이메일이 이미 존재합니다."),
     DUPLICATED_NAME("G0004", "중복된 이름이 이미 존재합니다." ),
+    INVALID_REQUEST("G0005","잘못된 요청입니다."),
 
     REWARD_NOT_FOUND("R0001", "리워드 정보를 찾을 수 없습니다."),
     STOCK_SETTING_ERROR("R0002", "재고는 양수여야 합니다."),

@@ -1,5 +1,6 @@
 package com.prgrms.wadiz.domain.funding.service;
 
+import com.prgrms.wadiz.domain.funding.FundingCategory;
 import com.prgrms.wadiz.domain.funding.FundingStatus;
 import com.prgrms.wadiz.domain.funding.dto.request.FundingCreateRequestDTO;
 import com.prgrms.wadiz.domain.funding.dto.request.FundingUpdateRequestDTO;
@@ -35,7 +36,7 @@ public class FundingService {
 
         Funding funding = Funding.builder()
                 .project(project)
-                .fundingCategory(fundingCreateRequestDTO.fundingCategory())
+                .fundingCategory(FundingCategory.valueOf(fundingCreateRequestDTO.fundingCategory()))
                 .fundingTargetAmount(fundingCreateRequestDTO.fundingTargetAmount())
                 .fundingStartAt(fundingCreateRequestDTO.fundingStartAt())
 

@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public record FundingCreateRequestDTO(
 
         @Schema(description = "펀당 모집 금액", example = "10000000")
-        @Min(value = 0, message = "펀딩 모집 금액은 0이상의 정수만 허용됩니다.")
+        @Min(value = 1, message = "펀딩 모집 금액은 양수만 허용됩니다.")
         Integer fundingTargetAmount,
 
         @Schema(description = "펀딩 시작 시점")
@@ -28,7 +28,7 @@ public record FundingCreateRequestDTO(
 
         @Schema(description = "펀딩 카테고리", example = "TECH")
         @ValidEnum(enumClass = FundingCategory.class, message = "존재하지 않는 카테고리 입니다.")
-        FundingCategory fundingCategory
+        String fundingCategory
 ) {
 
 }
