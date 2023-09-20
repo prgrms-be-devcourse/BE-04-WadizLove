@@ -64,12 +64,15 @@ public class ProjectUseCase {
     }
 
     @Transactional
-    public void createProject(Long projectId, Long makerId) {
+    public void createProject(
+            Long projectId,
+            Long makerId
+    ) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> {
                     log.warn("Project {} is not found", projectId);
 
-                    return new BaseException(ErrorCode.PROJECT_NOT_FOUND);
+                    throw new BaseException(ErrorCode.PROJECT_NOT_FOUND);
                 });
 
         if (!project.getMaker().getMakerId().equals(makerId)) {
@@ -130,16 +133,20 @@ public class ProjectUseCase {
                 .orElseThrow(() -> {
                     log.warn("Project {} is not found", projectId);
 
-                    return new BaseException(ErrorCode.PROJECT_NOT_FOUND);
+                    throw new BaseException(ErrorCode.PROJECT_NOT_FOUND);
                 });
 
         ProjectServiceDTO projectServiceDTO = ProjectServiceDTO.from(project);
 
-        return fundingService.createFunding(projectServiceDTO, fundingCreateRequestDTO);
+        return fundingService.createFunding(
+                projectServiceDTO,
+                fundingCreateRequestDTO
+        );
     }
 
     @Transactional(readOnly = true)
     public FundingResponseDTO getFunding(Long projectId) {
+
         return fundingService.getFundingByProjectId(projectId);
     }
 
@@ -168,12 +175,15 @@ public class ProjectUseCase {
                 .orElseThrow(() -> {
                     log.warn("Project {} is not found", projectId);
 
-                    return new BaseException(ErrorCode.PROJECT_NOT_FOUND);
+                    throw new BaseException(ErrorCode.PROJECT_NOT_FOUND);
                 });
 
         ProjectServiceDTO projectServiceDTO = ProjectServiceDTO.from(project);
 
-        return postService.createPost(projectServiceDTO, postCreateRequestDTO);
+        return postService.createPost(
+                projectServiceDTO,
+                postCreateRequestDTO
+        );
     }
 
     @Transactional(readOnly = true)
@@ -186,7 +196,10 @@ public class ProjectUseCase {
             Long projectId,
             PostUpdateRequestDTO postUpdateRequestDTO
     ) {
-        postService.updatePost(projectId, postUpdateRequestDTO);
+        postService.updatePost(
+                projectId,
+                postUpdateRequestDTO
+        );
     }
 
     @Transactional
@@ -203,7 +216,11 @@ public class ProjectUseCase {
             Long rewardId,
             RewardUpdateRequestDTO dto
     ) {
-        rewardService.updateReward(projectId, rewardId, dto);
+        rewardService.updateReward(
+                projectId,
+                rewardId,
+                dto
+        );
     }
 
     @Transactional
@@ -211,7 +228,10 @@ public class ProjectUseCase {
             Long projectId,
             Long rewardId
     ) {
-        rewardService.deleteReward(projectId, rewardId);
+        rewardService.deleteReward(
+                projectId,
+                rewardId
+        );
     }
 
     @Transactional
@@ -223,12 +243,15 @@ public class ProjectUseCase {
                 .orElseThrow(() -> {
                     log.warn("Project {} is not found", projectId);
 
-                    return new BaseException(ErrorCode.PROJECT_NOT_FOUND);
+                    throw new BaseException(ErrorCode.PROJECT_NOT_FOUND);
                 });
 
         ProjectServiceDTO projectServiceDTO = ProjectServiceDTO.from(project);
 
-        return rewardService.createReward(projectServiceDTO, rewardCreateRequestDTO);
+        return rewardService.createReward(
+                projectServiceDTO,
+                rewardCreateRequestDTO
+        );
     }
 
     @Transactional(readOnly = true)
@@ -236,7 +259,10 @@ public class ProjectUseCase {
             Long projectId,
             Long rewardId
     ) {
-        return rewardService.getReward(projectId, rewardId);
+        return rewardService.getReward(
+                projectId,
+                rewardId
+        );
     }
 
 
@@ -269,12 +295,14 @@ public class ProjectUseCase {
                 })
                 .toList();
 
-        String nextCursor = gotCursorIds.size() == 0 ? null : gotCursorIds.get(gotCursorIds.size()-1);
+        String nextCursor = gotCursorIds.size() == 0 ?
+                null : gotCursorIds.get(gotCursorIds.size()-1);
 
         List<ProjectPageResponseDTO> projectPages = IntStream.range(0, pagingRes.size())
                 .mapToObj(i -> {
                     PagingDTO pagingDTO = pagingRes.get(i);
                     String gotCursorId = gotCursorIds.get(i);
+
                     return ProjectPageResponseDTO.of(
                             gotCursorId,
                             pagingDTO.getProjectId(),
@@ -298,6 +326,8 @@ public class ProjectUseCase {
 
     @Transactional
     public void deleteProject(Long projectId) {
+        //TODO: 프로젝트가 삭제되면 딸린 애들도 삭제가 되어야하지만, 딸린애들은 있든 없든 상관없어야 함 existsbyid
+
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> {
                     log.warn("project : {} is not found", projectId);
@@ -314,42 +344,46 @@ public class ProjectUseCase {
         fundingService.deleteFunding(projectId);
 
         projectRepository.deleteById(projectId);
-
     }
 
     private boolean isProjectBeforeSetUp(Project project) {
         return project.getProjectStatus() == ProjectStatus.READY;
     }
 
-    private String generateCursor(String criterion,PagingDTO pagingDTO){
+    private String generateCursor(
+            String criterion,
+            PagingDTO pagingDTO
+    ){
         if (criterion == null){
+
             return String.format("%012d",pagingDTO.getFundingParticipants())
                     +String.format("%08d",pagingDTO.getProjectId());
         }
 
         switch (criterion) {
             case "fundingAmount":// 펀딩 금액 순
+
                 return String.format("%012d",pagingDTO.getFundingAmount())
                         +String.format("%08d",pagingDTO.getProjectId());
 
             case "fundingEndAt": // 마감 임박 순
+
                 return pagingDTO.getFundingEndAt().toString()
                         .replace("T","")
                         .replace("-","")
                         .replace(":","")
                         +String.format("%08d",pagingDTO.getProjectId());
             case "modifiedAt": // 최신 순
+
                 return pagingDTO.getModifiedAt().toString()
                         .replace("T","")
                         .replace("-","")
                         .replace(":","")
                         +String.format("%08d",pagingDTO.getProjectId());
             default:
+
                 return String.format("%012d",pagingDTO.getFundingParticipants())
                         +String.format("%08d",pagingDTO.getProjectId());
         }
-
     }
-
-
 }

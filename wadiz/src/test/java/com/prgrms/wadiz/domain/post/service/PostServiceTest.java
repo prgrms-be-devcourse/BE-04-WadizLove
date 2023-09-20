@@ -90,7 +90,7 @@ class PostServiceTest {
                 .build();
 
         // mocking
-        when(postRepository.findByProjectId(projectId)).thenReturn(Optional.ofNullable(post));
+        when(postRepository.findByProject_ProjectId(projectId)).thenReturn(Optional.ofNullable(post));
 
         // when
         PostResponseDTO actualPostResponseDTO = postService.getPostByProjectId(projectId);
@@ -130,7 +130,7 @@ class PostServiceTest {
         );
 
         // mocking
-        when(postRepository.findByProjectId(projectId)).thenReturn(Optional.of(befoerPost));
+        when(postRepository.findByProject_ProjectId(projectId)).thenReturn(Optional.of(befoerPost));
 
         // when
         postService.updatePost(projectId, postUpdateRequestDTO);
@@ -166,7 +166,7 @@ class PostServiceTest {
         );
 
         // mocking
-        when(postRepository.findByProjectId(projectId)).thenReturn(Optional.of(setUpPost));
+        when(postRepository.findByProject_ProjectId(projectId)).thenReturn(Optional.of(setUpPost));
 
         // when
         // then
@@ -192,7 +192,7 @@ class PostServiceTest {
                 .build();
 
         // mocking
-        when(postRepository.findByProjectId(projectId)).thenReturn(Optional.of(setUpPost));
+        when(postRepository.findByProject_ProjectId(projectId)).thenReturn(Optional.of(setUpPost));
 
         // when
         // then

@@ -17,7 +17,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "projects", description = "프로젝트 API")
+@Tag(
+        name = "projects",
+        description = "프로젝트 API"
+)
 @RestController
 @RequestMapping("/api/projects")
 @RequiredArgsConstructor
@@ -38,13 +41,18 @@ public class ProjectController {
                     description = "프로젝트 개설 실패"
             )
     })
-    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Project")
+    @ApiErrorCodeExample(
+            value = ErrorCode.class,
+            domain = "Project"
+    )
     @Operation(
             summary = "프로젝트 개설 시작",
             description = "매이커의 id를 이용하여 프로젝트 개설을 시작합니다."
     )
     @PostMapping("/maker/{makerId}")
-    public ResponseEntity<ResponseTemplate> startProject(@Parameter(description = "메이커 id")@PathVariable Long makerId) {
+    public ResponseEntity<ResponseTemplate> startProject(
+            @Parameter(description = "메이커 id")@PathVariable Long makerId
+    ) {
         ProjectResponseDTO projectResponseDTO = projectUseCase.startProject(makerId);
 
         return ResponseEntity.ok(ResponseFactory.getSingleResult(projectResponseDTO));
@@ -56,17 +64,20 @@ public class ProjectController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "프로젝트 생성 성공"
+                    description = "프로젝트 런칭 성공"
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "프로젝트 생성 실패"
+                    description = "프로젝트 런칭 실패"
             )
     })
-    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Project")
+    @ApiErrorCodeExample(
+            value = ErrorCode.class,
+            domain = "Project"
+    )
     @Operation(
-            summary = "프로젝트 생성",
-            description = "프로젝트 id와 매이커의 id를 이용하여 프로젝트를 생성합니다."
+            summary = "프로젝트 런칭",
+            description = "프로젝트 id와 매이커의 id를 이용하여 프로젝트를 런칭합니다."
     )
     @PostMapping("/{projectId}/maker/{makerId}/launching")
     public ResponseEntity<ResponseTemplate> createProject(
@@ -91,13 +102,18 @@ public class ProjectController {
                     description = "프로젝트 조회 실패"
             )
     })
-    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Project")
+    @ApiErrorCodeExample(
+            value = ErrorCode.class,
+            domain = "Project"
+    )
     @Operation(
             summary = "프로젝트 조회",
             description = "프로젝트의 id를 이용하여 프로젝트를 조회합니다."
     )
     @GetMapping("/{projectId}")
-    public ResponseEntity<ResponseTemplate> getProject(@Parameter(description = "프로젝트 id")@PathVariable Long projectId) {
+    public ResponseEntity<ResponseTemplate> getProject(
+            @Parameter(description = "프로젝트 id")@PathVariable Long projectId
+    ) {
         ProjectResponseDTO projectResponseDTO = projectUseCase.getProject(projectId);
 
         return ResponseEntity.ok(ResponseFactory.getSingleResult(projectResponseDTO));
@@ -116,7 +132,10 @@ public class ProjectController {
                     description = "프로젝트 목록 조회 실패"
             )
     })
-    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Project")
+    @ApiErrorCodeExample(
+            value = ErrorCode.class,
+            domain = "Project"
+    )
     @Operation(
             summary = "프로젝트 목록 조회",
             description = "커서 id, 페이지 size, 검색 조건, 분류를 이용하여 프로젝트 목록을 조회합니다."
@@ -148,8 +167,14 @@ public class ProjectController {
             @ApiResponse(responseCode = "404",
                     description = "프로젝트 목록 조회 실패")
     })
-    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Project")
-    @Operation(summary = "프로젝트 런칭 전 삭제", description = "프로젝트 id를 받아 프로젝트와 연결된 (funding,post,reward를 모두 삭제한다.")
+    @ApiErrorCodeExample(
+            value = ErrorCode.class,
+            domain = "Project"
+    )
+    @Operation(
+            summary = "프로젝트 런칭 전 삭제",
+            description = "프로젝트 id를 받아 프로젝트와 연결된 (funding,post,reward를 모두 삭제한다."
+    )
     @DeleteMapping("{projectId}")
     public ResponseEntity<ResponseTemplate> deleteProjectBeforeLaunching(
             @PathVariable Long projectId

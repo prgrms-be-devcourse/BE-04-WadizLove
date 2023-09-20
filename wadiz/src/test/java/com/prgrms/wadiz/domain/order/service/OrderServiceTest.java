@@ -7,7 +7,7 @@ import com.prgrms.wadiz.domain.maker.entity.Maker;
 import com.prgrms.wadiz.domain.order.OrderStatus;
 import com.prgrms.wadiz.domain.order.dto.request.OrderCreateRequestDTO;
 import com.prgrms.wadiz.domain.order.dto.response.OrderResponseDTO;
-import com.prgrms.wadiz.domain.order.dto.request.OrderRewardCreateRequestDTO;
+import com.prgrms.wadiz.domain.orderReward.dto.request.OrderRewardCreateRequestDTO;
 import com.prgrms.wadiz.domain.order.entity.Order;
 import com.prgrms.wadiz.domain.order.repository.OrderRepository;
 import com.prgrms.wadiz.domain.orderReward.dto.response.OrderRewardResponseDTO;
@@ -212,7 +212,7 @@ class OrderServiceTest {
                 OrderStatus.COMPLETED
         );
 
-         given(postRepository.findByProjectId(anyLong())).willReturn(Optional.of(post));
+         given(postRepository.findByProject_ProjectId(anyLong())).willReturn(Optional.of(post));
          given(orderRepository.findById(anyLong())).willReturn(Optional.of(order));
 
          OrderResponseDTO realResponseDTO = orderService.getSupporterPurchase(1L,1L);
@@ -294,8 +294,8 @@ class OrderServiceTest {
                 LocalDateTime.now()
         );
 
-        given(orderRepository.findAllBySupporterId(anyLong())).willReturn(Optional.of(orders));
-        given(postRepository.findByProjectId(anyLong())).willReturn(Optional.of(post));
+        given(orderRepository.findAllBySupporter_SupporterId(anyLong())).willReturn(Optional.of(orders));
+        given(postRepository.findByProject_ProjectId(anyLong())).willReturn(Optional.of(post));
         given(fundingRepository.findByProjectId(anyLong())).willReturn(Optional.of(funding));
 
         List<OrderResponseDTO> purchaseHis = orderService.getSupporterPurchaseHistory(1L);
@@ -363,7 +363,7 @@ class OrderServiceTest {
                 order.getOrderStatus()
         );
 
-        given(orderRepository.findAllByProjectId(anyLong())).willReturn(Optional.of(orders));
+        given(orderRepository.findAllByProject_ProjectId(anyLong())).willReturn(Optional.of(orders));
 
         List<OrderResponseDTO> makerProjectOrders = orderService.getMakerProjectOrders(1L, 1L);
 

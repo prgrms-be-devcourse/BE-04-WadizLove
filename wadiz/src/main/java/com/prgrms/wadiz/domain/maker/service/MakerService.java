@@ -36,7 +36,19 @@ public class MakerService {
         return savedMaker.getMakerId();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
+    public MakerResponseDTO getMaker(Long makerId) {
+        Maker maker = makerRepository.findById(makerId)
+                .orElseThrow(() -> {
+                    log.warn("Maker {} is not found", makerId);
+
+                    return new BaseException(ErrorCode.MAKER_NOT_FOUND);
+                });
+
+        return MakerResponseDTO.from(maker);
+    }
+
+    @Transactional(readOnly = true) //TODO: 둘을 하나로 처리해도 될듯
     public MakerServiceDTO getMakerDTO(Long makerId) {
         Maker retrivedMaker = makerRepository.findById(makerId)
                 .orElseThrow(() -> {
@@ -87,18 +99,9 @@ public class MakerService {
 
         maker.unregisteredMaker();
     }
-    public MakerResponseDTO getMaker(Long makerId) {
-        Maker maker = makerRepository.findById(makerId)
-                .orElseThrow(() -> {
-                    log.warn("Maker {} is not found", makerId);
 
-                    return new BaseException(ErrorCode.MAKER_NOT_FOUND);
-                });
 
-        return MakerResponseDTO.from(maker);
-    }
-
-    public void checkDuplicateEmail(String email) {
+    public void checkDuplicateEmail(String email) { //TODO : 로그
         if(makerRepository.existsByMakerEmail(email)){
 
             throw new BaseException((ErrorCode.DUPLICATED_EMAIL));

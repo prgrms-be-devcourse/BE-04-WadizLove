@@ -33,6 +33,7 @@ public class SupporterService {
         return savedSupporter.getSupporterId();
     }
 
+    @Transactional(readOnly = true)
     public SupporterResponseDTO getSupporter(Long supporterId) {
         Supporter supporter =supporterRepository.findById(supporterId)
                 .orElseThrow(() -> {
@@ -47,6 +48,7 @@ public class SupporterService {
         );
     }
 
+    @Transactional
     public SupporterResponseDTO updateSupporter(
             Long supporterId,
             SupporterUpdateRequestDTO dto
@@ -88,7 +90,7 @@ public class SupporterService {
     public void checkDuplicateEmail(String email) {
         if(supporterRepository.existsBySupporterEmail(email)){
 
-            throw new BaseException((ErrorCode.DUPLICATED_EMAIL));
+            throw new BaseException((ErrorCode.DUPLICATED_EMAIL)); //TODO: 로그
         }
     }
 

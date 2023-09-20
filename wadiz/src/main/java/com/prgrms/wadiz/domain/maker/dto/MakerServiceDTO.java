@@ -14,7 +14,10 @@ public record MakerServiceDTO(
         Long makerId,
 
         @Schema(description = "메이커 이름")
-        @Size(min = 2, message = "이름은 최소 2자 이상입니다.")
+        @Size(
+                min = 2,
+                message = "이름은 최소 2자 이상입니다."
+        )
         String makerName,
 
         @Schema(description = "메이커 브랜드")

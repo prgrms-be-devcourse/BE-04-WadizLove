@@ -19,14 +19,15 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@Tag(name = "rewards", description = "리워드 API")
+@Tag(
+        name = "rewards",
+        description = "리워드 API"
+)
 @RestController
 @RequestMapping("/api/projects")
 @RequiredArgsConstructor
 public class RewardController {
-
     private final ProjectUseCase projectUseCase;
-
     /**
      * Reward create
      */
@@ -40,7 +41,10 @@ public class RewardController {
                     description = "리워드 생성 실패"
             )
     })
-    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Reward")
+    @ApiErrorCodeExample(
+            value = ErrorCode.class,
+            domain = "Reward"
+    )
     @Operation(
             summary = "리워드 생성",
             description = "프로젝트 id와, 리워드 요청 양식(RewardCreateRequestDTO)을 이용하여 리워드를 생성한다."
@@ -50,7 +54,10 @@ public class RewardController {
             @Parameter(description = "프로젝트 id") @PathVariable Long projectId,
             @RequestBody @Valid RewardCreateRequestDTO rewardCreateRequestDTO
     ) {
-        Long rewardId = projectUseCase.createReward(projectId, rewardCreateRequestDTO);
+        Long rewardId = projectUseCase.createReward(
+                projectId,
+                rewardCreateRequestDTO
+        );
 
         return ResponseEntity.ok(ResponseFactory.getSingleResult(rewardId));
     }
@@ -68,7 +75,10 @@ public class RewardController {
                     description = "리워드 조회 실패"
             )
     })
-    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Reward")
+    @ApiErrorCodeExample(
+            value = ErrorCode.class,
+            domain = "Reward"
+    )
     @Operation(
             summary = "리워드 조회",
             description = "프로젝트 id, 리워드 id를 이용하여 리워드를 조회합니다."
@@ -78,7 +88,10 @@ public class RewardController {
             @Parameter(description = "프로젝트 id") @PathVariable Long projectId,
             @Parameter(description = "리워드 id") @PathVariable Long rewardId
     ){
-        RewardResponseDTO rewardResponseDTO = projectUseCase.getReward(projectId, rewardId);
+        RewardResponseDTO rewardResponseDTO = projectUseCase.getReward(
+                projectId,
+                rewardId
+        );
 
         return ResponseEntity.ok(ResponseFactory.getSingleResult(rewardResponseDTO));
     }
@@ -96,7 +109,10 @@ public class RewardController {
                     description = "리워드 수정 실패"
             )
     })
-    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Reward")
+    @ApiErrorCodeExample(
+            value = ErrorCode.class,
+            domain = "Reward"
+    )
     @Operation(
             summary = "리워드 수정",
             description = "프로젝트 id, 리워드 id를 통해 리워드를 조회한 후 리워드 정보를 수정합니다."
@@ -107,7 +123,11 @@ public class RewardController {
             @Parameter(description = "리워드 id") @PathVariable Long rewardId,
             @RequestBody @Valid RewardUpdateRequestDTO dto
     ) {
-        projectUseCase.updateReward(projectId,rewardId, dto);
+        projectUseCase.updateReward(
+                projectId,
+                rewardId,
+                dto
+        );
 
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());
     }
@@ -125,7 +145,10 @@ public class RewardController {
                     description = "리워드 삭제 실패"
             )
     })
-    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Reward")
+    @ApiErrorCodeExample(
+            value = ErrorCode.class,
+            domain = "Reward"
+    )
     @Operation(
             summary = "리워드 삭제",
             description = "프로젝트 id, 리워드 id를 이용하여 리워드를 삭제합니다."
@@ -133,7 +156,8 @@ public class RewardController {
     @DeleteMapping("/{projectId}/rewards/{rewardId}")
     public ResponseEntity<ResponseTemplate> deleteReward(
             @Parameter(description = "프로젝트 id") @PathVariable Long projectId,
-            @Parameter(description = "리워드 id") @PathVariable Long rewardId) {
+            @Parameter(description = "리워드 id") @PathVariable Long rewardId
+    ) {
         projectUseCase.deleteReward(projectId, rewardId);
 
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());

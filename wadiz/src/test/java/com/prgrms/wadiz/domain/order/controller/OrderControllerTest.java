@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prgrms.wadiz.domain.funding.FundingCategory;
 import com.prgrms.wadiz.domain.order.OrderStatus;
 import com.prgrms.wadiz.domain.order.dto.request.OrderCreateRequestDTO;
-import com.prgrms.wadiz.domain.order.dto.request.OrderRewardCreateRequestDTO;
+import com.prgrms.wadiz.domain.orderReward.dto.request.OrderRewardCreateRequestDTO;
 import com.prgrms.wadiz.domain.order.dto.response.OrderResponseDTO;
 import com.prgrms.wadiz.domain.order.service.OrderService;
 import com.prgrms.wadiz.domain.orderReward.dto.response.OrderRewardResponseDTO;
@@ -20,7 +20,6 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

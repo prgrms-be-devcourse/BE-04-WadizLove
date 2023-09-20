@@ -11,5 +11,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ApiErrorCodeExample {
     Class<ErrorCode> value();
+
     String domain();
 }

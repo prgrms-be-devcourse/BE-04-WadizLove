@@ -45,7 +45,10 @@ public class ProjectRepositoryImpl implements ProjectRepositoryCustom {
                 .from(funding)
                 .join(post).on(funding.project.projectId.eq(post.project.projectId))
                 .where(
-                        cursorId(pageable, cursorId),
+                        cursorId(
+                                pageable,
+                                cursorId
+                        ),
                         isDeclined(searchCondition)
                 )
                 .limit(pageable.getPageSize())
@@ -56,8 +59,11 @@ public class ProjectRepositoryImpl implements ProjectRepositoryCustom {
     private BooleanExpression isDeclined(ProjectSearchCondition searchCondition) {
         switch (searchCondition) {
             case OPEN:
+
                 return funding.fundingEndAt.gt(LocalDateTime.now());
+
             case CLOSE:
+
                 return funding.fundingEndAt.lt(LocalDateTime.now());
         }
 
@@ -85,23 +91,47 @@ public class ProjectRepositoryImpl implements ProjectRepositoryCustom {
         for (Sort.Order order : page.getSort()) {
             switch (order.getProperty()) {
                 case "fundingAmount":   // 펀딩 금액 순
-                    return StringExpressions.lpad(funding.fundingAmount.stringValue(), 12, '0')
-                            .concat(StringExpressions.lpad(funding.project.projectId.stringValue(), 8, '0'))
+                    return StringExpressions.lpad(
+                            funding.fundingAmount.stringValue(),
+                                    12,
+                                    '0'
+                            )
+                            .concat(StringExpressions.lpad(
+                                    funding.project.projectId.stringValue(),
+                                    8,
+                                    '0'
+                            ))
                             .lt(cursorId);
 
                 case "fundingEndAt":   // 마감 임박 순
                     return stringTemplate
-                            .concat(StringExpressions.lpad(funding.project.projectId.stringValue(), 8, '0'))
+                            .concat(StringExpressions.lpad(
+                                    funding.project.projectId.stringValue(),
+                                    8,
+                                    '0'
+                            ))
                             .lt(cursorId);
 
                 case "modifiedAt": // 최신 순
                     return stringTemplate2
-                            .concat(StringExpressions.lpad(funding.project.projectId.stringValue(), 8, '0'))
+                            .concat(StringExpressions.lpad(
+                                    funding.project.projectId.stringValue(),
+                                    8,
+                                    '0'
+                            ))
                             .lt(cursorId);
 
                 default:
-                    return StringExpressions.lpad(funding.fundingParticipants.stringValue(), 12, '0')
-                            .concat(StringExpressions.lpad(funding.project.projectId.stringValue(), 8, '0'))
+                    return StringExpressions.lpad(
+                            funding.fundingParticipants.stringValue(),
+                                    12,
+                                    '0'
+                            )
+                            .concat(StringExpressions.lpad(
+                                    funding.project.projectId.stringValue(),
+                                    8,
+                                    '0'
+                            ))
                             .lt(cursorId);
             }
         }
@@ -119,12 +149,15 @@ public class ProjectRepositoryImpl implements ProjectRepositoryCustom {
                 case "fundingAmount":   // 펀딩 금액 순
                     orderSpecifiers.add(new OrderSpecifier(direction, funding.fundingAmount));
                     break;
+
                 case "fundingEndAt":   // 마감 임박 순
                     orderSpecifiers.add(new OrderSpecifier(direction, funding.fundingEndAt));
                     break;
+
                 case "modifiedAt": // 최신 순
                     orderSpecifiers.add(new OrderSpecifier(direction, funding.project.modifiedAt));
                     break;
+
                 default:
                     orderSpecifiers.add(new OrderSpecifier(direction, funding.fundingParticipants));
                     break;

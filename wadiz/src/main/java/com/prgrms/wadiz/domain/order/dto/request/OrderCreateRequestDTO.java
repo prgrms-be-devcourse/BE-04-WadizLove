@@ -1,5 +1,6 @@
 package com.prgrms.wadiz.domain.order.dto.request;
 
+import com.prgrms.wadiz.domain.orderReward.dto.request.OrderRewardCreateRequestDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 

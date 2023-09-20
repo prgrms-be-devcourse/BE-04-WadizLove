@@ -1,9 +1,9 @@
 package com.prgrms.wadiz.domain.orderReward.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.prgrms.wadiz.domain.reward.entity.Reward;
-import com.prgrms.wadiz.domain.order.entity.Order;
 import com.prgrms.wadiz.domain.BaseEntity;
+import com.prgrms.wadiz.domain.order.entity.Order;
+import com.prgrms.wadiz.domain.reward.entity.Reward;
 import com.prgrms.wadiz.global.util.exception.BaseException;
 import com.prgrms.wadiz.global.util.exception.ErrorCode;
 import lombok.AccessLevel;
@@ -12,7 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Getter
@@ -20,6 +20,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderReward extends BaseEntity {
     private static final int POSITIVE_ORDER_QUANTITY = 1;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderRewardId;
@@ -33,16 +34,20 @@ public class OrderReward extends BaseEntity {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    @NotNull
+    @NotBlank(message = "주문 리워드의 가격이 필요합니다.")
     @Column(nullable = false)
     private Integer orderRewardPrice;
 
-    @NotNull
+    @NotBlank(message = "주문하는 리워드의 수량이 필요합니다.")
     @Column(nullable = false)
     private Integer orderRewardQuantity;
 
     @Builder
-    public OrderReward(Reward reward, Integer orderRewardPrice, Integer orderRewardQuantity) {
+    public OrderReward(
+            Reward reward,
+            Integer orderRewardPrice,
+            Integer orderRewardQuantity
+    ) {
         this.reward = reward;
         this.orderRewardPrice = orderRewardPrice;
         this.orderRewardQuantity = validatePositive(orderRewardQuantity);

@@ -57,7 +57,7 @@ public class MakerController {
     public ResponseEntity<ResponseTemplate> signUpMaker(@RequestBody @Valid MakerCreateRequestDTO dto) {
         Long makerId = makerService.signUpMaker(dto);
 
-        return ResponseEntity.ok(ResponseFactory.getSingleResult(makerId));  //TODO : id값 여기까지 함
+        return ResponseEntity.ok(ResponseFactory.getSingleResult(makerId));
     }
 
     /**
@@ -104,7 +104,10 @@ public class MakerController {
                     description = "메이커 탈퇴 실패"
             )
     })
-    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Maker")
+    @ApiErrorCodeExample(
+            value = ErrorCode.class,
+            domain = "Maker"
+    )
     @Operation(
             summary = "메이커 탈퇴",
             description = "메이커 id를 이용하여 메이커를 조회한 후, 메아커 탈퇴를 합니다."
@@ -130,14 +133,18 @@ public class MakerController {
                     description = "메이커 조회 실패"
             )
     })
-
-    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Maker")
+    @ApiErrorCodeExample(
+            value = ErrorCode.class,
+            domain = "Maker"
+    )
     @Operation(
             summary = "메이커 조회",
             description = "메이커 id를 이용하여 메이커를 조회합니다."
     )
     @GetMapping("/{makerId}")
-    public ResponseEntity<ResponseTemplate> getMaker(@Parameter(description = "메이커 id") @PathVariable Long makerId) {
+    public ResponseEntity<ResponseTemplate> getMaker(
+            @Parameter(description = "메이커 id") @PathVariable Long makerId
+    ) {
         MakerResponseDTO makerResponseDTO = makerService.getMaker(makerId);
 
         return ResponseEntity.ok(ResponseFactory.getSingleResult(makerResponseDTO));

@@ -21,6 +21,7 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Reward extends BaseEntity {
     private static final int ZERO_STOCK = 0;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rewardId;
@@ -39,19 +40,23 @@ public class Reward extends BaseEntity {
     private String rewardDescription;
 
     @Column(nullable = false)
-    @Min(value = 1, message = "리워드 재고를 입력해주세요.")
+    @Min(value = 1, message = "리워드 재고는 최소 1개 이상입니다.")
+    @NotBlank(message = "리워드 수량이 필요합니다.")
     private Integer rewardQuantity;
 
     @Column(nullable = false)
     @Min(value = 10, message = "리워드 가격은 10 이상입니다.")
+    @NotBlank(message = "리워드 가격이 필요합니다.")
     private Integer rewardPrice;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @NotBlank(message = "리워드 타입을 입력해주세요")
     private RewardType rewardType;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @NotBlank(message = "리워드 상태를 입력해주세요")
     private RewardStatus rewardStatus;
 
     @Column(nullable = false)
@@ -101,7 +106,7 @@ public class Reward extends BaseEntity {
         this.rewardStatus = rewardStatus;
     }
 
-    public void deletedStatus() {
+    public void unActivateStatus() {
         activated = Boolean.FALSE;
     }
 

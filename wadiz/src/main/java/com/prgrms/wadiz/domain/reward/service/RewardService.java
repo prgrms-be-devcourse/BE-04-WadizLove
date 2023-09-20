@@ -105,7 +105,7 @@ public class RewardService {
             throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
         }
 
-        reward.deletedStatus();
+        reward.unActivateStatus();
     }
 
     @Transactional

@@ -19,7 +19,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@Tag(name = "supporters", description = "서포터 API")
+@Tag(
+        name = "supporters",
+        description = "서포터 API"
+)
 @RestController
 @RequestMapping("/api/supporters")
 @RequiredArgsConstructor
@@ -44,9 +47,14 @@ public class SupporterController {
             summary = "서포터 회원가입",
             description = "서포터 요청 양식(SupporterCreateRequestDTO)을 이용하여 서포터 회원가입을 합니다."
     )
-    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Supporter")
+    @ApiErrorCodeExample(
+            value = ErrorCode.class,
+            domain = "Supporter"
+    )
     @PostMapping("/sign-up")
-    public ResponseEntity<ResponseTemplate> signUpSupporter(@RequestBody @Valid SupporterCreateRequestDTO dto) {
+    public ResponseEntity<ResponseTemplate> signUpSupporter(
+            @RequestBody @Valid SupporterCreateRequestDTO dto
+    ) {
         Long supporterId = supporterService.signUpSupporter(dto);
 
         return ResponseEntity.ok(ResponseFactory.getSingleResult(supporterId));
@@ -69,13 +77,17 @@ public class SupporterController {
             summary = "서포터 정보 수정",
             description = "서포터 id를 이용하여 서포터를 조회한 후, 서포터 정보를 수정합니다."
     )
-    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Supporter")
+    @ApiErrorCodeExample(
+            value = ErrorCode.class,
+            domain = "Supporter"
+    )
     @PutMapping(value = "/{supporterId}")
     public ResponseEntity<ResponseTemplate> updateSupporter(
             @Parameter(description = "서포터 id") @PathVariable Long supporterId,
             @RequestBody @Valid SupporterUpdateRequestDTO dto
     ) {
         supporterService.updateSupporter(supporterId, dto);
+
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());
     }
 
@@ -92,14 +104,20 @@ public class SupporterController {
                     description = "서포터 탈퇴 실패"
             )
     })
-    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Supporter")
+    @ApiErrorCodeExample(
+            value = ErrorCode.class,
+            domain = "Supporter"
+    )
     @Operation(
             summary = "서포터 탈퇴",
             description = "서포터 id를 이용하여 서포터를 조회한 후, 해당 서포터를 탈퇴합니다."
     )
     @DeleteMapping("/{supporterId}")
-    public ResponseEntity<ResponseTemplate> deleteSupporter(@Parameter(description = "서포터 id") @PathVariable Long supporterId){
+    public ResponseEntity<ResponseTemplate> deleteSupporter(
+            @Parameter(description = "서포터 id") @PathVariable Long supporterId
+    ){
         supporterService.deleteSupporter(supporterId);
+
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());
     }
 
@@ -116,14 +134,20 @@ public class SupporterController {
                     description = "서포터 조회 실패"
             )
     })
-    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Supporter")
+    @ApiErrorCodeExample(
+            value = ErrorCode.class,
+            domain = "Supporter"
+    )
     @Operation(
             summary = "서포터 조회",
             description = "서포터 id를 이용하여 서포터를 조회합니다."
     )
     @GetMapping("/{supporterId}")
-    public ResponseEntity<ResponseTemplate> getSupporter(@Parameter(description = "서포터 id") @PathVariable Long supporterId) {
+    public ResponseEntity<ResponseTemplate> getSupporter(
+            @Parameter(description = "서포터 id") @PathVariable Long supporterId
+    ) {
         SupporterResponseDTO supporterResponseDTO = supporterService.getSupporter(supporterId);
+
         return ResponseEntity.ok(ResponseFactory.getSingleResult(supporterResponseDTO));
     }
 }

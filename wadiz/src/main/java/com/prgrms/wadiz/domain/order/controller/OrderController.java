@@ -19,7 +19,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@Tag(name = "orders", description = "주문 API")
+@Tag(
+        name = "orders",
+        description = "주문 API"
+)
 @RestController
 @RequestMapping("/api/orders/")
 @RequiredArgsConstructor
@@ -40,7 +43,10 @@ public class OrderController {
                     description = "주문 생성 실패"
             )
     })
-    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Order")
+    @ApiErrorCodeExample(
+            value = ErrorCode.class,
+            domain = "Order"
+    )
     @Operation(
             summary = "주문 생성",
             description = "서포터 id와 주문 요청 양식(OrderCreateRequestDTO)을 이용하여 주문을 생성합니다."
@@ -50,7 +56,10 @@ public class OrderController {
             @Parameter(description = "서포터 id") @PathVariable Long supporterId,
             @RequestBody @Valid OrderCreateRequestDTO orderCreateRequestDto
     ){
-        OrderResponseDTO orderResponseDTO = orderService.createOrder(supporterId, orderCreateRequestDto);
+        OrderResponseDTO orderResponseDTO = orderService.createOrder(
+                supporterId,
+                orderCreateRequestDto
+        );
 
         return ResponseEntity.ok(ResponseFactory.getSingleResult(orderResponseDTO));
     }
@@ -68,7 +77,10 @@ public class OrderController {
                     description = "주문 취소 실패"
             )
     })
-    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Order")
+    @ApiErrorCodeExample(
+            value = ErrorCode.class,
+            domain = "Order"
+    )
     @Operation(
             summary = "주문 취소",
             description = "주문 Id와 주문한 서포터 Id를 이용하여 주문을 취소합니다."
@@ -78,7 +90,10 @@ public class OrderController {
             @Parameter(description = "주문 id") @PathVariable Long orderId,
             @Parameter(description = "서포터 id") @PathVariable Long supporterId
     ){
-        orderService.cancelOrder(supporterId, orderId);
+        orderService.cancelOrder(
+                supporterId,
+                orderId
+        );
 
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());
     }
@@ -96,7 +111,10 @@ public class OrderController {
                     description = "주문 조회 실패"
             )
     })
-    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Order")
+    @ApiErrorCodeExample(
+            value = ErrorCode.class,
+            domain = "Order"
+    )
     @Operation(
             summary = "서포터 주문 기록 조호(단건)",
             description = "주문 Id와 주문한 서포터 Id를 이용하여 특정 주문 정보를 조회합니다."
@@ -106,7 +124,10 @@ public class OrderController {
             @Parameter(description = "주문 id") @PathVariable Long orderId,
             @Parameter(description = "서포터 id") @PathVariable Long supporterId
     ){
-        OrderResponseDTO orderResponseDTO = orderService.getSupporterPurchase(orderId, supporterId);
+        OrderResponseDTO orderResponseDTO = orderService.getSupporterPurchase(
+                orderId,
+                supporterId
+        );
 
         return ResponseEntity.ok(ResponseFactory.getSingleResult(orderResponseDTO));
     }
@@ -124,13 +145,18 @@ public class OrderController {
                     description = "주문 조회 실패"
             )
     })
-    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Order")
+    @ApiErrorCodeExample(
+            value = ErrorCode.class,
+            domain = "Order"
+    )
     @Operation(
             summary = "서포터 주문 기록 조회(다건)",
             description = "주문한 서포터 Id를 이용하여 주문 정보 목록을 조회합니다."
     )
     @GetMapping("supporters/{supporterId}/history")
-    public ResponseEntity<ResponseTemplate> getSupporterPurchaseHistory(@Parameter(description = "서포터 id") @PathVariable Long supporterId){
+    public ResponseEntity<ResponseTemplate> getSupporterPurchaseHistory(
+            @Parameter(description = "서포터 id") @PathVariable Long supporterId
+    ){
         List<OrderResponseDTO> orderResponseDTOs = orderService.getSupporterPurchaseHistory(supporterId);
 
         return ResponseEntity.ok(ResponseFactory.getListResult(orderResponseDTOs));
@@ -149,7 +175,10 @@ public class OrderController {
                     description = "주문 조회 실패"
             )
     })
-    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Order")
+    @ApiErrorCodeExample(
+            value = ErrorCode.class,
+            domain = "Order"
+    )
     @Operation(
             summary = "메이커 프로젝트 기록 조회(다건)",
             description = "프로젝트 Id와 메이커 Id를 이용하여 메이커 주문 목록을 조회합니다."
@@ -159,7 +188,10 @@ public class OrderController {
             @Parameter(description = "프로젝트 Id") @PathVariable Long projectId,
             @Parameter(description = "메이커 Id") @PathVariable Long makerId
     ){
-        List<OrderResponseDTO> orderResponseDTOs = orderService.getMakerProjectOrders(projectId,makerId);
+        List<OrderResponseDTO> orderResponseDTOs = orderService.getMakerProjectOrders(
+                projectId,
+                makerId
+        );
 
         return ResponseEntity.ok(ResponseFactory.getListResult(orderResponseDTOs));
     }

@@ -9,19 +9,24 @@ import lombok.Builder;
 @Schema(description = "리워드 응답 DTO")
 @Builder
 public record RewardResponseDTO(
-
         @Schema(description = "리워드 아이디")
         Long rewardId,
+
         @Schema(description = "리워드명")
         String rewardName,
+
         @Schema(description = "리워드 설명")
         String rewardDescription,
+
         @Schema(description = "리워드 재고")
         Integer rewardQuantity,
+
         @Schema(description = "리워드 가격")
         Integer rewardPrice,
+
         @Schema(description = "리워드 타입")
         RewardType rewardType,
+
         @Schema(description = "리워드 상태")
         RewardStatus rewardStatus
 ) {

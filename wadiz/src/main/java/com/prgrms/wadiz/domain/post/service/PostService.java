@@ -43,11 +43,11 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public PostResponseDTO getPostByProjectId(Long projectId) {
-        Post post = postRepository.findByProjectId(projectId)
+        Post post = postRepository.findByProject_ProjectId(projectId)
                 .orElseThrow(() -> {
                     log.warn("Post for Project {} is not found", projectId);
 
-                    return new BaseException(ErrorCode.POST_NOT_FOUND);
+                    throw new BaseException(ErrorCode.POST_NOT_FOUND);
                 });
 
         return PostResponseDTO.from(post);
@@ -58,11 +58,11 @@ public class PostService {
             Long projectId,
             PostUpdateRequestDTO postUpdateRequestDTO
     ) {
-        Post post = postRepository.findByProjectId(projectId)
+        Post post = postRepository.findByProject_ProjectId(projectId)
                 .orElseThrow(() -> {
                     log.warn("Post for Project {} is not found", projectId);
 
-                    return new BaseException(ErrorCode.POST_NOT_FOUND);
+                    throw new BaseException(ErrorCode.POST_NOT_FOUND);
                 });
 
         if (!isProjectBeforeSetUp(post.getProject())) {
@@ -79,23 +79,22 @@ public class PostService {
 
     @Transactional
     public void deletePost(Long projectId) {
-        Post post = postRepository.findByProjectId(projectId)
+        Post post = postRepository.findByProject_ProjectId(projectId)
                 .orElseThrow(() -> {
                     log.warn("Post for Project {} is not found", projectId);
 
-                    return new BaseException(ErrorCode.POST_NOT_FOUND);
+                    throw new BaseException(ErrorCode.POST_NOT_FOUND);
                 });
 
         if (!isProjectBeforeSetUp(post.getProject())) {
             throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
         }
 
-        postRepository.deleteByProjectId(projectId);
+        postRepository.deleteByProject_ProjectId(projectId);
     }
 
-    @Transactional(readOnly = true)
     public boolean isPostExist(Long projectId) {
-        return postRepository.findByProjectId(projectId).isPresent();
+        return postRepository.findByProject_ProjectId(projectId).isPresent();
     }
 
     private boolean isProjectBeforeSetUp(Project project) {

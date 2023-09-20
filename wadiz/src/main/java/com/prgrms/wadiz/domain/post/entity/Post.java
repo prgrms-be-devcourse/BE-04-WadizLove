@@ -19,7 +19,10 @@ public class Post extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
 
-    @OneToOne
+    @OneToOne(
+            fetch = FetchType.LAZY,
+            optional = false
+    )
     @JoinColumn(name = "project_id")
     private Project project;
 
@@ -33,11 +36,19 @@ public class Post extends BaseEntity {
     private String postDescription;
 
     @Column(nullable = false)
-    @Pattern(regexp = "^https?://.*\\.(?:png|jpg|jpeg|gif)$", message = "올바른 이미지 URL 형식이 아닙니다.")
+    @Pattern(
+            regexp = "^https?://.*\\.(?:png|jpg|jpeg|gif)$",
+            message = "올바른 이미지 URL 형식이 아닙니다."
+    )
+    @NotBlank(message = "게시물 섬네일 이미지를 입력해주세요.")
     private String postThumbNailImage;
 
     @Column(nullable = false)
-    @Pattern(regexp = "^https?://.*\\.(?:png|jpg|jpeg|gif)$", message = "올바른 이미지 URL 형식이 아닙니다.")
+    @Pattern(
+            regexp = "^https?://.*\\.(?:png|jpg|jpeg|gif)$",
+            message = "올바른 이미지 URL 형식이 아닙니다."
+    )
+    @NotBlank(message = "게시물 상세 이미지를 입력해주세요.")
     private String postContentImage;
 
     @Builder

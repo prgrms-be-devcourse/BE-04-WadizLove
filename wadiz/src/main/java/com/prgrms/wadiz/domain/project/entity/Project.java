@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Getter
@@ -18,11 +19,13 @@ public class Project extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long projectId;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "maker_id")
     private Maker maker;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @NotBlank(message = "프로젝트 상태를 입력해주세요.")
     private ProjectStatus projectStatus;
 
     @Builder

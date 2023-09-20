@@ -2,7 +2,6 @@ package com.prgrms.wadiz.domain.maker.entity;
 
 import com.prgrms.wadiz.domain.BaseEntity;
 import com.prgrms.wadiz.domain.maker.MakerStatus;
-import com.prgrms.wadiz.global.annotation.ValidEnum;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,6 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -24,20 +24,31 @@ public class Maker extends BaseEntity{
     private Long makerId;
 
     @Column(nullable = false)
-    @Size(min = 2, message = "이름은 최소 2자 이상입니다.")
+    @Size(
+            min = 2,
+            message = "이름은 최소 2자 이상입니다."
+    )
+    @Pattern(
+            regexp = "^[0-9a-zA-Zㄱ-ㅎ가-힣]*$",
+            message = "올바른 이름 형식이 아닙니다."
+    )
+    @NotBlank(message = "이름을 입력해주세요")
     private String makerName;
 
-    @Column(nullable = false)
+    @Pattern(
+            regexp = "^[0-9a-zA-Zㄱ-ㅎ가-힣]*$",
+            message = "올바른 브랜드 형식이 아닙니다."
+    )
     @NotBlank(message = "브랜드를 입력해주세요.")
     private String makerBrand;
 
     @Column(nullable = false)
-    @Email(message = "이메일을 입력해주세요.")
+    @Email(message = "이메일 형식이 맞지 않습니다.")
+    @NotBlank(message = "이메일을 입력해주세요.")
     private String makerEmail;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    @ValidEnum(enumClass = MakerStatus.class, message = "해당하는 메이커 상태가 존재하지 않습니다.")
     private MakerStatus status = MakerStatus.REGISTERED;
 
     @Builder
