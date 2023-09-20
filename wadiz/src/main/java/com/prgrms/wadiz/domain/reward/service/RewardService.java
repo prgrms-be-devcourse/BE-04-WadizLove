@@ -108,6 +108,11 @@ public class RewardService {
         reward.deletedStatus();
     }
 
+    @Transactional
+    public void deleteRewardsByProjectId(Long projectId) {
+        rewardRepository.deleteAllByProjectId(projectId);
+    }
+
     public boolean isRewardsExist(Long projectId) {
         Optional<List<Reward>> rewards = rewardRepository.findAllByProjectId(projectId);
 
