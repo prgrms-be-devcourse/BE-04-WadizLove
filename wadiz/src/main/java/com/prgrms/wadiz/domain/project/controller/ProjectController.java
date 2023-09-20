@@ -97,6 +97,7 @@ public class ProjectController {
             @Parameter(description = "커서 id")
             @RequestParam(required = false) Long cursorId,
             @Parameter(description = "페이지 size")
+            @RequestParam(required = false) String cursorId,
             @RequestParam int size,
             @Parameter(description = "검색 조건")
             @RequestParam ProjectSearchCondition searchCondition,
