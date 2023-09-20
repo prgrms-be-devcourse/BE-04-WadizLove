@@ -25,7 +25,10 @@ public class BaseEntity {
     @PrePersist
     public void onPrePersist() {
         String customLocalDateTimeFormat = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        LocalDateTime parsedCreateDate = LocalDateTime.parse(customLocalDateTimeFormat, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        LocalDateTime parsedCreateDate = LocalDateTime.parse(
+                customLocalDateTimeFormat,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        );
         this.createdAt = parsedCreateDate;
         this.modifiedAt = parsedCreateDate;
     }
@@ -33,7 +36,10 @@ public class BaseEntity {
     @PreUpdate
     public void onPreUpdate() {
         String customLocalDateTimeFormat = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        LocalDateTime parsedUpdateDate = LocalDateTime.parse(customLocalDateTimeFormat, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        LocalDateTime parsedUpdateDate = LocalDateTime.parse(
+                customLocalDateTimeFormat,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        );
         this.modifiedAt = parsedUpdateDate;
     }
 }
