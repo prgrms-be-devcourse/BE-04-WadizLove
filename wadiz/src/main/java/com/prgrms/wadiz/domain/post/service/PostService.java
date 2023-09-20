@@ -11,9 +11,11 @@ import com.prgrms.wadiz.domain.project.entity.Project;
 import com.prgrms.wadiz.global.util.exception.BaseException;
 import com.prgrms.wadiz.global.util.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PostService {
@@ -42,7 +44,11 @@ public class PostService {
     @Transactional(readOnly = true)
     public PostResponseDTO getPostByProjectId(Long projectId) {
         Post post = postRepository.findByProjectId(projectId)
-                .orElseThrow(() -> new BaseException(ErrorCode.POST_NOT_FOUND));
+                .orElseThrow(() -> {
+                    log.warn("Post for Project {} is not found", projectId);
+
+                    return new BaseException(ErrorCode.POST_NOT_FOUND);
+                });
 
         return PostResponseDTO.from(post);
     }
@@ -53,7 +59,11 @@ public class PostService {
             PostUpdateRequestDTO postUpdateRequestDTO
     ) {
         Post post = postRepository.findByProjectId(projectId)
-                .orElseThrow(() -> new BaseException(ErrorCode.POST_NOT_FOUND));
+                .orElseThrow(() -> {
+                    log.warn("Post for Project {} is not found", projectId);
+
+                    return new BaseException(ErrorCode.POST_NOT_FOUND);
+                });
 
         if (!isProjectBeforeSetUp(post.getProject())) {
             throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
@@ -70,7 +80,11 @@ public class PostService {
     @Transactional
     public void deletePost(Long projectId) {
         Post post = postRepository.findByProjectId(projectId)
-                .orElseThrow(() -> new BaseException(ErrorCode.POST_NOT_FOUND));
+                .orElseThrow(() -> {
+                    log.warn("Post for Project {} is not found", projectId);
+
+                    return new BaseException(ErrorCode.POST_NOT_FOUND);
+                });
 
         if (!isProjectBeforeSetUp(post.getProject())) {
             throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);

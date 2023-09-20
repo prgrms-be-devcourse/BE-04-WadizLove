@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 public record FundingCreateRequestDTO(
 
-        @Schema(description = "펀당 모집 금액", example = "10000000")
+        @Schema(description = "펀딩 모집 금액", example = "10000000")
         @Min(value = 0, message = "펀딩 모집 금액은 0이상의 정수만 허용됩니다.")
         Integer fundingTargetAmount,
 

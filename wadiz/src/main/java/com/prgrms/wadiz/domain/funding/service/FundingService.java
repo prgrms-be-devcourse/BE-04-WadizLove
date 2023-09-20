@@ -12,14 +12,17 @@ import com.prgrms.wadiz.domain.project.entity.Project;
 import com.prgrms.wadiz.global.util.exception.BaseException;
 import com.prgrms.wadiz.global.util.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class FundingService {
+
     private final FundingRepository fundingRepository;
 
     @Transactional
@@ -48,7 +51,11 @@ public class FundingService {
     @Transactional(readOnly = true)
     public FundingResponseDTO getFundingByProjectId(Long projectId) {
         Funding funding = fundingRepository.findByProjectId(projectId)
-                .orElseThrow(() -> new BaseException(ErrorCode.FUNDING_NOT_FOUND));
+                .orElseThrow(() -> {
+                    log.warn("Funding for Project {} is not found", projectId);
+
+                    return new BaseException(ErrorCode.FUNDING_NOT_FOUND);
+                });
 
         FundingStatus fundingStatus = validateFundingDeadline(funding);
 
@@ -65,7 +72,11 @@ public class FundingService {
         }
 
         Funding funding = fundingRepository.findByProjectId(projectId)
-                .orElseThrow(() -> new BaseException(ErrorCode.FUNDING_NOT_FOUND));
+                .orElseThrow(() -> {
+                    log.warn("Funding for Project {} is not found", projectId);
+
+                    return new BaseException(ErrorCode.FUNDING_NOT_FOUND);
+                });
 
         if (!isProjectBeforeSetUp(funding.getProject())) {
             throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
@@ -82,7 +93,11 @@ public class FundingService {
     @Transactional
     public void deleteFunding(Long projectId) {
         Funding funding = fundingRepository.findByProjectId(projectId)
-                .orElseThrow(() -> new BaseException(ErrorCode.FUNDING_NOT_FOUND));
+                .orElseThrow(() -> {
+                    log.warn("Funding for Project {} is not found", projectId);
+
+                    return new BaseException(ErrorCode.FUNDING_NOT_FOUND);
+                });
 
         if (!isProjectBeforeSetUp(funding.getProject())) {
             throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
