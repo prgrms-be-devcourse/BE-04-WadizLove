@@ -46,7 +46,7 @@ public class OrderService {
                 .orElseThrow(() -> {
                     log.error("Supporter {} is not found", supporterId);
 
-                    throw new BaseException(ErrorCode.UNKNOWN);
+                    return new BaseException(ErrorCode.UNKNOWN);
                 });
 
         List<OrderReward> orderRewards = orderCreateRequestDto.orderRewards().stream()
@@ -55,7 +55,7 @@ public class OrderService {
                             .orElseThrow(() -> {
                                 log.error("reward is not found");
 
-                                throw new BaseException(ErrorCode.UNKNOWN);
+                                return new BaseException(ErrorCode.UNKNOWN);
                             });
 
                     Integer orderQuantity = orderRewardRequest.orderQuantity();
@@ -69,7 +69,7 @@ public class OrderService {
 
                     return orderReward;
                 })
-                .collect(Collectors.toList());
+                .toList();
 
         Project project = orderRewards.get(0).getReward().getProject();
 
@@ -83,7 +83,9 @@ public class OrderService {
 
         Funding funding = fundingRepository.findByProjectId(project.getProjectId())
                 .orElseThrow(() -> {
-                    throw new BaseException(ErrorCode.PROJECT_NOT_FOUND);
+                    log.warn("Funding {} is not found", project.getProjectId());
+
+                    return new BaseException(ErrorCode.PROJECT_NOT_FOUND);
                 });
 
         funding.addOrderInfo(order.getTotalOrderPrice());
@@ -104,9 +106,9 @@ public class OrderService {
 
         String postTitle = postRepository.findByProjectId(projectId)
                 .orElseThrow(() -> {
-                    log.error("post is not found");
+                    log.error("Post {} is not found", projectId);
 
-                    throw new BaseException(ErrorCode.POST_NOT_FOUND);
+                    return new BaseException(ErrorCode.POST_NOT_FOUND);
         }).getPostTitle();
 
         List<OrderRewardResponseDTO> orderRewardResponseDTOs = order.getOrderRewards().stream()
@@ -135,7 +137,7 @@ public class OrderService {
                 .orElseThrow(() -> {
                     log.error("Orders are not found by supporterId : {}", supporterId);
 
-                    throw new BaseException(ErrorCode.ORDER_COUNT_ERROR);
+                    return new BaseException(ErrorCode.ORDER_COUNT_ERROR);
                 });
 
         validateSupporter(supporterId,orders.get(0).getSupporter().getSupporterId());
@@ -177,7 +179,7 @@ public class OrderService {
                 .orElseThrow(() -> {
                     log.error("Orders are not found by projectId : {}", projectId);
 
-                    throw new BaseException(ErrorCode.ORDER_COUNT_ERROR);
+                    return new BaseException(ErrorCode.ORDER_COUNT_ERROR);
                 });
 
         validateMaker(makerId,orders.get(0).getProject().getMaker().getMakerId());
@@ -217,14 +219,13 @@ public class OrderService {
                 .orElseThrow(() -> {
                     log.error("Funding is not found");
 
-                    throw new BaseException(ErrorCode.ORDER_NOT_FOUND);
+                    return new BaseException(ErrorCode.ORDER_NOT_FOUND);
                 });
 
         funding.removeOrderInfo(order.getTotalOrderPrice());
 
         order.cancel();
     }
-
 
     private void validateSupporter(Long supporterId, Long orderSupporterId) {
         if (!orderSupporterId.equals(supporterId)){
@@ -241,13 +242,12 @@ public class OrderService {
     }
 
     private Order getOrderInfo(Long orderId) {
-        Order order = orderRepository.findById(orderId).orElseThrow(() -> {
+
+        return orderRepository.findById(orderId).orElseThrow(() -> {
             log.error("Order {} is not found", orderId);
 
-            throw new BaseException(ErrorCode.ORDER_NOT_FOUND);
+            return new BaseException(ErrorCode.ORDER_NOT_FOUND);
         });
-
-        return order;
     }
 
 }
