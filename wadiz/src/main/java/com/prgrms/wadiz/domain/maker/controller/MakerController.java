@@ -55,9 +55,9 @@ public class MakerController {
     )
     @PostMapping("/sign-up")
     public ResponseEntity<ResponseTemplate> signUpMaker(@RequestBody @Valid MakerCreateRequestDTO dto) {
-        makerService.signUpMaker(dto);
+        Long makerId = makerService.signUpMaker(dto);
 
-        return ResponseEntity.ok(ResponseFactory.getSuccessResult());  //TODO : id값 여기까지 함
+        return ResponseEntity.ok(ResponseFactory.getSingleResult(makerId));  //TODO : id값 여기까지 함
     }
 
     /**

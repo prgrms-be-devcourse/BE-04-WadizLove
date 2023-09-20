@@ -8,6 +8,7 @@ import com.prgrms.wadiz.global.annotation.ApiErrorCodeExample;
 import com.prgrms.wadiz.global.util.exception.ErrorCode;
 import com.prgrms.wadiz.global.util.resTemplate.ResponseFactory;
 import com.prgrms.wadiz.global.util.resTemplate.ResponseTemplate;
+import com.prgrms.wadiz.global.util.resTemplate.SingleResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -47,9 +48,9 @@ public class SupporterController {
     @ApiErrorCodeExample(value = ErrorCode.class, domain = "Supporter")
     @PostMapping("/sign-up")
     public ResponseEntity<ResponseTemplate> signUpSupporter(@RequestBody @Valid SupporterCreateRequestDTO dto) {
-        supporterService.signUpSupporter(dto);
+        Long supporterId = supporterService.signUpSupporter(dto);
 
-        return ResponseEntity.ok(ResponseFactory.getSuccessResult());
+        return ResponseEntity.ok(ResponseFactory.getSingleResult(supporterId));
     }
 
     /**

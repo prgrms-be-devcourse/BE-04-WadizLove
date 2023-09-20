@@ -21,7 +21,7 @@ public class MakerService {
     private final MakerRepository makerRepository;
 
     @Transactional
-    public MakerResponseDTO signUpMaker(MakerCreateRequestDTO dto) {
+    public Long signUpMaker(MakerCreateRequestDTO dto) {
         checkDuplicateName(dto.makerName());
         checkDuplicateEmail(dto.makerEmail());
 
@@ -33,7 +33,7 @@ public class MakerService {
 
         Maker savedMaker = makerRepository.save(maker);
 
-        return MakerResponseDTO.from(savedMaker);
+        return savedMaker.getMakerId();
     }
 
     @Transactional
