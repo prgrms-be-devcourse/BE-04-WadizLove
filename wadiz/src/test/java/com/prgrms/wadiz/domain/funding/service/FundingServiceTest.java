@@ -91,7 +91,7 @@ class FundingServiceTest {
                 .build();
 
         // mocking
-        when(fundingRepository.findByProjectId(projectId)).thenReturn(Optional.of(funding));
+        when(fundingRepository.findByProject_ProjectId(projectId)).thenReturn(Optional.of(funding));
 
         // when
         FundingResponseDTO actualFundingResponseDTO = fundingService.getFundingByProjectId(projectId);
@@ -125,7 +125,7 @@ class FundingServiceTest {
         );
 
         // mocking
-        when(fundingRepository.findByProjectId(projectId)).thenReturn(Optional.of(beforeFunding));
+        when(fundingRepository.findByProject_ProjectId(projectId)).thenReturn(Optional.of(beforeFunding));
 
         // when
         fundingService.updateFunding(projectId, fundingUpdateRequestDTO);

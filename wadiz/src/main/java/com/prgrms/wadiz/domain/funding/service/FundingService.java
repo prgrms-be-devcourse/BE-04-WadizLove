@@ -44,7 +44,7 @@ public class FundingService {
                 .project(project)
                 .fundingTargetAmount(fundingCreateRequestDTO.fundingTargetAmount())
                 .fundingStartAt(fundingCreateRequestDTO.fundingStartAt())
-                .fundingCategory(fundingCreateRequestDTO.fundingCategory())
+                .fundingCategory(FundingCategory.valueOf(fundingCreateRequestDTO.fundingCategory()))
                 .fundingEndAt(fundingCreateRequestDTO.fundingEndAt())
                 .build();
 
@@ -53,7 +53,7 @@ public class FundingService {
 
     @Transactional(readOnly = true)
     public FundingResponseDTO getFundingByProjectId(Long projectId) {
-        Funding funding = fundingRepository.findByProject_ProjectId(projectId)
+        Funding funding = fundingRepository.findByProject_ProjectId(projectId) //TODO : 예외 로그
                 .orElseThrow(() -> new BaseException(ErrorCode.FUNDING_NOT_FOUND));
 
         FundingStatus fundingStatus = validateFundingDeadline(funding);
@@ -73,7 +73,7 @@ public class FundingService {
             throw new BaseException(ErrorCode.INVALID_FUNDING_DURATION);
         }
 
-        Funding funding = fundingRepository.findByProject_ProjectId(projectId)
+        Funding funding = fundingRepository.findByProject_ProjectId(projectId)  //TODO : 예외 로그
                 .orElseThrow(() -> new BaseException(ErrorCode.FUNDING_NOT_FOUND));
 
         if (!isProjectBeforeSetUp(funding.getProject())) {
@@ -91,9 +91,9 @@ public class FundingService {
     @Transactional
     public void deleteFunding(Long projectId) {
         Funding funding = fundingRepository.findByProject_ProjectId(projectId)
-                .orElseThrow(() -> new BaseException(ErrorCode.FUNDING_NOT_FOUND));
+                .orElseThrow(() -> new BaseException(ErrorCode.FUNDING_NOT_FOUND));  //TODO : 예외 로그
 
-        if (!isProjectBeforeSetUp(funding.getProject())) {
+        if (!isProjectBeforeSetUp(funding.getProject())) {  //TODO : 예외 로그
 
             throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
         }
@@ -108,6 +108,7 @@ public class FundingService {
     }
 
     private boolean isProjectBeforeSetUp(Project project) {
+
         return project.getProjectStatus() == ProjectStatus.READY;
     }
 
@@ -115,11 +116,13 @@ public class FundingService {
             LocalDateTime fundingStartAt,
             LocalDateTime fundingEndAt
     ) {
+
        return fundingStartAt.isBefore(fundingEndAt);
     }
 
     private FundingStatus validateFundingDeadline(Funding funding){
         if (funding.getFundingEndAt().isBefore(LocalDateTime.now())) {
+
             return FundingStatus.CLOSED;
         }
 

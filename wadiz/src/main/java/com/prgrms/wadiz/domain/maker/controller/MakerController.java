@@ -45,8 +45,10 @@ public class MakerController {
                     description = "메이커 회원가입 실패"
             )
     })
-
-    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Maker")
+    @ApiErrorCodeExample(
+            value = ErrorCode.class,
+            domain = "Maker"
+    )
     @Operation(
             summary = "메이커 회원가입",
             description = "메이커 요청 양식(MakerCreateRequestDTO)을 이용하여 메아커 회원가입을 합니다."
@@ -55,7 +57,7 @@ public class MakerController {
     public ResponseEntity<ResponseTemplate> signUpMaker(@RequestBody @Valid MakerCreateRequestDTO dto) {
         makerService.signUpMaker(dto);
 
-        return ResponseEntity.ok(ResponseFactory.getSuccessResult());
+        return ResponseEntity.ok(ResponseFactory.getSuccessResult());  //TODO : id값 여기까지 함
     }
 
     /**
@@ -71,7 +73,6 @@ public class MakerController {
                     description = "메이커 정보 수정 실패"
             )
     })
-
     @ApiErrorCodeExample(value = ErrorCode.class, domain = "Maker")
     @Operation(
             summary = "메이커 정보수정",
@@ -103,7 +104,6 @@ public class MakerController {
                     description = "메이커 탈퇴 실패"
             )
     })
-  
     @ApiErrorCodeExample(value = ErrorCode.class, domain = "Maker")
     @Operation(
             summary = "메이커 탈퇴",

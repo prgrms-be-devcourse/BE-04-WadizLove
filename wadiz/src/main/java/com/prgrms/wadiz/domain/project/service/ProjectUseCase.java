@@ -73,6 +73,7 @@ public class ProjectUseCase {
                 });
 
         if (!project.getMaker().getMakerId().equals(makerId)) {
+
             throw new BaseException(ErrorCode.MAKER_NOT_FOUND);
         }
 
