@@ -21,7 +21,10 @@ public class Funding extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fundingId;
 
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @OneToOne( //TODO: 적용해줘야 하나 고민 중
+            optional = false,
+            fetch = FetchType.LAZY
+    )
     @JoinColumn(name = "project_id")
     private Project project;
 
@@ -109,6 +112,7 @@ public class Funding extends BaseEntity {
             Integer fundingAmount,
             Integer fundingTargetAmount
     ) {
-        this.fundingSuccess = (fundingAmount >= fundingTargetAmount) ? Boolean.TRUE : Boolean.FALSE;
+        this.fundingSuccess = (fundingAmount >= fundingTargetAmount) ?
+                Boolean.TRUE : Boolean.FALSE;
     }
 }

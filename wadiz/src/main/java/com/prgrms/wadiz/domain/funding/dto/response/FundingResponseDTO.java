@@ -20,7 +20,10 @@ public record FundingResponseDTO(
         FundingCategory fundingCategory,
         FundingStatus fundingStatus
 ) {
-    public static FundingResponseDTO of(Funding funding, FundingStatus fundingStatus) {
+    public static FundingResponseDTO of(
+            Funding funding,
+            FundingStatus fundingStatus
+    ) {
         return FundingResponseDTO.builder()
                 .fundingId(funding.getFundingId())
                 .fundingTargetAmount(funding.getFundingTargetAmount())
