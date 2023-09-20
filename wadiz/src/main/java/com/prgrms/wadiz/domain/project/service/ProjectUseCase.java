@@ -150,6 +150,7 @@ public class ProjectUseCase {
     ) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new BaseException(ErrorCode.PROJECT_NOT_FOUND));
+
         ProjectServiceDTO projectServiceDTO = ProjectServiceDTO.from(project);
 
         postService.createPost(projectServiceDTO, postCreateRequestDTO);

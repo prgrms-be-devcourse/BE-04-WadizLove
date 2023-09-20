@@ -13,47 +13,94 @@ import com.prgrms.wadiz.domain.project.service.ProjectUseCase;
 import com.prgrms.wadiz.domain.reward.dto.request.RewardCreateRequestDTO;
 import com.prgrms.wadiz.domain.reward.dto.request.RewardUpdateRequestDTO;
 import com.prgrms.wadiz.domain.reward.dto.response.RewardResponseDTO;
+import com.prgrms.wadiz.global.annotation.ApiErrorCodeExample;
+import com.prgrms.wadiz.global.util.exception.ErrorCode;
 import com.prgrms.wadiz.global.util.resTemplate.ResponseFactory;
 import com.prgrms.wadiz.global.util.resTemplate.ResponseTemplate;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+@Tag(name = "projects", description = "프로젝트 API")
 @RestController
 @RequestMapping("/api/projects")
 @RequiredArgsConstructor
 public class ProjectController {
     private final ProjectUseCase projectUseCase;
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "프로젝트 개설 성공"),
+            @ApiResponse(responseCode = "404",
+                    description = "프로젝트 개설 실패")
+    })
+    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Project")
+    @Operation(summary = "프로젝트 개설 시작", description = "매이커의 id를 입력받아 프로젝트 개설을 시작한다.")
     @PostMapping("/maker/{makerId}")
-    public ResponseEntity<ResponseTemplate> startProject(@PathVariable Long makerId) {
+    public ResponseEntity<ResponseTemplate> startProject(@Parameter(description = "메이커 id")@PathVariable Long makerId) {
         ProjectResponseDTO projectResponseDTO = projectUseCase.startProject(makerId);
 
         return ResponseEntity.ok(ResponseFactory.getSingleResult(projectResponseDTO));
     }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "프로젝트 생성 성공"),
+            @ApiResponse(responseCode = "404",
+                    description = "프로젝트 생성 실패")
+    })
+    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Project")
+    @Operation(summary = "프로젝트 생성", description = "프로젝트와 매이커의 id를 받아 프로젝트를 생성한다.")
     @PostMapping("/{projectId}/maker/{makerId}/launching")
     public ResponseEntity<ResponseTemplate> createProject(
-            @PathVariable Long projectId,
-            @PathVariable Long makerId
+            @Parameter(description = "프로젝트 id") @PathVariable Long projectId,
+            @Parameter(description = "메이커 id") @PathVariable Long makerId
     ) {
         projectUseCase.createProject(projectId, makerId);
 
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "프로젝트 조회 성공"),
+            @ApiResponse(responseCode = "404",
+                    description = "프로젝트 조회 실패")
+    })
+    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Project")
+    @Operation(summary = "프로젝트 조회", description = "프로젝트의 id로 프로젝트를 조회한다.")
     @GetMapping("/{projectId}")
-    public ResponseEntity<ResponseTemplate> getProject(@PathVariable Long projectId) {
+    public ResponseEntity<ResponseTemplate> getProject(@Parameter(description = "프로젝트 id")@PathVariable Long projectId) {
         ProjectResponseDTO projectResponseDTO = projectUseCase.getProject(projectId);
+
         return ResponseEntity.ok(ResponseFactory.getSingleResult(projectResponseDTO));
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "프로젝트 목록 조회 성공"),
+            @ApiResponse(responseCode = "404",
+                    description = "프로젝트 목록 조회 실패")
+    })
+    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Project")
+    @Operation(summary = "프로젝트 목록 조회", description = "커서 id, 페이지 size, 검색 조건, 분류를 받아 프로젝트 목록을 조회한다.")
     @GetMapping
     public ResponseEntity<ResponseTemplate> getProjects(
+            @Parameter(description = "커서 id")
             @RequestParam(required = false) Long cursorId,
+            @Parameter(description = "페이지 size")
             @RequestParam int size,
+            @Parameter(description = "검색 조건")
             @RequestParam ProjectSearchCondition searchCondition,
+            @Parameter(description = "분류")
             @RequestParam(required = false) String criterion
             ) {
         ProjectSummaryResponseDTO projectSummaryRes = projectUseCase.getProjects(
@@ -66,117 +113,4 @@ public class ProjectController {
         return ResponseEntity.ok(ResponseFactory.getSingleResult(projectSummaryRes));
     }
 
-    /**
-     * Funding 정보 CURD
-     */
-    @PostMapping("/{projectId}/fundings/new")
-    public ResponseEntity<ResponseTemplate> createFunding(
-            @PathVariable Long projectId,
-            @RequestBody @Valid FundingCreateRequestDTO fundingCreateRequestDTO
-    ) {
-        projectUseCase.createFunding(projectId, fundingCreateRequestDTO);
-
-        return ResponseEntity.ok(ResponseFactory.getSuccessResult());
-    }
-
-    @GetMapping("/{projectId}/fundings")
-    public ResponseEntity<ResponseTemplate> getFunding(@PathVariable Long projectId) {
-        FundingResponseDTO fundingResponseDTO = projectUseCase.getFunding(projectId);
-      
-        return ResponseEntity.ok(ResponseFactory.getSingleResult(fundingResponseDTO));
-    }
-
-    @PutMapping("/{projectId}/fundings")
-    public ResponseEntity<ResponseTemplate> updateFunding(
-            @PathVariable Long projectId,
-            @RequestBody @Valid FundingUpdateRequestDTO fundingUpdateRequestDTO
-    ) {
-        projectUseCase.updateFunding(projectId, fundingUpdateRequestDTO);
-
-        return ResponseEntity.ok(ResponseFactory.getSuccessResult());
-    }
-
-    @DeleteMapping("/{projectId}/fundings")
-    public ResponseEntity<ResponseTemplate> deleteFunding(@PathVariable Long projectId) {
-        projectUseCase.deleteFunding(projectId);
-
-        return ResponseEntity.ok(ResponseFactory.getSuccessResult());
-    }
-
-    /**
-     * Post 정보 CURD
-     */
-    @PostMapping("/{projectId}/posts/new")
-    public ResponseEntity<ResponseTemplate> createPost(
-            @PathVariable Long projectId,
-            @RequestBody @Valid PostCreateRequestDTO postCreateRequestDTO
-    ) {
-        projectUseCase.createPost(projectId, postCreateRequestDTO);
-
-        return ResponseEntity.ok(ResponseFactory.getSuccessResult());
-    }
-
-    @GetMapping("/{projectId}/posts")
-    public ResponseEntity<ResponseTemplate> getPost(@PathVariable Long projectId) {
-        PostResponseDTO postResponseDTO = projectUseCase.getPost(projectId);
-
-        return ResponseEntity.ok(ResponseFactory.getSingleResult(postResponseDTO));
-    }
-
-    @PutMapping("/{projectId}/posts")
-    public ResponseEntity<ResponseTemplate> updatePost(
-            @PathVariable Long projectId,
-            @RequestBody @Valid PostUpdateRequestDTO postUpdateRequestDTO
-    ) {
-        projectUseCase.updatePost(projectId, postUpdateRequestDTO);
-
-        return ResponseEntity.ok(ResponseFactory.getSuccessResult());
-    }
-
-    @DeleteMapping("/{projectId}/posts")
-    public ResponseEntity<ResponseTemplate> deletePost(@PathVariable Long projectId) {
-        projectUseCase.deletePost(projectId);
-
-        return ResponseEntity.ok(ResponseFactory.getSuccessResult());
-    }
-
-    /**
-     * Reward 정보 CURD
-     */
-    @PostMapping("/{projectId}/rewards")
-    public ResponseEntity<ResponseTemplate> createReward(
-            @PathVariable Long projectId,
-            @RequestBody @Valid RewardCreateRequestDTO rewardCreateRequestDTO
-    ) {
-        RewardResponseDTO rewardResponseDTO = projectUseCase.createReward(projectId, rewardCreateRequestDTO);
-
-        return ResponseEntity.ok(ResponseFactory.getSingleResult(rewardResponseDTO));
-    }
-
-    @GetMapping("/{projectId}/rewards/{rewardId}")
-    public ResponseEntity<ResponseTemplate> getReward(
-            @PathVariable Long projectId,
-            @PathVariable Long rewardId
-    ){
-        RewardResponseDTO rewardResponseDTO = projectUseCase.getReward(projectId, rewardId);
-        return ResponseEntity.ok(ResponseFactory.getSingleResult(rewardResponseDTO));
-    }
-
-    @PutMapping("/{projectId}/rewards/{rewardId}")
-    public ResponseEntity<ResponseTemplate> updateReward(
-            @PathVariable Long projectId,
-            @PathVariable Long rewardId,
-            @RequestBody @Valid RewardUpdateRequestDTO dto
-    ) {
-        projectUseCase.updateReward(projectId,rewardId, dto);
-        return ResponseEntity.ok(ResponseFactory.getSuccessResult());
-    }
-
-    @DeleteMapping("/{projectId}/rewards/{rewardId}")
-    public ResponseEntity<ResponseTemplate> deleteReward(
-            @PathVariable Long projectId,
-            @PathVariable Long rewardId) {
-        projectUseCase.deleteReward(projectId, rewardId);
-        return ResponseEntity.ok(ResponseFactory.getSuccessResult());
-    }
 }

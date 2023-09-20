@@ -84,6 +84,6 @@ public class ProjectRepositoryImpl implements ProjectRepositoryCustom {
             return null;
         }
 
-        return funding.project.projectId.gt(cursorId);
+        return funding.fundingAmount.lt(cursorId);
     }
 }
