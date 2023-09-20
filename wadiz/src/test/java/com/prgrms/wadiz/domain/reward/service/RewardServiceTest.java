@@ -50,8 +50,8 @@ class RewardServiceTest {
         when(rewardRepository.save(any(Reward.class))).then(AdditionalAnswers.returnsFirstArg());
 
         //when
-        RewardResponseDTO reward = rewardService.createReward(projectServiceDTO, createRequestDTO);
-        Optional<Reward> savedReward = rewardRepository.findById(reward.rewardId());
+        Long rewardId = rewardService.createReward(projectServiceDTO, createRequestDTO);
+        Optional<Reward> savedReward = rewardRepository.findById(rewardId);
 
         //then
         assertThat(savedReward).isNotNull();

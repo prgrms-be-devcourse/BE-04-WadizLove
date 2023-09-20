@@ -34,7 +34,9 @@ public class PostService {
                 .postContentImage(postCreateRequestDTO.postContentImage())
                 .build();
 
-        return postRepository.save(post).getPostId();
+        Post savedPost = postRepository.save(post);
+
+        return savedPost.getPostId();
     }
 
     @Transactional(readOnly = true)

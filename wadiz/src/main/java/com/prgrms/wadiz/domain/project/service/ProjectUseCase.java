@@ -195,7 +195,7 @@ public class ProjectUseCase {
     }
 
     @Transactional
-    public RewardResponseDTO createReward(
+    public void createReward(
             Long projectId,
             RewardCreateRequestDTO rewardCreateRequestDTO
     ) {
@@ -204,7 +204,7 @@ public class ProjectUseCase {
 
         ProjectServiceDTO projectServiceDTO = ProjectServiceDTO.from(project);
 
-        return rewardService.createReward(projectServiceDTO, rewardCreateRequestDTO);
+        rewardService.createReward(projectServiceDTO, rewardCreateRequestDTO);
     }
 
     @Transactional(readOnly = true)

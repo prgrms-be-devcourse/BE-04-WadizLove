@@ -39,9 +39,9 @@ public class MakerController {
     @Operation(summary = "메이커 회원가입", description = "이름, 브랜드, 이름을 입력하여 메아커 회원가입을 한다.")
     @PostMapping("/sign-up")
     public ResponseEntity<ResponseTemplate> signUpMaker(@RequestBody @Valid MakerCreateRequestDTO dto) {
-        MakerResponseDTO makerResponseDTO = makerService.signUpMaker(dto);
+        makerService.signUpMaker(dto);
 
-        return ResponseEntity.ok(ResponseFactory.getSingleResult(makerResponseDTO));
+        return ResponseEntity.ok(ResponseFactory.getSuccessResult());
     }
 
     @ApiResponses(value = {

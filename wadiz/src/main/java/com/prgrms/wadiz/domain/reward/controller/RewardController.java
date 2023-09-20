@@ -43,9 +43,9 @@ public class RewardController {
             @Parameter(description = "프로젝트 id") @PathVariable Long projectId,
             @RequestBody @Valid RewardCreateRequestDTO rewardCreateRequestDTO
     ) {
-        RewardResponseDTO rewardResponseDTO = projectUseCase.createReward(projectId, rewardCreateRequestDTO);
+        projectUseCase.createReward(projectId, rewardCreateRequestDTO);
 
-        return ResponseEntity.ok(ResponseFactory.getSingleResult(rewardResponseDTO));
+        return ResponseEntity.ok(ResponseFactory.getSuccessResult());
     }
 
     @ApiResponses(value = {
