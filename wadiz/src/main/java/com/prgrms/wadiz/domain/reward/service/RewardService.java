@@ -3,6 +3,8 @@ package com.prgrms.wadiz.domain.reward.service;
 import com.prgrms.wadiz.domain.project.ProjectStatus;
 import com.prgrms.wadiz.domain.project.dto.ProjectServiceDTO;
 import com.prgrms.wadiz.domain.project.entity.Project;
+import com.prgrms.wadiz.domain.reward.RewardStatus;
+import com.prgrms.wadiz.domain.reward.RewardType;
 import com.prgrms.wadiz.domain.reward.dto.request.RewardCreateRequestDTO;
 import com.prgrms.wadiz.domain.reward.dto.request.RewardUpdateRequestDTO;
 import com.prgrms.wadiz.domain.reward.dto.response.RewardResponseDTO;
@@ -41,7 +43,7 @@ public class RewardService {
                 .rewardDescription(dto.rewardDescription())
                 .rewardQuantity(dto.rewardQuantity())
                 .rewardPrice(dto.rewardPrice())
-                .rewardType(dto.rewardType())
+                .rewardType(RewardType.valueOf(dto.rewardType()))
                 .build();
 
         Reward savedReward = rewardRepository.save(reward);
@@ -68,7 +70,13 @@ public class RewardService {
             throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
         }
 
-        reward.updateReward(dto.rewardName(),dto.rewardDescription(),dto.rewardQuantity(),dto.rewardPrice(),dto.rewardType(),dto.rewardStatus());
+        reward.updateReward(dto.rewardName(),
+                dto.rewardDescription(),
+                dto.rewardQuantity(),
+                dto.rewardPrice(),
+                RewardType.valueOf(dto.rewardType()),
+                RewardStatus.valueOf(dto.rewardStatus())
+        );
 
         return RewardResponseDTO.from(reward);
     }
