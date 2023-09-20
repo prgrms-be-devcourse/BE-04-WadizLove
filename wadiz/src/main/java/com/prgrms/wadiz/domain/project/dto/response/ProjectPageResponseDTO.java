@@ -1,10 +1,10 @@
 package com.prgrms.wadiz.domain.project.dto.response;
 
-import com.prgrms.wadiz.domain.project.entity.Project;
 import lombok.Builder;
 
 @Builder
 public record ProjectPageResponseDTO(
+        String cursorId,
         Long projectId,
         String title,
         String thumbNailImage,
@@ -13,6 +13,7 @@ public record ProjectPageResponseDTO(
         Integer fundingAmount
 ) {
     public static ProjectPageResponseDTO of(
+            String cursorId,
             Long projectId,
             String title,
             String thumbNailImage,
@@ -21,6 +22,7 @@ public record ProjectPageResponseDTO(
             Integer fundingAmount
     ) {
        return ProjectPageResponseDTO.builder()
+               .cursorId(cursorId)
                .projectId(projectId)
                .title(title)
                .thumbNailImage(thumbNailImage)

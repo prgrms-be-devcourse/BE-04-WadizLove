@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @NoArgsConstructor
 public class PagingDTO {
@@ -14,6 +16,9 @@ public class PagingDTO {
     private String makerBrand;
     private Integer targetFundingAmount;
     private Integer fundingAmount;
+    private LocalDateTime modifiedAt;
+    private LocalDateTime fundingEndAt;
+    private Integer fundingParticipants;
 
     @Builder
     @QueryProjection
@@ -23,7 +28,10 @@ public class PagingDTO {
             String thumbNailImage,
             String makerBrand,
             Integer targetFundingAmount,
-            Integer fundingAmount
+            Integer fundingAmount,
+            LocalDateTime modifiedAt,
+            LocalDateTime fundingEndAt,
+            Integer fundingParticipants
     ){
         this.projectId =projectId;
         this.title = title;
@@ -31,6 +39,9 @@ public class PagingDTO {
         this.makerBrand = makerBrand;
         this.targetFundingAmount = targetFundingAmount;
         this.fundingAmount = fundingAmount;
+        this.modifiedAt = modifiedAt;
+        this.fundingEndAt = fundingEndAt;
+        this.fundingParticipants = fundingParticipants;
     }
 
 }
