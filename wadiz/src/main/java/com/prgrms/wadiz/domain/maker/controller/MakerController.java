@@ -52,10 +52,9 @@ public class MakerController {
     })
     @ApiErrorCodeExample(value = ErrorCode.class, domain = "Maker")
     @Operation(summary = "메이커 정보수정", description = "id를 통해 메이커를 조회한 후, 메아커 정보 수정을 한다.")
-    @Parameter(name = "makerId", description = "메이커 id", in = ParameterIn.PATH)
     @PutMapping("/{makerId}")
     public ResponseEntity<ResponseTemplate> updateMaker(
-            @PathVariable Long makerId,
+            @Parameter(description = "메이커 id") @PathVariable Long makerId,
             @RequestBody @Valid MakerUpdateRequestDTO dto
     ) {
         makerService.updateMaker(makerId, dto);

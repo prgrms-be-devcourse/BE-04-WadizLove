@@ -112,15 +112,16 @@ public class ProjectUseCase {
      * Funding CRUD 서비스
      */
     @Transactional
-    public void createFunding(
+    public Long createFunding(
             Long projectId,
             FundingCreateRequestDTO fundingCreateRequestDTO
     ) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new BaseException(ErrorCode.PROJECT_NOT_FOUND));
+
         ProjectServiceDTO projectServiceDTO = ProjectServiceDTO.from(project);
 
-        fundingService.createFunding(projectServiceDTO, fundingCreateRequestDTO);
+        return fundingService.createFunding(projectServiceDTO, fundingCreateRequestDTO);
     }
 
     @Transactional(readOnly = true)
@@ -145,7 +146,7 @@ public class ProjectUseCase {
      * Post CRUD Service
      */
     @Transactional
-    public void createPost(
+    public Long createPost(
             Long projectId,
             PostCreateRequestDTO postCreateRequestDTO
     ) {
@@ -154,7 +155,7 @@ public class ProjectUseCase {
 
         ProjectServiceDTO projectServiceDTO = ProjectServiceDTO.from(project);
 
-        postService.createPost(projectServiceDTO, postCreateRequestDTO);
+        return postService.createPost(projectServiceDTO, postCreateRequestDTO);
     }
 
     @Transactional(readOnly = true)
@@ -196,7 +197,7 @@ public class ProjectUseCase {
     }
 
     @Transactional
-    public void createReward(
+    public Long createReward(
             Long projectId,
             RewardCreateRequestDTO rewardCreateRequestDTO
     ) {
@@ -205,7 +206,7 @@ public class ProjectUseCase {
 
         ProjectServiceDTO projectServiceDTO = ProjectServiceDTO.from(project);
 
-        rewardService.createReward(projectServiceDTO, rewardCreateRequestDTO);
+        return rewardService.createReward(projectServiceDTO, rewardCreateRequestDTO);
     }
 
     @Transactional(readOnly = true)

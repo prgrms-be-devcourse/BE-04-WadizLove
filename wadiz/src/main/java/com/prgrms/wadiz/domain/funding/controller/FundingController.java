@@ -44,9 +44,9 @@ public class FundingController {
             @PathVariable Long projectId,
             @RequestBody @Valid FundingCreateRequestDTO fundingCreateRequestDTO
     ) {
-        projectUseCase.createFunding(projectId, fundingCreateRequestDTO);
+        Long fundingId = projectUseCase.createFunding(projectId, fundingCreateRequestDTO);
 
-        return ResponseEntity.ok(ResponseFactory.getSuccessResult());
+        return ResponseEntity.ok(ResponseFactory.getSingleResult(fundingId));
     }
 
     @ApiResponses(value = {

@@ -95,9 +95,8 @@ public class ProjectController {
     @GetMapping
     public ResponseEntity<ResponseTemplate> getProjects(
             @Parameter(description = "커서 id")
-            @RequestParam(required = false) Long cursorId,
-            @Parameter(description = "페이지 size")
             @RequestParam(required = false) String cursorId,
+            @Parameter(description = "페이지 size")
             @RequestParam int size,
             @Parameter(description = "검색 조건")
             @RequestParam ProjectSearchCondition searchCondition,
