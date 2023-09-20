@@ -39,9 +39,9 @@ public class SupporterController {
     @ApiErrorCodeExample(value = ErrorCode.class, domain = "Supporter")
     @PostMapping("/sign-up")
     public ResponseEntity<ResponseTemplate> signUpSupporter(@RequestBody @Valid SupporterCreateRequestDTO dto) {
+        supporterService.signUpSupporter(dto);
 
-        Long signUpSupporterId = supporterService.signUpSupporter(dto);
-        return ResponseEntity.ok(ResponseFactory.getSingleResult(signUpSupporterId));
+        return ResponseEntity.ok(ResponseFactory.getSuccessResult());
     }
 
     @ApiResponses(value = {

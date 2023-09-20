@@ -28,11 +28,11 @@ public record RewardCreateRequestDTO(
         @Min(value = 10, message = "리워드 가격을 입력해주세요.")
         Integer rewardPrice,
 
-        @Schema(description = "리워드 타입", allowableValues = {"SUPER_EARLY_BIRD", "EARLY_BIRD", "SINGLE"} ,example = "SINGLE")
+        @Schema(description = "리워드 타입", example = "SINGLE")
         @ValidEnum(enumClass = RewardType.class, message = "리워드 타입을 입력해주세요.")
         String rewardType,
 
-        @Schema(description = "리워드 상태",  allowableValues = {"IN_STOCK", "OUT_OF_STOCK", "SUSPEND"}, example = "IN_STOCK")
+        @Schema(description = "리워드 상태", example = "IN_STOCK")
         @ValidEnum(enumClass = RewardStatus.class, message = "리워드 상태를 입력해주세요.")
         String rewardStatus
 ) {

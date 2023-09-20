@@ -29,7 +29,7 @@ public class RewardService {
     }
 
     @Transactional
-    public RewardResponseDTO createReward(
+    public Long createReward(
             ProjectServiceDTO projectServiceDTO,
             RewardCreateRequestDTO dto
     ) {
@@ -46,9 +46,7 @@ public class RewardService {
 
         Reward savedReward = rewardRepository.save(reward);
 
-        RewardResponseDTO rewardResponseDTO = RewardResponseDTO.from(savedReward);
-
-        return rewardResponseDTO;
+        return savedReward.getRewardId();
     }
 
     @Transactional

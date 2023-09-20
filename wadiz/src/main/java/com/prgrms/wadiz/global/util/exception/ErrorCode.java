@@ -23,10 +23,10 @@ public enum ErrorCode {
 
     SUPPORTER_NOT_FOUND("S0001","서포터 정보를 찾을 수 없습니다."),
 
-    PROJECT_NOT_FOUND("PJ0001", "프로젝트 정보를 찾을 수 없습니다."),
-    PROJECT_ACCESS_DENY("PJ0002", "프로젝트가 개설된 이후로는 접근할 수 없습니다."),
+    PROJECT_NOT_FOUND("P0001", "프로젝트 정보를 찾을 수 없습니다."),
+    PROJECT_ACCESS_DENY("P0002", "프로젝트가 개설된 이후로는 접근할 수 없습니다."),
 
-    POST_NOT_FOUND("P0001", "게시글 정보를 찾을 수 없습니다."),
+    POST_NOT_FOUND("B0001", "게시글 정보를 찾을 수 없습니다."),
 
     ORDER_COUNT_ERROR("O0001", "주문 수량은 1개 이상이어야 합니다."),
     ORDER_NOT_FOUND("O0002","주문 정보를 찾을 수 없습니다." );
