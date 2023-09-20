@@ -15,5 +15,5 @@ public interface FundingRepository extends JpaRepository<Funding, Long> {
     //    @Modifying
 //    @Query("DELETE FROM Funding f WHERE f.project.projectId = :projectId")
 //    void deleteByProjectId(@Param("projectId") Long projectId);
-    void deleteBy_Project_ProjectId(Long projectId); //TODO : 변경가능한데 바꿀 지 상의해보기
+    void deleteByProject_ProjectId(Long projectId); //TODO : 변경가능한데 바꿀 지 상의해보기
 }

@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface RewardRepository extends JpaRepository<Reward,Long> {
 //    @Query("SELECT r FROM Reward r WHERE r.project.projectId = :projectId") //TODO : 체크 필요
-    Optional<List<Reward>> findAllByProjectId(Long projectId);
+    Optional<List<Reward>> findAllByProject_ProjectId(Long projectId);
 
-    void deleteAllByProjectId(Long projectId);
+    void deleteAllByProject_ProjectId(Long projectId);
 }

@@ -110,17 +110,17 @@ public class RewardService {
 
     @Transactional
     public void deleteRewardsByProjectId(Long projectId) {
-        rewardRepository.deleteAllByProjectId(projectId);
+        rewardRepository.deleteAllByProject_ProjectId(projectId);
     }
 
     public boolean isRewardsExist(Long projectId) {
-        Optional<List<Reward>> rewards = rewardRepository.findAllByProjectId(projectId);
+        Optional<List<Reward>> rewards = rewardRepository.findAllByProject_ProjectId(projectId);
 
         return rewards.isPresent();
     }
 
     public List<RewardResponseDTO> getRewardsByProjectId(Long projectId) {
-        List<Reward> rewards = rewardRepository.findAllByProjectId(projectId)
+        List<Reward> rewards = rewardRepository.findAllByProject_ProjectId(projectId)
                 .orElseThrow(() -> {
                     log.warn("Rewards for Project {} is not found", projectId);
 

@@ -81,7 +81,7 @@ public class OrderService {
         orderRewards.forEach(order::addOrderReward);
         orderRewards.forEach(order::calculateTotalOrderPrice);
 
-        Funding funding = fundingRepository.findByProjectId(project.getProjectId())
+        Funding funding = fundingRepository.findByProject_ProjectId(project.getProjectId())
                 .orElseThrow(() -> {
                     log.warn("Funding {} is not found", project.getProjectId());
 
@@ -151,7 +151,7 @@ public class OrderService {
                                 return new BaseException(ErrorCode.POST_NOT_FOUND);
                             }).getPostTitle();
 
-                    FundingCategory fundingCategory = fundingRepository.findByProjectId(order.getProject().getProjectId())
+                    FundingCategory fundingCategory = fundingRepository.findByProject_ProjectId(order.getProject().getProjectId())
                             .orElseThrow(() -> {
                                 log.error("post is not found");
 
@@ -215,7 +215,7 @@ public class OrderService {
 
         validateSupporter(supporterId, order.getSupporter().getSupporterId());
 
-        Funding funding = fundingRepository.findByProjectId(order.getProject().getProjectId())
+        Funding funding = fundingRepository.findByProject_ProjectId(order.getProject().getProjectId())
                 .orElseThrow(() -> {
                     log.error("Funding is not found");
 

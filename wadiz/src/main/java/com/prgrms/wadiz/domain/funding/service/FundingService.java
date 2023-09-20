@@ -44,7 +44,7 @@ public class FundingService {
                 .project(project)
                 .fundingTargetAmount(fundingCreateRequestDTO.fundingTargetAmount())
                 .fundingStartAt(fundingCreateRequestDTO.fundingStartAt())
-                .fundingCategory(FundingCategory.valueOf(fundingCreateRequestDTO.fundingCategory()))
+                .fundingCategory(fundingCreateRequestDTO.fundingCategory())
                 .fundingEndAt(fundingCreateRequestDTO.fundingEndAt())
                 .build();
 
@@ -98,7 +98,7 @@ public class FundingService {
             throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
         }
 
-        fundingRepository.deleteBy_Project_ProjectId(projectId);
+        fundingRepository.deleteByProject_ProjectId(projectId);
     }
 
     @Transactional(readOnly = true)
