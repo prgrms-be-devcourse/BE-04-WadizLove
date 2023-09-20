@@ -26,7 +26,7 @@ public class Funding extends BaseEntity {
     private Project project;
 
     @Column(nullable = false)
-    @Min(value = 0, message = "펀딩 모집 금액은 0이상의 정수만 허용됩니다.")
+    @Min(value = 1, message = "펀딩 모집 금액은 양수만 허용됩니다.")
     private Integer fundingTargetAmount;
 
     @Column(nullable = false)

@@ -9,7 +9,7 @@ import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 
 public record FundingUpdateRequestDTO(
-        @Min(value = 0, message = "펀딩 모집 금액은 0이상의 정수만 허용됩니다.")
+        @Min(value = 1, message = "펀딩 모집 금액은 양수만 허용됩니다.")
         Integer fundingTargetAmount,
 
         @FutureOrPresent(message = "펀딩 시작 시점을 과거 시각으로 설정할 수 없습니다.")
