@@ -28,7 +28,7 @@ public record RewardUpdateRequestDTO(
         @Min(value = 10, message = "리워드 가격을 입력해주세요.")
         Integer rewardPrice,
 
-        @Schema(description = "리워드 타입", allowableValues = {"SUPER_EARLY_BIRD", "EARLY_BIRD", "SINGLE"}, example = "EARLY_BIRD")
+        @Schema(description = "리워드 타입", example = "EARLY_BIRD")
         @ValidEnum(enumClass = RewardType.class, message = "리워드 타입을 입력해주세요.")
         RewardType rewardType,
 
