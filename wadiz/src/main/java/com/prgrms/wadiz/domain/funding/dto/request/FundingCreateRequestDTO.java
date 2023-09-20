@@ -23,7 +23,7 @@ public record FundingCreateRequestDTO(
         LocalDateTime fundingEndAt,
 
         @ValidEnum(enumClass = FundingCategory.class, message = "존재하지 않는 카테고리 입니다.")
-        FundingCategory fundingCategory
+        String fundingCategory
 ) {
 
 }

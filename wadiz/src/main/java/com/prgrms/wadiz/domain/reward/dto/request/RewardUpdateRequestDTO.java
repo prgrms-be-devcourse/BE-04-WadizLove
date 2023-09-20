@@ -30,10 +30,10 @@ public record RewardUpdateRequestDTO(
 
         @Schema(description = "리워드 타입", allowableValues = {"SUPER_EARLY_BIRD", "EARLY_BIRD", "SINGLE"}, example = "EARLY_BIRD")
         @ValidEnum(enumClass = RewardType.class, message = "리워드 타입을 입력해주세요.")
-        RewardType rewardType,
+        String rewardType,
 
         @Schema(description = "리워드 상태", allowableValues = {"IN_STOCK", "OUT_OF_STOCK", "SUSPEND"}, example = "SUSPEND")
         @ValidEnum(enumClass = RewardStatus.class, message = "리워드 타입을 입력해주세요.")
-        RewardStatus rewardStatus
+        String rewardStatus
 ) {
 }
