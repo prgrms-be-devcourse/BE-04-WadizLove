@@ -21,7 +21,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@Tag(name = "makers", description = "메이커 API")
+@Tag(
+        name = "makers",
+        description = "메이커 API"
+)
 @RestController
 @RequestMapping("/api/makers")
 @RequiredArgsConstructor
@@ -42,6 +45,7 @@ public class MakerController {
                     description = "메이커 회원가입 실패"
             )
     })
+
     @ApiErrorCodeExample(value = ErrorCode.class, domain = "Maker")
     @Operation(
             summary = "메이커 회원가입",
@@ -67,6 +71,7 @@ public class MakerController {
                     description = "메이커 정보 수정 실패"
             )
     })
+
     @ApiErrorCodeExample(value = ErrorCode.class, domain = "Maker")
     @Operation(
             summary = "메이커 정보수정",
@@ -77,7 +82,10 @@ public class MakerController {
             @Parameter(description = "메이커 id") @PathVariable Long makerId,
             @RequestBody @Valid MakerUpdateRequestDTO dto
     ) {
-        makerService.updateMaker(makerId, dto);
+        makerService.updateMaker(
+                makerId,
+                dto
+        );
 
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());
     }
@@ -95,6 +103,7 @@ public class MakerController {
                     description = "메이커 탈퇴 실패"
             )
     })
+  
     @ApiErrorCodeExample(value = ErrorCode.class, domain = "Maker")
     @Operation(
             summary = "메이커 탈퇴",
@@ -121,6 +130,7 @@ public class MakerController {
                     description = "메이커 조회 실패"
             )
     })
+
     @ApiErrorCodeExample(value = ErrorCode.class, domain = "Maker")
     @Operation(
             summary = "메이커 조회",

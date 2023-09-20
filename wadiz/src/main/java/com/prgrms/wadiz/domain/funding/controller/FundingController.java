@@ -19,7 +19,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@Tag(name = "fundings", description = "펀딩 API")
+@Tag(
+        name = "fundings",
+        description = "펀딩 API"
+)
 @RestController
 @RequestMapping("/api/projects")
 @RequiredArgsConstructor
@@ -40,6 +43,7 @@ public class FundingController {
                     description = "펀딩 생성 실패"
             )
     })
+  
     @ApiErrorCodeExample(value = ErrorCode.class, domain = "Funding")
     @Operation(
             summary = "펀딩 생성",
@@ -69,6 +73,7 @@ public class FundingController {
                     description = "펀딩 조회 실패"
             )
     })
+  
     @ApiErrorCodeExample(value = ErrorCode.class, domain = "Funding")
     @Operation(
             summary = "펀딩 조회",
@@ -94,6 +99,7 @@ public class FundingController {
                     description = "펀딩 수정 실패"
             )
     })
+
     @ApiErrorCodeExample(value = ErrorCode.class, domain = "Funding")
     @Operation(
             summary = "펀딩 수정",
@@ -104,7 +110,10 @@ public class FundingController {
             @Parameter(description = "프로젝트 id") @PathVariable Long projectId,
             @RequestBody @Valid FundingUpdateRequestDTO fundingUpdateRequestDTO
     ) {
-        projectUseCase.updateFunding(projectId, fundingUpdateRequestDTO);
+        projectUseCase.updateFunding(
+                projectId,
+                fundingUpdateRequestDTO
+        );
 
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());
     }
@@ -122,13 +131,14 @@ public class FundingController {
                     description = "펀딩 삭제 실패"
             )
     })
+
     @ApiErrorCodeExample(value = ErrorCode.class, domain = "Funding")
     @Operation(
             summary = "펀딩 삭제",
             description = "프로젝트 id를 이용하여 펀딩을 조회한 후, 펀딩을 삭제합니다."
     )
     @DeleteMapping("/{projectId}/fundings")
-    public ResponseEntity<ResponseTemplate> deleteFunding(@Parameter(description = "프로젝트 id")@PathVariable Long projectId) {
+    public ResponseEntity<ResponseTemplate> deleteFunding(@Parameter(description = "프로젝트 id") @PathVariable Long projectId) {
         projectUseCase.deleteFunding(projectId);
 
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());

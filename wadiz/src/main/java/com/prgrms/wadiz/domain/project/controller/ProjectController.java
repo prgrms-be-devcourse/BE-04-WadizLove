@@ -142,4 +142,21 @@ public class ProjectController {
         return ResponseEntity.ok(ResponseFactory.getSingleResult(projectSummaryRes));
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "프로젝트 목록 조회 성공"),
+            @ApiResponse(responseCode = "404",
+                    description = "프로젝트 목록 조회 실패")
+    })
+    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Project")
+    @Operation(summary = "프로젝트 런칭 전 삭제", description = "프로젝트 id를 받아 프로젝트와 연결된 (funding,post,reward를 모두 삭제한다.")
+    @DeleteMapping("{projectId}")
+    public ResponseEntity<ResponseTemplate> deleteProjectBeforeLaunching(
+            @PathVariable Long projectId
+    ){
+        projectUseCase.deleteProject(projectId);
+
+        return ResponseEntity.ok(ResponseFactory.getSuccessResult());
+    }
+
 }

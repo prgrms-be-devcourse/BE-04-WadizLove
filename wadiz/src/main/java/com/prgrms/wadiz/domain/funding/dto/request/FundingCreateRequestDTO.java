@@ -19,11 +19,20 @@ public record FundingCreateRequestDTO(
 
         @Schema(description = "펀딩 시작 시점")
         @FutureOrPresent(message = "펀딩 시작 시점을 과거 시각으로 설정할 수 없습니다.")
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+        @JsonFormat(
+                shape = JsonFormat.Shape.STRING,
+                pattern = "yyyy-MM-dd HH:mm:ss",
+                timezone = "Asia/Seoul"
+        )
         LocalDateTime fundingStartAt,
+
         @Schema(description = "펀딩 종료 시점")
         @FutureOrPresent(message = "펀딩 종료 시점을 과거 시각으로 설정할 수 없습니다.")
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+        @JsonFormat(
+                shape = JsonFormat.Shape.STRING,
+                pattern = "yyyy-MM-dd HH:mm:ss",
+                timezone = "Asia/Seoul"
+        )
         LocalDateTime fundingEndAt,
 
         @Schema(description = "펀딩 카테고리", example = "TECH")

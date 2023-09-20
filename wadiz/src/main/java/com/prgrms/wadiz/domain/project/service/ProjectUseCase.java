@@ -13,6 +13,7 @@ import com.prgrms.wadiz.domain.post.dto.request.PostCreateRequestDTO;
 import com.prgrms.wadiz.domain.post.dto.request.PostUpdateRequestDTO;
 import com.prgrms.wadiz.domain.post.dto.response.PostResponseDTO;
 import com.prgrms.wadiz.domain.post.service.PostService;
+import com.prgrms.wadiz.domain.project.ProjectStatus;
 import com.prgrms.wadiz.domain.project.condition.ProjectSearchCondition;
 import com.prgrms.wadiz.domain.project.dto.ProjectServiceDTO;
 import com.prgrms.wadiz.domain.project.dto.response.PagingDTO;
@@ -294,6 +295,31 @@ public class ProjectUseCase {
         );
     }
 
+    @Transactional
+    public void deleteProject(Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> {
+                    log.warn("project : {} is not found", projectId);
+
+                    throw new BaseException(ErrorCode.PROJECT_NOT_FOUND);
+                });
+
+        if (!isProjectBeforeSetUp(project)) {
+            throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
+        }
+
+        rewardService.deleteRewardsByProjectId(projectId);
+        postService.deletePost(projectId);
+        fundingService.deleteFunding(projectId);
+
+        projectRepository.deleteById(projectId);
+
+    }
+
+    private boolean isProjectBeforeSetUp(Project project) {
+        return project.getProjectStatus() == ProjectStatus.READY;
+    }
+
     private String generateCursor(String criterion,PagingDTO pagingDTO){
         if (criterion == null){
             return String.format("%012d",pagingDTO.getFundingParticipants())
@@ -323,5 +349,6 @@ public class ProjectUseCase {
         }
 
     }
+
 
 }
