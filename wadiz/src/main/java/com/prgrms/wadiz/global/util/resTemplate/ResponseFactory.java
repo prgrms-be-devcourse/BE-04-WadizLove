@@ -11,6 +11,7 @@ public class ResponseFactory {
         SingleResult<T> result = new SingleResult<>();
         result.setData(data);
         setSuccessResult(result);
+
         return result;
     }
 
@@ -19,6 +20,7 @@ public class ResponseFactory {
         ListResult<T> result = new ListResult<>();
         result.setData(list);
         setSuccessResult(result);
+
         return result;
     }
 
@@ -26,6 +28,7 @@ public class ResponseFactory {
     public static ResponseTemplate getSuccessResult() {
         ResponseTemplate result = new ResponseTemplate();
         setSuccessResult(result);
+
         return result;
     }
 
@@ -33,6 +36,7 @@ public class ResponseFactory {
     public static ResponseTemplate getFailResult(String code, String message) {
         ResponseTemplate result = new ResponseTemplate();
         setFailResult(result, code, message);
+
         return result;
     }
 

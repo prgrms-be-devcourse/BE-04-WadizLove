@@ -1,6 +1,5 @@
 package com.prgrms.wadiz.global.util.resTemplate;
 
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;

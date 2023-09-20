@@ -38,7 +38,7 @@ public class SupporterService {
                 .orElseThrow(() -> {
                     log.warn("Supporter {} is not found", supporterId);
 
-                    throw new BaseException(ErrorCode.SUPPORTER_NOT_FOUND);
+                    return new BaseException(ErrorCode.SUPPORTER_NOT_FOUND);
                 });
 
         return SupporterResponseDTO.of(
@@ -59,7 +59,7 @@ public class SupporterService {
                 .orElseThrow(() -> {
                     log.warn("Supporter {} is not found", supporterId);
 
-                    throw new BaseException(ErrorCode.SUPPORTER_NOT_FOUND);
+                    return new BaseException(ErrorCode.SUPPORTER_NOT_FOUND);
                 });
 
         supporter.updateSupporter(
@@ -79,7 +79,7 @@ public class SupporterService {
                 .orElseThrow(() -> {
                     log.warn("Supporter {} is not found", supporterId);
 
-                    throw new BaseException(ErrorCode.SUPPORTER_NOT_FOUND);
+                    return new BaseException(ErrorCode.SUPPORTER_NOT_FOUND);
                 });
 
         supporter.unregisteredSupporter();
