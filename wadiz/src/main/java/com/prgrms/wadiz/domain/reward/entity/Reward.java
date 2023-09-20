@@ -1,14 +1,11 @@
 package com.prgrms.wadiz.domain.reward.entity;
 
+import com.prgrms.wadiz.domain.BaseEntity;
 import com.prgrms.wadiz.domain.project.entity.Project;
 import com.prgrms.wadiz.domain.reward.RewardStatus;
 import com.prgrms.wadiz.domain.reward.RewardType;
-import com.prgrms.wadiz.domain.BaseEntity;
-
-import com.prgrms.wadiz.global.annotation.ValidEnum;
 import com.prgrms.wadiz.global.util.exception.BaseException;
 import com.prgrms.wadiz.global.util.exception.ErrorCode;
-
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -51,12 +48,10 @@ public class Reward extends BaseEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    @ValidEnum(enumClass = RewardType.class, message = "리워드 타입을 입력해주세요.")
     private RewardType rewardType;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    @ValidEnum(enumClass = RewardStatus.class, message = "리워드 상태를 입력해주세요.")
     private RewardStatus rewardStatus;
 
     @Column(nullable = false)

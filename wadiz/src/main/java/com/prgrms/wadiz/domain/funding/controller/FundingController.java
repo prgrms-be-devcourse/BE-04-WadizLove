@@ -19,7 +19,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@Tag(name = "fundings", description = "펀딩 API")
+@Tag(
+        name = "fundings",
+        description = "펀딩 API"
+)
 @RestController
 @RequestMapping("/api/projects")
 @RequiredArgsConstructor
@@ -36,8 +39,14 @@ public class FundingController {
             @ApiResponse(responseCode = "404",
                     description = "펀딩 생성 실패")
     })
-    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Funding")
-    @Operation(summary = "펀딩 생성", description = "프로젝트 id를 받고, 펀딩 모집 금액, 펀딩 시작 시점, 펀딩 종료 시점, 펀딩 카테고리를 입력해 펀딩을 생성한다.")
+    @ApiErrorCodeExample(
+            value = ErrorCode.class,
+            domain = "Funding"
+    )
+    @Operation(
+            summary = "펀딩 생성",
+            description = "프로젝트 id를 받고, 펀딩 모집 금액, 펀딩 시작 시점, 펀딩 종료 시점, 펀딩 카테고리를 입력해 펀딩을 생성한다."
+    )
     @PostMapping("/{projectId}/fundings/new")
     public ResponseEntity<ResponseTemplate> createFunding(
             @Parameter(description = "프로젝트 id")
@@ -55,10 +64,16 @@ public class FundingController {
             @ApiResponse(responseCode = "404",
                     description = "펀딩 조회 실패")
     })
-    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Funding")
-    @Operation(summary = "펀딩 조회", description = "프로젝트 id를 통해 펀딩을 조회한다.")
+    @ApiErrorCodeExample(
+            value = ErrorCode.class,
+            domain = "Funding"
+    )
+    @Operation(
+            summary = "펀딩 조회",
+            description = "프로젝트 id를 통해 펀딩을 조회한다."
+    )
     @GetMapping("/{projectId}/fundings")
-    public ResponseEntity<ResponseTemplate> getFunding(@Parameter(description = "프로젝트 id")@PathVariable Long projectId) {
+    public ResponseEntity<ResponseTemplate> getFunding(@Parameter(description = "프로젝트 id") @PathVariable Long projectId) {
         FundingResponseDTO fundingResponseDTO = projectUseCase.getFunding(projectId);
 
         return ResponseEntity.ok(ResponseFactory.getSingleResult(fundingResponseDTO));
@@ -70,14 +85,23 @@ public class FundingController {
             @ApiResponse(responseCode = "404",
                     description = "펀딩 수정 실패")
     })
-    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Funding")
-    @Operation(summary = "펀딩 수정", description = "프로젝트 id를 통해 펀딩을 조회한 후, 펀딩 정보를 수정한다.")
+    @ApiErrorCodeExample(
+            value = ErrorCode.class,
+            domain = "Funding"
+    )
+    @Operation(
+            summary = "펀딩 수정",
+            description = "프로젝트 id를 통해 펀딩을 조회한 후, 펀딩 정보를 수정한다."
+    )
     @PutMapping("/{projectId}/fundings")
     public ResponseEntity<ResponseTemplate> updateFunding(
             @Parameter(description = "프로젝트 id") @PathVariable Long projectId,
             @RequestBody @Valid FundingUpdateRequestDTO fundingUpdateRequestDTO
     ) {
-        projectUseCase.updateFunding(projectId, fundingUpdateRequestDTO);
+        projectUseCase.updateFunding(
+                projectId,
+                fundingUpdateRequestDTO
+        );
 
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());
     }
@@ -88,10 +112,16 @@ public class FundingController {
             @ApiResponse(responseCode = "404",
                     description = "펀딩 삭제 실패")
     })
-    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Funding")
-    @Operation(summary = "펀딩 삭제", description = "프로젝트 id를 통해 펀딩을 조회한 후, 펀딩을 삭제한다.")
+    @ApiErrorCodeExample(
+            value = ErrorCode.class,
+            domain = "Funding"
+    )
+    @Operation(
+            summary = "펀딩 삭제",
+            description = "프로젝트 id를 통해 펀딩을 조회한 후, 펀딩을 삭제한다."
+    )
     @DeleteMapping("/{projectId}/fundings")
-    public ResponseEntity<ResponseTemplate> deleteFunding(@Parameter(description = "프로젝트 id")@PathVariable Long projectId) {
+    public ResponseEntity<ResponseTemplate> deleteFunding(@Parameter(description = "프로젝트 id") @PathVariable Long projectId) {
         projectUseCase.deleteFunding(projectId);
 
         return ResponseEntity.ok(ResponseFactory.getSuccessResult());

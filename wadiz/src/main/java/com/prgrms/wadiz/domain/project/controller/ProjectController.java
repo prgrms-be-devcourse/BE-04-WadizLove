@@ -1,33 +1,21 @@
 package com.prgrms.wadiz.domain.project.controller;
 
-import com.prgrms.wadiz.domain.post.dto.request.PostCreateRequestDTO;
-import com.prgrms.wadiz.domain.post.dto.request.PostUpdateRequestDTO;
-import com.prgrms.wadiz.domain.post.dto.response.PostResponseDTO;
-import com.prgrms.wadiz.domain.funding.dto.request.FundingCreateRequestDTO;
-import com.prgrms.wadiz.domain.funding.dto.request.FundingUpdateRequestDTO;
-import com.prgrms.wadiz.domain.funding.dto.response.FundingResponseDTO;
 import com.prgrms.wadiz.domain.project.condition.ProjectSearchCondition;
 import com.prgrms.wadiz.domain.project.dto.response.ProjectResponseDTO;
 import com.prgrms.wadiz.domain.project.dto.response.ProjectSummaryResponseDTO;
 import com.prgrms.wadiz.domain.project.service.ProjectUseCase;
-import com.prgrms.wadiz.domain.reward.dto.request.RewardCreateRequestDTO;
-import com.prgrms.wadiz.domain.reward.dto.request.RewardUpdateRequestDTO;
-import com.prgrms.wadiz.domain.reward.dto.response.RewardResponseDTO;
 import com.prgrms.wadiz.global.annotation.ApiErrorCodeExample;
 import com.prgrms.wadiz.global.util.exception.ErrorCode;
 import com.prgrms.wadiz.global.util.resTemplate.ResponseFactory;
 import com.prgrms.wadiz.global.util.resTemplate.ResponseTemplate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @Tag(name = "projects", description = "프로젝트 API")
 @RestController
@@ -111,6 +99,23 @@ public class ProjectController {
         );
 
         return ResponseEntity.ok(ResponseFactory.getSingleResult(projectSummaryRes));
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "프로젝트 목록 조회 성공"),
+            @ApiResponse(responseCode = "404",
+                    description = "프로젝트 목록 조회 실패")
+    })
+    @ApiErrorCodeExample(value = ErrorCode.class, domain = "Project")
+    @Operation(summary = "프로젝트 런칭 전 삭제", description = "프로젝트 id를 받아 프로젝트와 연결된 (funding,post,reward를 모두 삭제한다.")
+    @DeleteMapping("{projectId}")
+    public ResponseEntity<ResponseTemplate> deleteProjectBeforeLaunching(
+            @PathVariable Long projectId
+    ){
+        projectUseCase.deleteProject(projectId);
+
+        return ResponseEntity.ok(ResponseFactory.getSuccessResult());
     }
 
 }

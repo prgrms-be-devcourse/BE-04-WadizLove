@@ -30,16 +30,18 @@ public class FundingService {
     ) {
         Project project = ProjectServiceDTO.toEntity(projectServiceDTO);
 
-        if (!isFundingStartAtBeforeFundingEndAt(fundingCreateRequestDTO.fundingStartAt(), fundingCreateRequestDTO.fundingEndAt())) {
+        if (!isFundingStartAtBeforeFundingEndAt(
+                fundingCreateRequestDTO.fundingStartAt(),
+                fundingCreateRequestDTO.fundingEndAt())
+        ) {
             throw new BaseException(ErrorCode.INVALID_FUNDING_DURATION);
         }
 
         Funding funding = Funding.builder()
                 .project(project)
-                .fundingCategory(FundingCategory.valueOf(fundingCreateRequestDTO.fundingCategory()))
                 .fundingTargetAmount(fundingCreateRequestDTO.fundingTargetAmount())
                 .fundingStartAt(fundingCreateRequestDTO.fundingStartAt())
-
+                .fundingCategory(FundingCategory.valueOf(fundingCreateRequestDTO.fundingCategory()))
                 .fundingEndAt(fundingCreateRequestDTO.fundingEndAt())
                 .build();
 
@@ -48,7 +50,7 @@ public class FundingService {
 
     @Transactional(readOnly = true)
     public FundingResponseDTO getFundingByProjectId(Long projectId) {
-        Funding funding = fundingRepository.findByProjectId(projectId)
+        Funding funding = fundingRepository.findByProject_ProjectId(projectId)
                 .orElseThrow(() -> new BaseException(ErrorCode.FUNDING_NOT_FOUND));
 
         FundingStatus fundingStatus = validateFundingDeadline(funding);
@@ -61,11 +63,14 @@ public class FundingService {
             Long projectId,
             FundingUpdateRequestDTO fundingUpdateRequestDTO
     ) {
-        if (!isFundingStartAtBeforeFundingEndAt(fundingUpdateRequestDTO.fundingStartAt(), fundingUpdateRequestDTO.fundingEndAt())) {
+        if (!isFundingStartAtBeforeFundingEndAt(
+                fundingUpdateRequestDTO.fundingStartAt(),
+                fundingUpdateRequestDTO.fundingEndAt())
+        ) {
             throw new BaseException(ErrorCode.INVALID_FUNDING_DURATION);
         }
 
-        Funding funding = fundingRepository.findByProjectId(projectId)
+        Funding funding = fundingRepository.findByProject_ProjectId(projectId)
                 .orElseThrow(() -> new BaseException(ErrorCode.FUNDING_NOT_FOUND));
 
         if (!isProjectBeforeSetUp(funding.getProject())) {
@@ -76,25 +81,27 @@ public class FundingService {
                 fundingUpdateRequestDTO.fundingTargetAmount(),
                 fundingUpdateRequestDTO.fundingStartAt(),
                 fundingUpdateRequestDTO.fundingEndAt(),
-                fundingUpdateRequestDTO.fundingCategory()
+                FundingCategory.valueOf(fundingUpdateRequestDTO.fundingCategory())
         );
     }
 
     @Transactional
     public void deleteFunding(Long projectId) {
-        Funding funding = fundingRepository.findByProjectId(projectId)
+        Funding funding = fundingRepository.findByProject_ProjectId(projectId)
                 .orElseThrow(() -> new BaseException(ErrorCode.FUNDING_NOT_FOUND));
 
         if (!isProjectBeforeSetUp(funding.getProject())) {
+
             throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
         }
 
-        fundingRepository.deleteByProjectId(projectId);
+        fundingRepository.deleteBy_Project_ProjectId(projectId);
     }
 
     @Transactional(readOnly = true)
     public boolean isFundingExist(Long projectId) {
-        return fundingRepository.findByProjectId(projectId).isPresent();
+
+        return fundingRepository.findByProject_ProjectId(projectId).isPresent();
     }
 
     private boolean isProjectBeforeSetUp(Project project) {

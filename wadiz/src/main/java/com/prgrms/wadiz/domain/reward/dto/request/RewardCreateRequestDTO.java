@@ -29,11 +29,14 @@ public record RewardCreateRequestDTO(
         Integer rewardPrice,
 
         @Schema(description = "리워드 타입", example = "SINGLE")
-        @ValidEnum(enumClass = RewardType.class, message = "리워드 타입을 입력해주세요.")
+        @ValidEnum(enumClass = RewardType.class, message = "리워드 타입을 입력해주세요.",
+                ignoreCase = true)
         String rewardType,
 
         @Schema(description = "리워드 상태", example = "IN_STOCK")
-        @ValidEnum(enumClass = RewardStatus.class, message = "리워드 상태를 입력해주세요.")
+        @ValidEnum(enumClass = RewardStatus.class,
+                message = "리워드 상태를 입력해주세요.",
+                ignoreCase = true)
         String rewardStatus
 ) {
 }
