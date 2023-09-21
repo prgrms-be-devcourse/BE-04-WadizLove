@@ -367,6 +367,7 @@ public class ProjectUseCase {
      * Project 상태가 개설된 상태인지 확인
      */
     private boolean isProjectBeforeSetUp(Project project) {
+
         return project.getProjectStatus() == ProjectStatus.READY;
     }
 
@@ -405,8 +406,7 @@ public class ProjectUseCase {
                         +String.format("%08d",pagingDTO.getProjectId());
             default:
 
-                return String.format("%012d",pagingDTO.getFundingParticipants())
-                        +String.format("%08d",pagingDTO.getProjectId());
+                throw new BaseException(ErrorCode.UNKNOWN);
         }
     }
 }

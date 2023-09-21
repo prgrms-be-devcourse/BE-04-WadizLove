@@ -10,11 +10,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+@Slf4j
 @Entity
 @Getter
 @Table(name = "rewards")
@@ -40,7 +42,7 @@ public class Reward extends BaseEntity {
     private String rewardDescription;
 
     @Column(nullable = false)
-    @Min(value = 1, message = "리워드 재고는 최소 1개 이상입니다.")
+    @Min(value = 0, message = "리워드 재고는 양수입니다.")
     @NotNull(message = "리워드 수량이 필요합니다.")
     private Integer rewardQuantity;
 
@@ -66,7 +68,9 @@ public class Reward extends BaseEntity {
         int restQuantity = this.rewardQuantity - rewardQuantity;
 
         if (restQuantity < ZERO_STOCK) {
-            throw new BaseException(ErrorCode.UNKNOWN);
+            log.warn("orderStock is over than rewardQuantity");
+
+            throw new BaseException(ErrorCode.ORDER_COUNT_EXCEED);
         }
 
         this.rewardQuantity = restQuantity;

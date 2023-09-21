@@ -108,9 +108,9 @@ public class PostService {
 
                 throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
             }
-        }
 
-        postRepository.deleteByProject_ProjectId(projectId);
+            postRepository.deleteByProject_ProjectId(projectId);
+        }
     }
 
     /**

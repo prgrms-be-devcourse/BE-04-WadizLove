@@ -31,7 +31,8 @@ public enum ErrorCode {
     CANNOT_CREATE_POST("B0002", "게시글을 새로 생성할 수 없습니다."),
 
     ORDER_COUNT_ERROR("O0001", "주문 수량은 1개 이상이어야 합니다."),
-    ORDER_NOT_FOUND("O0002","주문 정보를 찾을 수 없습니다." );
+    ORDER_NOT_FOUND("O0002","주문 정보를 찾을 수 없습니다." ),
+    ORDER_COUNT_EXCEED("O0003", "주문 수량이 재고 수량을 초과했습니다.");
 
     private String code;
     private String errorMessage;

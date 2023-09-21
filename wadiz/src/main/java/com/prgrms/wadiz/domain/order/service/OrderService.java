@@ -73,6 +73,7 @@ public class OrderService {
                             .orderRewardPrice(reward.getRewardPrice())
                             .orderRewardQuantity(orderQuantity)
                             .build();
+
                     reward.removeStock(orderQuantity);
 
                     return orderReward;
@@ -100,7 +101,6 @@ public class OrderService {
                 });
 
         funding.addOrderInfo(order.getTotalOrderPrice());
-
         return OrderResponseDTO.of(orderRepository.save(order).getOrderId());
     }
 
