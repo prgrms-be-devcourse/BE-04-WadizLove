@@ -1,14 +1,14 @@
 package com.prgrms.wadiz.domain.project.entity;
 
+import com.prgrms.wadiz.domain.BaseEntity;
 import com.prgrms.wadiz.domain.maker.entity.Maker;
 import com.prgrms.wadiz.domain.project.ProjectStatus;
-import com.prgrms.wadiz.domain.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 
 @Entity
 @Getter
@@ -25,7 +25,6 @@ public class Project extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    @NotBlank(message = "프로젝트 상태를 입력해주세요.")
     private ProjectStatus projectStatus;
 
     @Builder

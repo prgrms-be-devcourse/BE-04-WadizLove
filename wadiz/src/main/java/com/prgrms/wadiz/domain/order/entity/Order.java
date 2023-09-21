@@ -13,7 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,11 +43,11 @@ public class Order extends BaseEntity {
     private List<OrderReward> orderRewards = new ArrayList<>();
 
     @Column(nullable = false)
-    @NotBlank(message = "총 주문 금액을 입력하세요")
+    @NotNull(message = "총 주문 금액을 입력하세요")
     private Integer totalOrderPrice;
 
     @Enumerated(EnumType.STRING)
-    @NotBlank(message = "주문 상태를 입력하세요")
+    @NotNull(message = "주문 상태를 입력하세요")
     private OrderStatus orderStatus;
 
     @Builder

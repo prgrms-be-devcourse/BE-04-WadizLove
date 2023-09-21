@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -30,11 +30,11 @@ public class Supporter extends BaseEntity {
             regexp = "^[0-9a-zA-Zㄱ-ㅎ가-힣]*$",
             message = "올바른 이름 형식이 아닙니다."
     )
-    @NotBlank(message = "서포터 이름을 입력해주세요")
+    @NotNull(message = "서포터 이름을 입력해주세요")
     private String supporterName;
 
     @Column(nullable = false)
-    @NotBlank(message = "이메일 정보는 빈칸이 될 수 없습니다.")
+    @NotNull(message = "이메일 정보는 빈칸이 될 수 없습니다.")
     @Email(message = "이메일 정보를 입력해 주세요")
     private String supporterEmail;
 

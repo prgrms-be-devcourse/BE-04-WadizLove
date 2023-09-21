@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 public record FundingUpdateRequestDTO(
@@ -19,7 +20,7 @@ public record FundingUpdateRequestDTO(
                 value = 1,
                 message = "펀딩 모집 금액은 양수만 허용됩니다."
         )
-        @NotBlank(message = "펀딩 모집 금액을 입력해주세요")
+        @NotNull(message = "펀딩 모집 금액을 입력해주세요")
         Integer fundingTargetAmount,
 
         @Schema(
@@ -33,7 +34,7 @@ public record FundingUpdateRequestDTO(
                 pattern = "yyyy-MM-dd HH:mm:ss",
                 timezone = "Asia/Seoul"
         )
-        @NotBlank(message = "펀딩 시작 시간을 입력해주세요")
+        @NotNull(message = "펀딩 시작 시간을 입력해주세요")
         LocalDateTime fundingStartAt,
 
         @Schema(
@@ -47,7 +48,7 @@ public record FundingUpdateRequestDTO(
                 pattern = "yyyy-MM-dd HH:mm:ss",
                 timezone = "Asia/Seoul"
         )
-        @NotBlank(message = "펀딩 종료 시간을 입력해주세요")
+        @NotNull(message = "펀딩 종료 시간을 입력해주세요")
         LocalDateTime fundingEndAt,
 
         @Schema(description = "펀딩 카테고리", example = "FASHION")
