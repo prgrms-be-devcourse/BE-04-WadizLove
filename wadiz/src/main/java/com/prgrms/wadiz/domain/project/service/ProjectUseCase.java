@@ -49,7 +49,7 @@ public class ProjectUseCase {
     private final ProjectRepository projectRepository;
 
     /**
-     * Project 관련 로직
+     * Project 개설
      */
     @Transactional
     public ProjectResponseDTO startProject(Long makerId) {
@@ -63,6 +63,9 @@ public class ProjectUseCase {
         return ProjectResponseDTO.of(projectRepository.save(project).getProjectId());
     }
 
+    /**
+     * Project 런칭
+     */
     @Transactional
     public void createProject(
             Long projectId,
@@ -91,6 +94,9 @@ public class ProjectUseCase {
         project.setUpProject();
     }
 
+    /**
+     * Project 조회
+     */
 //    @Cacheable(value = "projects", key = "#projectId")
     @Transactional(readOnly = true)
     public ProjectResponseDTO getProject(Long projectId) {
@@ -122,7 +128,7 @@ public class ProjectUseCase {
     }
 
     /**
-     * Funding CRUD 서비스
+     * Funding CRUD service
      */
     @Transactional
     public Long createFunding(
@@ -211,30 +217,6 @@ public class ProjectUseCase {
      * Reward Service 관련 로직
      */
     @Transactional
-    public void updateReward(
-            Long projectId,
-            Long rewardId,
-            RewardUpdateRequestDTO dto
-    ) {
-        rewardService.updateReward(
-                projectId,
-                rewardId,
-                dto
-        );
-    }
-
-    @Transactional
-    public void deleteReward(
-            Long projectId,
-            Long rewardId
-    ) {
-        rewardService.deleteReward(
-                projectId,
-                rewardId
-        );
-    }
-
-    @Transactional
     public Long createReward(
             Long projectId,
             RewardCreateRequestDTO rewardCreateRequestDTO
@@ -265,7 +247,34 @@ public class ProjectUseCase {
         );
     }
 
+    @Transactional
+    public void updateReward(
+            Long projectId,
+            Long rewardId,
+            RewardUpdateRequestDTO dto
+    ) {
+        rewardService.updateReward(
+                projectId,
+                rewardId,
+                dto
+        );
+    }
 
+    @Transactional
+    public void deleteReward(
+            Long projectId,
+            Long rewardId
+    ) {
+        rewardService.deleteReward(
+                projectId,
+                rewardId
+        );
+    }
+
+
+    /**
+     * 커서 기반 프로젝트 조회
+     */
 //    @Cacheable(value = "projects")
     @Transactional(readOnly = true)
     public ProjectSummaryResponseDTO getProjects(
@@ -324,6 +333,9 @@ public class ProjectUseCase {
         );
     }
 
+    /**
+     * Project 삭제
+     */
     @Transactional
     public void deleteProject(Long projectId) {
         //TODO: 프로젝트가 삭제되면 딸린 애들도 삭제가 되어야하지만, 딸린애들은 있든 없든 상관없어야 함 existsbyid
@@ -346,10 +358,16 @@ public class ProjectUseCase {
         projectRepository.deleteById(projectId);
     }
 
+    /**
+     * Project 상태가 개설된 상태인지 확인
+     */
     private boolean isProjectBeforeSetUp(Project project) {
         return project.getProjectStatus() == ProjectStatus.READY;
     }
 
+    /**
+     * 커서 생성
+     */
     private String generateCursor(
             String criterion,
             PagingDTO pagingDTO
