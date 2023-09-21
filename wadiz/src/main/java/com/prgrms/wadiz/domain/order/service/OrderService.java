@@ -265,6 +265,7 @@ public class OrderService {
      */
     private void validateSupporter(Long supporterId, Long orderSupporterId) {
         if (!orderSupporterId.equals(supporterId)){
+            log.warn("Supporter is not match");
 
             throw new BaseException(ErrorCode.INVALID_ACCESS);
         }
@@ -275,6 +276,7 @@ public class OrderService {
      */
     private void validateMaker(Long makerId, Long projectMakerId) {
         if(!makerId.equals(projectMakerId)){
+            log.warn("Maker is not match");
 
             throw new BaseException(ErrorCode.INVALID_ACCESS);
         }

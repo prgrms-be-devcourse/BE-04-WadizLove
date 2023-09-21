@@ -40,6 +40,8 @@ public class FundingService {
                 fundingCreateRequestDTO.fundingStartAt(),
                 fundingCreateRequestDTO.fundingEndAt())
         ) {
+            log.warn("Funding end time is before start time");
+
             throw new BaseException(ErrorCode.INVALID_FUNDING_DURATION);
         }
 
@@ -62,6 +64,7 @@ public class FundingService {
         Funding funding = fundingRepository.findByProject_ProjectId(projectId)
                 .orElseThrow(() -> {
                     log.warn("Funding is not found.");
+
                     throw new BaseException(ErrorCode.FUNDING_NOT_FOUND);
                 });
 
@@ -82,6 +85,8 @@ public class FundingService {
                 fundingUpdateRequestDTO.fundingStartAt(),
                 fundingUpdateRequestDTO.fundingEndAt())
         ) {
+            log.warn("Funding end time is before start time");
+
             throw new BaseException(ErrorCode.INVALID_FUNDING_DURATION);
         }
 
@@ -93,6 +98,8 @@ public class FundingService {
                 });
 
         if (!isProjectBeforeSetUp(funding.getProject())) {
+            log.warn("Project's status is not 'before setUp'");
+
             throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
         }
 
@@ -117,7 +124,7 @@ public class FundingService {
                 });
 
         if (!isProjectBeforeSetUp(funding.getProject())) {
-            log.warn("Project is before setup");
+            log.warn("Project's status is not 'before setUp'");
 
             throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
         }

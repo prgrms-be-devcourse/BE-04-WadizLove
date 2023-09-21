@@ -67,11 +67,13 @@ public class RewardService {
                 });
 
         if (!Objects.equals(reward.getProject().getProjectId(), projectId)) {
+            log.warn("Project {} is not match", projectId);
 
             throw new BaseException(ErrorCode.NOT_MATCH);
         }
 
         if(!isProjectBeforeSetUp(reward.getProject())){
+            log.warn("Project's status is 'before setup'");
 
             throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
         }
@@ -104,15 +106,17 @@ public class RewardService {
                 .orElseThrow(() -> {
                     log.warn("Reward {} is not found", rewardId);
 
-                    return new BaseException(ErrorCode.REWARD_NOT_FOUND);
+                    throw new BaseException(ErrorCode.REWARD_NOT_FOUND);
                 });
 
         if (!Objects.equals(reward.getProject().getProjectId(), projectId)) {
+            log.warn("Project {} is not match", projectId);
 
             throw new BaseException(ErrorCode.NOT_MATCH);
         }
 
         if(!isProjectBeforeSetUp(reward.getProject())){
+            log.warn("Project's status is 'before setup'");
 
             throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
         }
@@ -145,7 +149,7 @@ public class RewardService {
                 .orElseThrow(() -> {
                     log.warn("Rewards for Project {} is not found", projectId);
 
-                    return new BaseException(ErrorCode.REWARD_NOT_FOUND);
+                    throw new BaseException(ErrorCode.REWARD_NOT_FOUND);
                 });
 
         return rewards.stream().map(RewardResponseDTO::from).toList();
@@ -160,10 +164,11 @@ public class RewardService {
                 .orElseThrow(() -> {
                     log.warn("Reward {} is not found", rewardId);
 
-                    return new BaseException(ErrorCode.REWARD_NOT_FOUND);
+                    throw new BaseException(ErrorCode.REWARD_NOT_FOUND);
                 });
 
         if (!Objects.equals(reward.getProject().getProjectId(), projectId)) {
+            log.warn("Project {} is not match", projectId);
 
             throw new BaseException(ErrorCode.NOT_MATCH);
         }

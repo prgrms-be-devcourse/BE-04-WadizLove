@@ -53,7 +53,7 @@ public class ProjectUseCase {
      */
     @Transactional
     public ProjectResponseDTO startProject(Long makerId) {
-        MakerServiceDTO makerServiceDTO = makerService.getMakerDTO(makerId);
+        MakerResponseDTO makerServiceDTO = makerService.getMaker(makerId);
         Maker maker = MakerServiceDTO.toEntity(makerServiceDTO);
 
         Project project = Project.builder()
@@ -79,6 +79,7 @@ public class ProjectUseCase {
                 });
 
         if (!project.getMaker().getMakerId().equals(makerId)) {
+            log.warn("Maker is not match");
 
             throw new BaseException(ErrorCode.MAKER_NOT_FOUND);
         }
@@ -88,6 +89,8 @@ public class ProjectUseCase {
                 !fundingService.isFundingExist(projectId) ||
                 !rewardService.isRewardsExist(projectId)
         ) {
+            log.warn("Some of the posts, funding, and rewards don't exist.");
+
             throw new BaseException(ErrorCode.UNKNOWN);
         }
 
@@ -348,6 +351,8 @@ public class ProjectUseCase {
                 });
 
         if (!isProjectBeforeSetUp(project)) {
+            log.warn("Project's status is not 'before setUp'");
+
             throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
         }
 
