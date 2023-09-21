@@ -20,6 +20,9 @@ public class MakerService {
 
     private final MakerRepository makerRepository;
 
+    /**
+     * Maker 회원가입
+     */
     @Transactional
     public Long signUpMaker(MakerCreateRequestDTO dto) {
         checkDuplicateName(dto.makerName());
@@ -36,6 +39,9 @@ public class MakerService {
         return savedMaker.getMakerId();
     }
 
+    /**
+     * Maker 조회
+     */
     @Transactional(readOnly = true)
     public MakerResponseDTO getMaker(Long makerId) {
         Maker maker = makerRepository.findById(makerId)
@@ -48,18 +54,9 @@ public class MakerService {
         return MakerResponseDTO.from(maker);
     }
 
-    @Transactional(readOnly = true) //TODO: 둘을 하나로 처리해도 될듯
-    public MakerServiceDTO getMakerDTO(Long makerId) {
-        Maker retrivedMaker = makerRepository.findById(makerId)
-                .orElseThrow(() -> {
-                    log.warn("Maker {} is not found", makerId);
-
-                    return new BaseException(ErrorCode.MAKER_NOT_FOUND);
-                });
-
-        return MakerServiceDTO.from(retrivedMaker);
-    }
-
+    /**
+     * Maker 정보 수정
+     */
     @Transactional
     public MakerResponseDTO updateMaker(
             Long makerId,
@@ -88,6 +85,9 @@ public class MakerService {
         );
     }
 
+    /**
+     * Maker 탈퇴
+     */
     @Transactional
     public void deleteMaker(Long makerId) {
         Maker maker = makerRepository.findById(makerId)
@@ -100,16 +100,23 @@ public class MakerService {
         maker.unregisteredMaker();
     }
 
-
-    public void checkDuplicateEmail(String email) { //TODO : 로그
+    /**
+     * Maker 이메일 중복 검증
+     */
+    public void checkDuplicateEmail(String email) {
         if(makerRepository.existsByMakerEmail(email)){
+            log.warn("Duplicate email exists.");
 
             throw new BaseException((ErrorCode.DUPLICATED_EMAIL));
         }
     }
 
+    /**
+     * Maker 이름 중복 검증
+     */
     public void checkDuplicateName(String name) {
         if(makerRepository.existsByMakerName(name)){
+            log.warn("Duplicate name exists.");
 
             throw new BaseException((ErrorCode.DUPLICATED_NAME));
         }
