@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -28,9 +29,16 @@ public class FundingService {
 
     @Transactional
     public Long createFunding(
+            Long projectId,
             ProjectServiceDTO projectServiceDTO,
             FundingCreateRequestDTO fundingCreateRequestDTO
     ) {
+        if(fundingRepository.existsByProject_ProjectId(projectId)){
+            log.warn("cannot create post");
+
+            throw new BaseException(ErrorCode.CANNOT_CREATE_FUNDING);
+        }
+
         Project project = ProjectServiceDTO.toEntity(projectServiceDTO);
 
         if (!isFundingStartAtBeforeFundingEndAt(
@@ -90,12 +98,14 @@ public class FundingService {
 
     @Transactional
     public void deleteFunding(Long projectId) {
-        Funding funding = fundingRepository.findByProject_ProjectId(projectId)
-                .orElseThrow(() -> new BaseException(ErrorCode.FUNDING_NOT_FOUND));  //TODO : 예외 로그
+        Optional<Funding> funding = fundingRepository.findByProject_ProjectId(projectId);
 
-        if (!isProjectBeforeSetUp(funding.getProject())) {  //TODO : 예외 로그
+        if(funding.isPresent()){
+            if (!isProjectBeforeSetUp(funding.get().getProject())) {
+                log.warn("project is already launched");
 
-            throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
+                throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
+            }
         }
 
         fundingRepository.deleteByProject_ProjectId(projectId);
