@@ -15,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -27,9 +29,16 @@ public class PostService {
      */
     @Transactional
     public Long createPost(
+            Long projectId,
             ProjectServiceDTO projectServiceDTO,
             PostCreateRequestDTO postCreateRequestDTO
     ) {
+        if(postRepository.existsByProject_ProjectId(projectId)){
+            log.warn("cannot create post");
+
+            throw new BaseException(ErrorCode.CANNOT_CREATE_POST);
+        }
+
         Project project = ProjectServiceDTO.toEntity(projectServiceDTO);
 
         Post post = Post.builder()
@@ -92,15 +101,13 @@ public class PostService {
      */
     @Transactional
     public void deletePost(Long projectId) {
-        Post post = postRepository.findByProject_ProjectId(projectId)
-                .orElseThrow(() -> {
-                    log.warn("Post for Project {} is not found", projectId);
+        Optional<Post> post = postRepository.findByProject_ProjectId(projectId);
+        if(post.isPresent()){
+            if (!isProjectBeforeSetUp(post.get().getProject())) {
+                log.warn("project is already launched");
 
-                    throw new BaseException(ErrorCode.POST_NOT_FOUND);
-                });
-
-        if (!isProjectBeforeSetUp(post.getProject())) {
-            throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
+                throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
+            }
         }
 
         postRepository.deleteByProject_ProjectId(projectId);
@@ -110,7 +117,12 @@ public class PostService {
      * Post 존재 여부
      */
     public boolean isPostExist(Long projectId) {
-        return postRepository.findByProject_ProjectId(projectId).isPresent();
+        if(postRepository.existsByProject_ProjectId(projectId)){
+            return true;
+        }
+        log.warn("Post for Project {} is not found", projectId);
+
+        throw new BaseException(ErrorCode.POST_NOT_FOUND);
     }
 
     /**

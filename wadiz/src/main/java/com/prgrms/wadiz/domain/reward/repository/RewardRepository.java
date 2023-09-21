@@ -10,4 +10,6 @@ public interface RewardRepository extends JpaRepository<Reward,Long> {
     Optional<List<Reward>> findAllByProject_ProjectId(Long projectId);
 
     void deleteAllByProject_ProjectId(Long projectId);
+
+    boolean existsByProject_ProjectId(Long projectId);
 }

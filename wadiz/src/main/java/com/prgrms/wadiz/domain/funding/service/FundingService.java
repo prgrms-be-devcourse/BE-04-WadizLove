@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -31,9 +32,16 @@ public class FundingService {
      */
     @Transactional
     public Long createFunding(
+            Long projectId,
             ProjectServiceDTO projectServiceDTO,
             FundingCreateRequestDTO fundingCreateRequestDTO
     ) {
+        if(fundingRepository.existsByProject_ProjectId(projectId)){
+            log.warn("cannot create post");
+
+            throw new BaseException(ErrorCode.CANNOT_CREATE_FUNDING);
+        }
+
         Project project = ProjectServiceDTO.toEntity(projectServiceDTO);
 
         if (!isFundingStartAtBeforeFundingEndAt(
@@ -70,7 +78,7 @@ public class FundingService {
 
         FundingStatus fundingStatus = validateFundingDeadline(funding);
 
-        return FundingResponseDTO.of(funding,fundingStatus);
+        return FundingResponseDTO.of(funding, fundingStatus);
     }
 
     /**
@@ -116,20 +124,17 @@ public class FundingService {
      */
     @Transactional
     public void deleteFunding(Long projectId) {
-        Funding funding = fundingRepository.findByProject_ProjectId(projectId)
-                .orElseThrow(() -> {
-                    log.warn("Funding is not found.");
+        Optional<Funding> funding = fundingRepository.findByProject_ProjectId(projectId);
 
-                    throw new BaseException(ErrorCode.FUNDING_NOT_FOUND);
-                });
+        if(funding.isPresent()){
+            if (!isProjectBeforeSetUp(funding.get().getProject())) {
+                log.warn("project is already launched");
 
-        if (!isProjectBeforeSetUp(funding.getProject())) {
-            log.warn("Project's status is not 'before setUp'");
-
-            throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
-        }
-
-        fundingRepository.deleteByProject_ProjectId(projectId);
+                throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
+            }
+          
+          fundingRepository.deleteByProject_ProjectId(projectId);
+        }    
     }
 
     /**
@@ -137,8 +142,12 @@ public class FundingService {
      */
     @Transactional(readOnly = true)
     public boolean isFundingExist(Long projectId) {
+        if(fundingRepository.existsByProject_ProjectId(projectId)){
+            return true;
+        }
+        log.warn("Funding for Project {} is not found", projectId);
 
-        return fundingRepository.findByProject_ProjectId(projectId).isPresent();
+        throw new BaseException(ErrorCode.FUNDING_NOT_FOUND);
     }
 
     /**
@@ -157,13 +166,13 @@ public class FundingService {
             LocalDateTime fundingEndAt
     ) {
 
-       return fundingStartAt.isBefore(fundingEndAt);
+        return fundingStartAt.isBefore(fundingEndAt);
     }
 
     /**
      * Funding 마감일자 검증
      */
-    private FundingStatus validateFundingDeadline(Funding funding){
+    private FundingStatus validateFundingDeadline(Funding funding) {
         if (funding.getFundingEndAt().isBefore(LocalDateTime.now())) {
 
             return FundingStatus.CLOSED;

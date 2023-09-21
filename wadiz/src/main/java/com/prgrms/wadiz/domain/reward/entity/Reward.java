@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
@@ -31,32 +31,32 @@ public class Reward extends BaseEntity {
     private Project project;
 
     @Column(nullable = false)
-    @NotBlank(message = "리워드명을 입력해주세요.")
+    @NotNull(message = "리워드명을 입력해주세요.")
     private String rewardName;
 
     @Lob
     @Column(nullable = false)
-    @NotBlank(message = "리워드 설명을 입력해주세요.")
+    @NotNull(message = "리워드 설명을 입력해주세요.")
     private String rewardDescription;
 
     @Column(nullable = false)
     @Min(value = 1, message = "리워드 재고는 최소 1개 이상입니다.")
-    @NotBlank(message = "리워드 수량이 필요합니다.")
+    @NotNull(message = "리워드 수량이 필요합니다.")
     private Integer rewardQuantity;
 
     @Column(nullable = false)
     @Min(value = 10, message = "리워드 가격은 10 이상입니다.")
-    @NotBlank(message = "리워드 가격이 필요합니다.")
+    @NotNull(message = "리워드 가격이 필요합니다.")
     private Integer rewardPrice;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    @NotBlank(message = "리워드 타입을 입력해주세요")
+    @NotNull(message = "리워드 타입을 입력해주세요")
     private RewardType rewardType;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    @NotBlank(message = "리워드 상태를 입력해주세요")
+    @NotNull(message = "리워드 상태를 입력해주세요")
     private RewardStatus rewardStatus;
 
     @Column(nullable = false)

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -32,19 +32,19 @@ public class Maker extends BaseEntity{
             regexp = "^[0-9a-zA-Zㄱ-ㅎ가-힣]*$",
             message = "올바른 이름 형식이 아닙니다."
     )
-    @NotBlank(message = "이름을 입력해주세요")
+    @NotNull(message = "이름을 입력해주세요")
     private String makerName;
 
     @Pattern(
             regexp = "^[0-9a-zA-Zㄱ-ㅎ가-힣]*$",
             message = "올바른 브랜드 형식이 아닙니다."
     )
-    @NotBlank(message = "브랜드를 입력해주세요.")
+    @NotNull(message = "브랜드를 입력해주세요.")
     private String makerBrand;
 
     @Column(nullable = false)
     @Email(message = "이메일 형식이 맞지 않습니다.")
-    @NotBlank(message = "이메일을 입력해주세요.")
+    @NotNull(message = "이메일을 입력해주세요.")
     private String makerEmail;
 
     @Column(nullable = false)

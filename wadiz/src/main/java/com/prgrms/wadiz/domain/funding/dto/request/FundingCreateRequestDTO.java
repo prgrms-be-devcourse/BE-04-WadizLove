@@ -9,6 +9,7 @@ import lombok.Builder;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Builder
@@ -22,7 +23,7 @@ public record FundingCreateRequestDTO(
                 value = 1,
                 message = "펀딩 모집 금액은 0이상의 양수만 허용됩니다."
         )
-        @NotBlank(message = "펀딩 목표 긍맥을 적어주세요")
+        @NotNull(message = "펀딩 목표 긍맥을 적어주세요")
         Integer fundingTargetAmount,
 
         @Schema(
@@ -36,7 +37,7 @@ public record FundingCreateRequestDTO(
                 pattern = "yyyy-MM-dd HH:mm:ss",
                 timezone = "Asia/Seoul"
         )
-        @NotBlank(message = "시작 날짜를 입력해주세요")
+        @NotNull(message = "시작 날짜를 입력해주세요")
         LocalDateTime fundingStartAt,
 
         @Schema(
@@ -50,7 +51,7 @@ public record FundingCreateRequestDTO(
                 pattern = "yyyy-MM-dd HH:mm:ss",
                 timezone = "Asia/Seoul"
         )
-        @NotBlank(message = "종료 날짜를 입력해주세요")
+        @NotNull(message = "종료 날짜를 입력해주세요")
         LocalDateTime fundingEndAt,
 
         @Schema(

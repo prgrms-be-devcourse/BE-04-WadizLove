@@ -8,6 +8,7 @@ import lombok.Builder;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Schema(description = "리워드 생성 요청 DTO")
 @Builder
@@ -34,7 +35,7 @@ public record RewardCreateRequestDTO(
                 value = 1,
                 message = "리워드 재고는 최소 1개 이상입니다."
         )
-        @NotBlank(message = "리워드 수량을 입력해주세요.")
+        @NotNull(message = "리워드 수량을 입력해주세요")
         Integer rewardQuantity,
 
         @Schema(
@@ -45,7 +46,8 @@ public record RewardCreateRequestDTO(
                 value = 10,
                 message = "리워드 가격은 10원 이상입니다."
         )
-        @NotBlank(message = "리워드 가격을 입력해주세요.")
+
+        @NotNull(message = "리워드 가격을 입력해주세요")
         Integer rewardPrice,
 
         @Schema(

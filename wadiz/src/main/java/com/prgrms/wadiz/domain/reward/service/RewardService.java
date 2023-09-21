@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -128,7 +127,7 @@ public class RewardService {
      * Project id로 Reward 삭제
      */
     @Transactional
-    public void deleteRewardsByProjectId(Long projectId) {
+    public void deleteRewardsBeforeLaunching(Long projectId) {
         rewardRepository.deleteAllByProject_ProjectId(projectId);
     }
 
@@ -136,9 +135,12 @@ public class RewardService {
      * Project id로 Reward 존재 여부 확인
      */
     public boolean isRewardsExist(Long projectId) {
-        Optional<List<Reward>> rewards = rewardRepository.findAllByProject_ProjectId(projectId);
+        if(rewardRepository.existsByProject_ProjectId(projectId)){
+            return true;
+        }
+        log.warn("Rewards for Project {} is not found", projectId);
 
-        return rewards.isPresent();
+        throw new BaseException(ErrorCode.REWARD_NOT_FOUND);
     }
 
     /**

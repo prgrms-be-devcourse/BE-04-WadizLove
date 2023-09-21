@@ -45,7 +45,6 @@ public class ProjectUseCase {
     private final FundingService fundingService;
     private final PostService postService;
     private final RewardService rewardService;
-
     private final ProjectRepository projectRepository;
 
     /**
@@ -148,6 +147,7 @@ public class ProjectUseCase {
         ProjectServiceDTO projectServiceDTO = ProjectServiceDTO.from(project);
 
         return fundingService.createFunding(
+                projectId,
                 projectServiceDTO,
                 fundingCreateRequestDTO
         );
@@ -190,6 +190,7 @@ public class ProjectUseCase {
         ProjectServiceDTO projectServiceDTO = ProjectServiceDTO.from(project);
 
         return postService.createPost(
+                projectId,
                 projectServiceDTO,
                 postCreateRequestDTO
         );
@@ -197,6 +198,7 @@ public class ProjectUseCase {
 
     @Transactional(readOnly = true)
     public PostResponseDTO getPost(Long projectId) {
+
         return postService.getPostByProjectId(projectId);
     }
 
@@ -341,8 +343,6 @@ public class ProjectUseCase {
      */
     @Transactional
     public void deleteProject(Long projectId) {
-        //TODO: 프로젝트가 삭제되면 딸린 애들도 삭제가 되어야하지만, 딸린애들은 있든 없든 상관없어야 함 existsbyid
-
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> {
                     log.warn("project : {} is not found", projectId);
@@ -356,7 +356,7 @@ public class ProjectUseCase {
             throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
         }
 
-        rewardService.deleteRewardsByProjectId(projectId);
+        rewardService.deleteRewardsBeforeLaunching(projectId);
         postService.deletePost(projectId);
         fundingService.deleteFunding(projectId);
 
