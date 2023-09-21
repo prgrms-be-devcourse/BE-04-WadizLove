@@ -58,10 +58,10 @@ class MakerServiceTest {
         when(makerRepository.save(any(Maker.class))).then(AdditionalAnswers.returnsFirstArg());
 
         //when
-        MakerResponseDTO makerResponseDTO = makerService.signUpMaker(makerCreateRequestDTO);
+        Long makerId = makerService.signUpMaker(makerCreateRequestDTO);
 
         //then
-        assertThat(makerResponseDTO).isNotNull();
+        assertThat(makerId).isNotNull();
     }
 
     @Test

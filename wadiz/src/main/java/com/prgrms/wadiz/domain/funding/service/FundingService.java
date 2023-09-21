@@ -27,6 +27,9 @@ public class FundingService {
 
     private final FundingRepository fundingRepository;
 
+    /**
+     * Funding 생성
+     */
     @Transactional
     public Long createFunding(
             Long projectId,
@@ -45,6 +48,8 @@ public class FundingService {
                 fundingCreateRequestDTO.fundingStartAt(),
                 fundingCreateRequestDTO.fundingEndAt())
         ) {
+            log.warn("Funding end time is before start time");
+
             throw new BaseException(ErrorCode.INVALID_FUNDING_DURATION);
         }
 
@@ -59,16 +64,26 @@ public class FundingService {
         return fundingRepository.save(funding).getFundingId();
     }
 
+    /**
+     * Funding 조회
+     */
     @Transactional(readOnly = true)
     public FundingResponseDTO getFundingByProjectId(Long projectId) {
-        Funding funding = fundingRepository.findByProject_ProjectId(projectId) //TODO : 예외 로그
-                .orElseThrow(() -> new BaseException(ErrorCode.FUNDING_NOT_FOUND));
+        Funding funding = fundingRepository.findByProject_ProjectId(projectId)
+                .orElseThrow(() -> {
+                    log.warn("Funding is not found.");
+
+                    throw new BaseException(ErrorCode.FUNDING_NOT_FOUND);
+                });
 
         FundingStatus fundingStatus = validateFundingDeadline(funding);
 
         return FundingResponseDTO.of(funding, fundingStatus);
     }
 
+    /**
+     * Funding 정보 수정
+     */
     @Transactional
     public void updateFunding(
             Long projectId,
@@ -78,13 +93,21 @@ public class FundingService {
                 fundingUpdateRequestDTO.fundingStartAt(),
                 fundingUpdateRequestDTO.fundingEndAt())
         ) {
+            log.warn("Funding end time is before start time");
+
             throw new BaseException(ErrorCode.INVALID_FUNDING_DURATION);
         }
 
         Funding funding = fundingRepository.findByProject_ProjectId(projectId)  //TODO : 예외 로그
-                .orElseThrow(() -> new BaseException(ErrorCode.FUNDING_NOT_FOUND));
+                .orElseThrow(() -> {
+                    log.warn("Funding is not found.");
+
+                    throw new BaseException(ErrorCode.FUNDING_NOT_FOUND);
+                });
 
         if (!isProjectBeforeSetUp(funding.getProject())) {
+            log.warn("Project's status is not 'before setUp'");
+
             throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
         }
 
@@ -96,6 +119,9 @@ public class FundingService {
         );
     }
 
+    /**
+     * Funding 삭제
+     */
     @Transactional
     public void deleteFunding(Long projectId) {
         Optional<Funding> funding = fundingRepository.findByProject_ProjectId(projectId);
@@ -106,11 +132,15 @@ public class FundingService {
 
                 throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
             }
-        }
-
-        fundingRepository.deleteByProject_ProjectId(projectId);
+          
+          fundingRepository.deleteByProject_ProjectId(projectId);
+        }    
     }
 
+    /**
+     * Funding 존재 여부 확인
+     */
+    @Transactional(readOnly = true)
     public boolean isFundingExist(Long projectId) {
         if(fundingRepository.existsByProject_ProjectId(projectId)){
             return true;
@@ -120,11 +150,17 @@ public class FundingService {
         throw new BaseException(ErrorCode.FUNDING_NOT_FOUND);
     }
 
+    /**
+     * Project가 개설된 상태인지 확인
+     */
     private boolean isProjectBeforeSetUp(Project project) {
 
         return project.getProjectStatus() == ProjectStatus.READY;
     }
 
+    /**
+     * Funding 마감 시간은 시작 시간보다 이전이면 안된다.
+     */
     private boolean isFundingStartAtBeforeFundingEndAt(
             LocalDateTime fundingStartAt,
             LocalDateTime fundingEndAt
@@ -133,6 +169,9 @@ public class FundingService {
         return fundingStartAt.isBefore(fundingEndAt);
     }
 
+    /**
+     * Funding 마감일자 검증
+     */
     private FundingStatus validateFundingDeadline(Funding funding) {
         if (funding.getFundingEndAt().isBefore(LocalDateTime.now())) {
 

@@ -161,6 +161,9 @@ public class ProjectController {
         return ResponseEntity.ok(ResponseFactory.getSingleResult(projectSummaryRes));
     }
 
+    /**
+     * Project 런칭 전 삭제
+     */
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "프로젝트 목록 조회 성공"),

@@ -1,5 +1,6 @@
 package com.prgrms.wadiz.domain.maker.dto;
 
+import com.prgrms.wadiz.domain.maker.dto.response.MakerResponseDTO;
 import com.prgrms.wadiz.domain.maker.entity.Maker;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -28,7 +29,7 @@ public record MakerServiceDTO(
         @Email(message = "이메일 형식이 맞지 않습니다.")
         String makerEmail
 ) {
-    public static Maker toEntity(MakerServiceDTO dto) {
+    public static Maker toEntity(MakerResponseDTO dto) {
 
         return Maker.builder()
                 .makerId(dto.makerId())

@@ -22,14 +22,14 @@ public record SupporterCreateRequestDTO(
                 regexp = "^[0-9a-zA-Zㄱ-ㅎ가-힣]*$",
                 message = "올바른 이름 형식이 아닙니다."
         )
-        @NotBlank(message = "서포터 이름을 입력해주세요")
+        @NotBlank(message = "서포터 이름을 입력해주세요.")
         String supporterName,
 
         @Schema(
                 description = "서포터 이메일",
                 example = "june@gmail.com"
         )
-        @NotBlank(message = "서포터 이메일을 입력해주세요")
+        @NotBlank(message = "서포터 이메일을 입력해주세요.")
         @Email(message = "이메일 형식이 맞지 않습니다.")
         String supporterEmail
 ) {

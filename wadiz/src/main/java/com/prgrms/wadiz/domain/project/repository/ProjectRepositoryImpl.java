@@ -22,8 +22,12 @@ import static com.prgrms.wadiz.domain.post.entity.QPost.post;
 @Slf4j
 @RequiredArgsConstructor
 public class ProjectRepositoryImpl implements ProjectRepositoryCustom {
+
     private final JPAQueryFactory jpaQueryFactory;
 
+    /**
+     * 검색 조건 별 Project 조회
+     */
     @Override
     public List<PagingDTO> findAllByCondition(
             String cursorId,
@@ -56,7 +60,10 @@ public class ProjectRepositoryImpl implements ProjectRepositoryCustom {
                 .fetch();
     }
 
-    private BooleanExpression isDeclined(ProjectSearchCondition searchCondition) {
+    /**
+     *
+     */
+    private BooleanExpression isDeclined(ProjectSearchCondition searchCondition) { //TODO
         switch (searchCondition) {
             case OPEN:
 
@@ -70,6 +77,9 @@ public class ProjectRepositoryImpl implements ProjectRepositoryCustom {
         return null;
     }
 
+    /**
+     * 조건 별 커서 아이디 커스텀
+     */
     private BooleanExpression cursorId(Pageable page, String cursorId) {
         if (cursorId == null) {
 
@@ -139,6 +149,9 @@ public class ProjectRepositoryImpl implements ProjectRepositoryCustom {
         return null;
     }
 
+    /**
+     * 분류 별 OrderSpecifier
+     */
     private OrderSpecifier[] criterionSort(Pageable page) {
 
         List<OrderSpecifier> orderSpecifiers = new ArrayList<>();

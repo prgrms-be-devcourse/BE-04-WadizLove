@@ -18,6 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class SupporterService {
     private final SupporterRepository supporterRepository;
 
+    /**
+     *
+     * Supporter 회원가입
+     */
     @Transactional
     public Long signUpSupporter(SupporterCreateRequestDTO dto) {
         checkDuplicateEmail(dto.supporterEmail());
@@ -33,13 +37,17 @@ public class SupporterService {
         return savedSupporter.getSupporterId();
     }
 
+    /**
+     *
+     * Supporter id로 서포터 조회 (단건)
+     */
     @Transactional(readOnly = true)
     public SupporterResponseDTO getSupporter(Long supporterId) {
         Supporter supporter =supporterRepository.findById(supporterId)
                 .orElseThrow(() -> {
                     log.warn("Supporter {} is not found", supporterId);
 
-                    return new BaseException(ErrorCode.SUPPORTER_NOT_FOUND);
+                    throw  new BaseException(ErrorCode.SUPPORTER_NOT_FOUND);
                 });
 
         return SupporterResponseDTO.of(
@@ -48,6 +56,10 @@ public class SupporterService {
         );
     }
 
+    /**
+     *
+     * Supporter 정보 수정
+     */
     @Transactional
     public SupporterResponseDTO updateSupporter(
             Long supporterId,
@@ -61,7 +73,7 @@ public class SupporterService {
                 .orElseThrow(() -> {
                     log.warn("Supporter {} is not found", supporterId);
 
-                    return new BaseException(ErrorCode.SUPPORTER_NOT_FOUND);
+                    throw new BaseException(ErrorCode.SUPPORTER_NOT_FOUND);
                 });
 
         supporter.updateSupporter(
@@ -75,27 +87,41 @@ public class SupporterService {
         );
     }
 
+    /**
+     *
+     * Supporter 탈퇴
+     */
     @Transactional
     public void deleteSupporter(Long supporterId) {
         Supporter supporter = supporterRepository.findById(supporterId)
                 .orElseThrow(() -> {
                     log.warn("Supporter {} is not found", supporterId);
 
-                    return new BaseException(ErrorCode.SUPPORTER_NOT_FOUND);
+                    throw new BaseException(ErrorCode.SUPPORTER_NOT_FOUND);
                 });
 
         supporter.unregisteredSupporter();
     }
 
+    /**
+     *
+     * Supporter 회원가입시 중복 이메일 검증
+     */
     public void checkDuplicateEmail(String email) {
         if(supporterRepository.existsBySupporterEmail(email)){
+            log.warn("Duplicate email exists.");
 
-            throw new BaseException((ErrorCode.DUPLICATED_EMAIL)); //TODO: 로그
+            throw new BaseException((ErrorCode.DUPLICATED_EMAIL));
         }
     }
 
+    /**
+     *
+     * Supporter 회원가입시 중복 이름 검증
+     */
     public void checkDuplicateName(String name) {
         if(supporterRepository.existsBySupporterName(name)){
+            log.warn("Duplicate name exists.");
 
             throw new BaseException((ErrorCode.DUPLICATED_NAME));
         }

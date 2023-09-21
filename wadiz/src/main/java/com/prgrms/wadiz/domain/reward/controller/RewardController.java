@@ -28,6 +28,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class RewardController {
     private final ProjectUseCase projectUseCase;
+    
     /**
      * Reward create
      */
@@ -47,7 +48,7 @@ public class RewardController {
     )
     @Operation(
             summary = "리워드 생성",
-            description = "프로젝트 id와, 리워드 요청 양식(RewardCreateRequestDTO)을 이용하여 리워드를 생성한다."
+            description = "프로젝트 id와, 리워드 요청 양식(RewardCreateRequestDTO)을 이용하여 리워드를 생성합니다."
     )
     @PostMapping("/{projectId}/rewards")
     public ResponseEntity<ResponseTemplate> createReward(

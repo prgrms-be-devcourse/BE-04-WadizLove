@@ -29,6 +29,9 @@ public class RewardService {
         this.rewardRepository = rewardRepository;
     }
 
+    /**
+     * Reward 생성
+     */
     @Transactional
     public Long createReward(
             ProjectServiceDTO projectServiceDTO,
@@ -50,6 +53,9 @@ public class RewardService {
         return savedReward.getRewardId();
     }
 
+    /**
+     * Reward 정보 수정
+     */
     @Transactional
     public RewardResponseDTO updateReward(Long projectId, Long rewardId, RewardUpdateRequestDTO dto) {
         Reward reward = rewardRepository.findById(rewardId)
@@ -60,11 +66,13 @@ public class RewardService {
                 });
 
         if (!Objects.equals(reward.getProject().getProjectId(), projectId)) {
+            log.warn("Project {} is not match", projectId);
 
             throw new BaseException(ErrorCode.NOT_MATCH);
         }
 
         if(!isProjectBeforeSetUp(reward.getProject())){
+            log.warn("Project's status is 'before setup'");
 
             throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
         }
@@ -80,26 +88,34 @@ public class RewardService {
         return RewardResponseDTO.from(reward);
     }
 
+    /**
+     * project가 개설된 상태인지 확인
+     */
     private boolean isProjectBeforeSetUp(Project project) {
 
         return project.getProjectStatus() == ProjectStatus.READY;
     }
 
+    /**
+     * Reward 조회 후 단건 삭제
+     */
     @Transactional
     public void deleteReward(Long projectId, Long rewardId) {
         Reward reward = rewardRepository.findById(rewardId)
                 .orElseThrow(() -> {
                     log.warn("Reward {} is not found", rewardId);
 
-                    return new BaseException(ErrorCode.REWARD_NOT_FOUND);
+                    throw new BaseException(ErrorCode.REWARD_NOT_FOUND);
                 });
 
         if (!Objects.equals(reward.getProject().getProjectId(), projectId)) {
+            log.warn("Project {} is not match", projectId);
 
             throw new BaseException(ErrorCode.NOT_MATCH);
         }
 
         if(!isProjectBeforeSetUp(reward.getProject())){
+            log.warn("Project's status is 'before setup'");
 
             throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
         }
@@ -107,11 +123,17 @@ public class RewardService {
         reward.unActivateStatus();
     }
 
+    /**
+     * Project id로 Reward 삭제
+     */
     @Transactional
     public void deleteRewardsBeforeLaunching(Long projectId) {
         rewardRepository.deleteAllByProject_ProjectId(projectId);
     }
 
+    /**
+     * Project id로 Reward 존재 여부 확인
+     */
     public boolean isRewardsExist(Long projectId) {
         if(rewardRepository.existsByProject_ProjectId(projectId)){
             return true;
@@ -121,27 +143,34 @@ public class RewardService {
         throw new BaseException(ErrorCode.REWARD_NOT_FOUND);
     }
 
+    /**
+     * Project id로 Reward 조회 (다건)
+     */
     public List<RewardResponseDTO> getRewardsByProjectId(Long projectId) {
         List<Reward> rewards = rewardRepository.findAllByProject_ProjectId(projectId)
                 .orElseThrow(() -> {
                     log.warn("Rewards for Project {} is not found", projectId);
 
-                    return new BaseException(ErrorCode.REWARD_NOT_FOUND);
+                    throw new BaseException(ErrorCode.REWARD_NOT_FOUND);
                 });
 
         return rewards.stream().map(RewardResponseDTO::from).toList();
     }
 
+    /**
+     * Project id, Reward id로 Reward 조회 (단건)
+     */
     @Transactional(readOnly = true)
     public RewardResponseDTO getReward(Long projectId, Long rewardId){
         Reward reward = rewardRepository.findById(rewardId)
                 .orElseThrow(() -> {
                     log.warn("Reward {} is not found", rewardId);
 
-                    return new BaseException(ErrorCode.REWARD_NOT_FOUND);
+                    throw new BaseException(ErrorCode.REWARD_NOT_FOUND);
                 });
 
         if (!Objects.equals(reward.getProject().getProjectId(), projectId)) {
+            log.warn("Project {} is not match", projectId);
 
             throw new BaseException(ErrorCode.NOT_MATCH);
         }

@@ -46,6 +46,7 @@ public record RewardCreateRequestDTO(
                 value = 10,
                 message = "리워드 가격은 10원 이상입니다."
         )
+
         @NotNull(message = "리워드 가격을 입력해주세요")
         Integer rewardPrice,
 
@@ -57,7 +58,7 @@ public record RewardCreateRequestDTO(
                 enumClass = RewardType.class,
                 message = "리워드 타입을 찾을 수 없습니다.",
                 ignoreCase = true)
-        @NotBlank(message = "리워드 타입을 입력해주세요")
+        @NotBlank(message = "리워드 타입을 입력해주세요.")
         String rewardType,
 
         @Schema(
@@ -67,7 +68,7 @@ public record RewardCreateRequestDTO(
         @ValidEnum(enumClass = RewardStatus.class,
                 message = "리워드 상태를 찾을 수 없습니다..",
                 ignoreCase = true)
-        @NotBlank(message = "리워드 상태를 입력해주세요")
+        @NotBlank(message = "리워드 상태를 입력해주세요.")
         String rewardStatus
 ) {
 }
