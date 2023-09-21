@@ -19,8 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class PostService {
+
     private final PostRepository postRepository;
 
+    /**
+     * Post 생성
+     */
     @Transactional
     public Long createPost(
             ProjectServiceDTO projectServiceDTO,
@@ -41,6 +45,9 @@ public class PostService {
         return savedPost.getPostId();
     }
 
+    /**
+     * Post 조회
+     */
     @Transactional(readOnly = true)
     public PostResponseDTO getPostByProjectId(Long projectId) {
         Post post = postRepository.findByProject_ProjectId(projectId)
@@ -53,6 +60,9 @@ public class PostService {
         return PostResponseDTO.from(post);
     }
 
+    /**
+     * Post 정보 수정
+     */
     @Transactional
     public void updatePost(
             Long projectId,
@@ -77,6 +87,9 @@ public class PostService {
         );
     }
 
+    /**
+     * Post 삭제
+     */
     @Transactional
     public void deletePost(Long projectId) {
         Post post = postRepository.findByProject_ProjectId(projectId)
@@ -93,10 +106,16 @@ public class PostService {
         postRepository.deleteByProject_ProjectId(projectId);
     }
 
+    /**
+     * Post 존재 여부
+     */
     public boolean isPostExist(Long projectId) {
         return postRepository.findByProject_ProjectId(projectId).isPresent();
     }
 
+    /**
+     * Project가 개설된 상태인지 확인
+     */
     private boolean isProjectBeforeSetUp(Project project) {
         return project.getProjectStatus() == ProjectStatus.READY;
     }
