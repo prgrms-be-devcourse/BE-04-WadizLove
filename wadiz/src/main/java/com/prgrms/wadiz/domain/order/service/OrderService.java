@@ -36,7 +36,9 @@ public class OrderService {
     private final PostRepository postRepository;
     private final FundingRepository fundingRepository;
 
-    // 주문 생성
+    /**
+     * Order create
+     */
     @Transactional
     public OrderResponseDTO createOrder(
             Long supporterId,
@@ -102,6 +104,9 @@ public class OrderService {
         return OrderResponseDTO.of(orderRepository.save(order).getOrderId());
     }
 
+    /**
+     * Supporter 주문 조회
+     */
     @Transactional(readOnly = true)
     public OrderResponseDTO getSupporterPurchase(
             Long orderId,
@@ -142,6 +147,9 @@ public class OrderService {
         );
     }
 
+    /**
+     * Supporter 주문 목록 조회
+     */
     @Transactional(readOnly = true)
     public List<OrderResponseDTO> getSupporterPurchaseHistory(Long supporterId) {
         List<Order> orders = orderRepository.findAllBySupporter_SupporterId(supporterId)
@@ -186,6 +194,9 @@ public class OrderService {
         return orderResponseDTOs;
     }
 
+    /**
+     * Maker 주문 조회
+     */
     @Transactional(readOnly = true)
     public List<OrderResponseDTO> getMakerProjectOrders(Long projectId, Long makerId) {
         List<Order> orders = orderRepository.findAllByProject_ProjectId(projectId)
@@ -222,6 +233,9 @@ public class OrderService {
         return orderResponseDTOs;
     }
 
+    /**
+     * Order cancel
+     */
     @Transactional //수정 취소될때 참여자 수, 참여 금액, 퍼센트 모두 빼줘야 한다.
     public void cancelOrder(
             Long supporterId,
@@ -246,6 +260,9 @@ public class OrderService {
         order.cancel();
     }
 
+    /**
+     * Supporter 검증
+     */
     private void validateSupporter(Long supporterId, Long orderSupporterId) {
         if (!orderSupporterId.equals(supporterId)){
 
@@ -253,6 +270,9 @@ public class OrderService {
         }
     }
 
+    /**
+     * Maker 검증
+     */
     private void validateMaker(Long makerId, Long projectMakerId) {
         if(!makerId.equals(projectMakerId)){
 
@@ -260,6 +280,9 @@ public class OrderService {
         }
     }
 
+    /**
+     * Order 정보 조회
+     */
     private Order getOrderInfo(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> {
             log.warn("Order {} is not found", orderId);
