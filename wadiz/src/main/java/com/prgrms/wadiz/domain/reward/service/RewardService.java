@@ -108,7 +108,7 @@ public class RewardService {
     }
 
     @Transactional
-    public void deleteRewardsByProjectId(Long projectId) {
+    public void deleteRewardsBeforeLaunching(Long projectId) {
         rewardRepository.deleteAllByProject_ProjectId(projectId);
     }
 
