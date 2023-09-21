@@ -12,4 +12,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 //    @Modifying
 //    @Query("DELETE FROM Post p WHERE p.project.projectId = :projectId")
     void deleteByProject_ProjectId(Long projectId);
+
+    boolean existsByProject_ProjectId(Long projectId);
 }

@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -114,9 +113,12 @@ public class RewardService {
     }
 
     public boolean isRewardsExist(Long projectId) {
-        Optional<List<Reward>> rewards = rewardRepository.findAllByProject_ProjectId(projectId);
+        if(rewardRepository.existsByProject_ProjectId(projectId)){
+            return true;
+        }
+        log.warn("Rewards for Project {} is not found", projectId);
 
-        return rewards.isPresent();
+        throw new BaseException(ErrorCode.REWARD_NOT_FOUND);
     }
 
     public List<RewardResponseDTO> getRewardsByProjectId(Long projectId) {

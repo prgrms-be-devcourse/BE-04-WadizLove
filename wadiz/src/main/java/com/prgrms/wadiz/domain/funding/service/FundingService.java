@@ -58,7 +58,7 @@ public class FundingService {
 
         FundingStatus fundingStatus = validateFundingDeadline(funding);
 
-        return FundingResponseDTO.of(funding,fundingStatus);
+        return FundingResponseDTO.of(funding, fundingStatus);
     }
 
     @Transactional
@@ -101,10 +101,13 @@ public class FundingService {
         fundingRepository.deleteByProject_ProjectId(projectId);
     }
 
-    @Transactional(readOnly = true)
     public boolean isFundingExist(Long projectId) {
+        if(fundingRepository.existsByProject_ProjectId(projectId)){
+            return true;
+        }
+        log.warn("Funding for Project {} is not found", projectId);
 
-        return fundingRepository.findByProject_ProjectId(projectId).isPresent();
+        throw new BaseException(ErrorCode.FUNDING_NOT_FOUND);
     }
 
     private boolean isProjectBeforeSetUp(Project project) {
@@ -117,10 +120,10 @@ public class FundingService {
             LocalDateTime fundingEndAt
     ) {
 
-       return fundingStartAt.isBefore(fundingEndAt);
+        return fundingStartAt.isBefore(fundingEndAt);
     }
 
-    private FundingStatus validateFundingDeadline(Funding funding){
+    private FundingStatus validateFundingDeadline(Funding funding) {
         if (funding.getFundingEndAt().isBefore(LocalDateTime.now())) {
 
             return FundingStatus.CLOSED;

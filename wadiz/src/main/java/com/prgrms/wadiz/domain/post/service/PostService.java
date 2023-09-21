@@ -94,7 +94,12 @@ public class PostService {
     }
 
     public boolean isPostExist(Long projectId) {
-        return postRepository.findByProject_ProjectId(projectId).isPresent();
+        if(postRepository.existsByProject_ProjectId(projectId)){
+            return true;
+        }
+        log.warn("Post for Project {} is not found", projectId);
+
+        throw new BaseException(ErrorCode.POST_NOT_FOUND);
     }
 
     private boolean isProjectBeforeSetUp(Project project) {
