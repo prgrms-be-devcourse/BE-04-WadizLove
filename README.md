@@ -22,7 +22,7 @@
 
 # 👟 프로젝트 소개
 
-<img width="1415" alt="image" src="https://github.com/prgrms-be-devcourse/BE-04-WadizLove/assets/93516595/1669a817-3680-42e8-9e1e-0b72a42feb04">
+<img width="815" alt="image" src="https://github.com/prgrms-be-devcourse/BE-04-WadizLove/assets/93516595/1669a817-3680-42e8-9e1e-0b72a42feb04">
 
 
 # 크라우드 펀딩 플랫폼 서비스인 [Wadiz](https://www.wadiz.kr/web/main)
@@ -44,7 +44,7 @@
 
 <br>
 
-## 와디즈 펀딩 서비스 절차
+## 👑  와디즈 펀딩 서비스 절차
 #### 1. 원하는 프로잭트 click !
 
 ####  2. 주문하고자 하는 리워드 선택 
@@ -395,16 +395,17 @@
 https://github.com/prgrms-be-devcourse/BE-04-WadizLove.git
 <br>
 
-2. Query DSL 컴파일한다.
-
-3. jar 파일을 실행한다
+2. jar 파일을 실행한다.
 
     ```
     ./gradlew clean build
     java -jar build/libs/dining-1.0.0-SNAPSHOT.jar
     ```
+3. Query DSL 컴파일한다.
 
-4. 터미널에서 도커 컴포즈 빌드 명령어를 입력한다.
+4. bootjar를 실행한다.
+   
+5. 터미널에서 도커 컴포즈 빌드 명령어를 입력한다.
    
     ```
     docker-compose up --build
