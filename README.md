@@ -1,3 +1,4 @@
+
 # WadizLove
 > 백엔드 히히팀 wadiz 클론코딩
 
@@ -44,15 +45,13 @@
 <br>
 
 ## 와디즈 펀딩 서비스 절차
-### 1. 원하는 프로잭트 click !
-<img width="1333" alt="image" src="https://github.com/prgrms-be-devcourse/BE-04-WadizLove/assets/93516595/3f340910-d542-4f85-8a63-33f61a7cd2eb">
+#### 1. 원하는 프로잭트 click !
 
-### 2. 주문하고자 하는 리워드 선택 
-<img width="948" alt="image" src="https://github.com/prgrms-be-devcourse/BE-04-WadizLove/assets/93516595/6a92c520-62d8-433a-bc91-fa80e9014615">
+####  2. 주문하고자 하는 리워드 선택 
 
-### 3. 결제 예약
+#### 3. 결제 예약
 
-### 4. 프로젝트 마감 후 & 펀딩 목표 금액 달성 시 주문 정상 진행
+#### 4. 프로젝트 마감 후 & 펀딩 목표 금액 달성 시 주문 정상 진행
 
 <br/>
 
@@ -396,7 +395,7 @@
 https://github.com/prgrms-be-devcourse/BE-04-WadizLove.git
 <br>
 
-2. Query DSL 빌드한다.
+2. Query DSL 컴파일한다.
 
 3. jar 파일을 실행한다
 
