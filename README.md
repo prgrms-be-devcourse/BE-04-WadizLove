@@ -133,8 +133,6 @@
 <img src="https://img.shields.io/badge/IntelliJ IDEA-000000.svg?style=flat-square&logo=IntelliJ IDEA&logoColor=white"/>
 <img src="https://img.shields.io/badge/Postman-FF6C37.svg?style=flat-square&logo=Postman&logoColor=white"/>
 <img src="https://img.shields.io/badge/Swagger 2.9.2-85EA2D?style=flat-square&logo=Swagger&logoColor=white"/>
-
-
 </p>
 
 ----
@@ -368,7 +366,7 @@
 ### using Github Project
 
 1. github에서 프로젝트를 다운받는다.
-<br>
+
 https://github.com/prgrms-be-devcourse/BE-04-WadizLove.git
 <br>
 
