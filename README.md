@@ -17,9 +17,9 @@
 <br/>
 [🍉 프로젝트 실행 방법](#-프로젝트-실행-방법)
 
----
 
-## 👟 프로젝트 소개
+
+# 👟 프로젝트 소개
 
 <img width="1415" alt="image" src="https://github.com/prgrms-be-devcourse/BE-04-WadizLove/assets/93516595/1669a817-3680-42e8-9e1e-0b72a42feb04">
 
@@ -36,21 +36,20 @@
 ###  [프로젝트 기간]
 프로젝트 기간 : 2023/0828 ~ 2023/09/22
 
----
-
-## 🍋 프로젝트 팀 노션
 
 
+# 🍋 프로젝트 팀 노션
 
----
 
-## 👬 팀 소개
+
+
+# 👬 팀 소개
 
 <table>
 <tr>
     <td><b>Product Owner</b></td>
     <td><b>Scrum Master</b></td>
-    <td><b>Developer</b></td>
+    <td><b>Tech Leader</b></td>
     <td><b>Mentor</b></td>
     <td><b>Sub Mentor</b></td>
   </tr>
@@ -92,8 +91,8 @@
 
 <br/>
 
----
-## 🛠 기술 협업 tool 소개
+
+# 🛠 기술 협업 tool 소개
 
 <h2 align="center"> 🛠 기술 스택 🛠 </>
 
@@ -106,6 +105,7 @@
 <img src="https://img.shields.io/badge/Spring-58CC02?style=flat-square&logo=Spring&logoColor=white"/></img>
 <img src="https://img.shields.io/badge/Spring Boot 2.7.14-6DB33F?style=flat-square&logo=Spring Boot&logoColor=white"/></img>
 <img src="https://img.shields.io/badge/Spring Data JPA-ECD53F?style=flat-square&logo=JPA&logoColor=white"/></img>
+<img src="https://img.shields.io/badge/Query DSL-669DF6?style=flat-square&logo=JPA&logoColor=white"/></img>
 </p>
 
 <p align="center">
@@ -135,15 +135,15 @@
 <img src="https://img.shields.io/badge/Swagger 2.9.2-85EA2D?style=flat-square&logo=Swagger&logoColor=white"/>
 </p>
 
-----
 
-## 🍓 Architecture
+
+# 🍓 Architecture
 ![image](https://github.com/prgrms-be-devcourse/BE-04-WadizLove/assets/93516595/02ff9df6-50bd-4f01-83df-7bec98265182)
 
 
 
----
-## 🍰 ERD
+
+# 🍰 ERD
 
 ![image](https://github.com/prgrms-be-devcourse/BE-04-WadizLove/assets/93516595/b88c1c12-45f1-4c81-91f1-e9060268b2e8)
 
@@ -152,8 +152,8 @@
 🔗[ERD 보러가기](https://app.quickdatabasediagrams.com/#/d/3KqYJ6)
 
 
----
-## 🥝 프로젝트 패키지 구조
+
+# 🥝 프로젝트 패키지 구조
 <details>
     <summary><b>패키지 구조 확인하기</b></summary>
   <div markdown="1">
@@ -359,9 +359,9 @@
 <br>
 
 
-----
 
-## 🍉 프로젝트 실행 방법
+
+# 🍉 프로젝트 실행 방법
 
 ### using Github Project
 
@@ -370,9 +370,16 @@
 https://github.com/prgrms-be-devcourse/BE-04-WadizLove.git
 <br>
 
-2. build 후, jar 파일을 실행한다
+2. Query DSL 빌드한다.
+
+3. jar 파일을 실행한다
 
     ```
     ./gradlew clean build
     java -jar build/libs/dining-1.0.0-SNAPSHOT.jar
+    ```
+4. 터미널에서 도커 컴포즈 빌드 명령어를 입력한다.
+   
+    ```
+    docker-compose up --build
     ```
