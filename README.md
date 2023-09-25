@@ -1,4 +1,4 @@
-# ShoeKream
+# WadizLove
 > 백엔드 히히팀 wadiz 클론코딩
 
 <br/>  
