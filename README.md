@@ -11,6 +11,7 @@
 <br/>
 [🍰 ERD](#-erd)
 <br/>
+[🍓 Architecture](#-architecture)
 
 ---
 
@@ -20,10 +21,8 @@
 
 
 ### 클라우드 펀딩 플랫폼 서비스인 [Wadiz](https://www.wadiz.kr/web/main)
-![image](https://github.com/prgrms-be-devcourse/BE-04-WadizLove/assets/93516595/0fcd7a61-0d55-4fd8-b1eb-f3d2045575a2)
-
 <br>
-서포터는 메이커가 런칭한 펀딩에 참여하고, 펀딩이 프로젝트 마감 일자 전까지 일정 금액 이상을 달성하면 주문이 진행되는 서비스이다 !
+서포터는 메이커가 런칭한 펀딩에 참여하고, 펀딩이 프로젝트 마감 일자 전까지 일정 금액 이상을 달성하면 주문이 진행되는 서비스
 
 <br/>
 
@@ -143,7 +142,8 @@
 ---
 ## 🍰 ERD
 
-![image](https://github.com/prgrms-be-devcourse/BE-04-WadizLove/assets/93516595/eca83ab5-f63e-4c51-8157-32b04dc57e81)
+![image](https://github.com/prgrms-be-devcourse/BE-04-WadizLove/assets/93516595/b88c1c12-45f1-4c81-91f1-e9060268b2e8)
+
 
 
 🔗[ERD 보러가기](https://app.quickdatabasediagrams.com/#/d/3KqYJ6)
@@ -359,3 +359,15 @@
 ----
 
 ## 🍓 프로젝트 실행 방법
+
+### using Github Project
+
+1. github에서 프로젝트를 다운받는다.
+https://github.com/prgrms-be-devcourse/BE-04-WadizLove.git
+
+3. build 후, jar 파일을 실행한다
+
+    ```
+    ./gradlew clean build
+    java -jar build/libs/dining-1.0.0-SNAPSHOT.jar
+    ```
