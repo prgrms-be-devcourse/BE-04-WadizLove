@@ -378,6 +378,7 @@ https://github.com/prgrms-be-devcourse/BE-04-WadizLove.git
     ./gradlew clean build
     java -jar build/libs/dining-1.0.0-SNAPSHOT.jar
     ```
+
 4. 터미널에서 도커 컴포즈 빌드 명령어를 입력한다.
    
     ```
