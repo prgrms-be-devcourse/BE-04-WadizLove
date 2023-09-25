@@ -1,0 +1,353 @@
+# ShoeKream
+> 백엔드 히히팀 wadiz 클론코딩
+
+<br/>  
+
+[👟 프로젝트 소개](#-프로젝트-소개)
+<br/>
+[👬 팀 소개](#-팀-소개)
+<br/>
+[🛠 기술 소개](#-기술-스택)
+<br/>
+[🍰 ERD](#-erd)
+<br/>
+
+---
+
+## 👟 프로젝트 소개
+
+<img width="1415" alt="image" src="https://github.com/prgrms-be-devcourse/BE-04-WadizLove/assets/93516595/1669a817-3680-42e8-9e1e-0b72a42feb04">
+
+
+### 클라우드 펀딩 플랫폼 서비스인 [Wadiz](https://www.wadiz.kr/web/main)
+<br/>
+
+###  [프로젝트 목표 및 선정 과정]()
+
+---
+
+## 🍋 프로젝트 문서
+
+- ### 🏀 [노션]()
+
+- ### 🎱 [회고]()
+
+- ### ⚾️ [API 명세서]()
+
+
+
+
+---
+
+## 👬 팀 소개
+
+<table>
+<tr>
+    <td><b>Product Owner</b></td>
+    <td><b>Scrum Master</b></td>
+    <td><b>Developer</b></td>
+    <td><b>Mentor</b></td>
+    <td><b>Sub Mentor</b></td>
+  </tr>
+  <tr>
+    <td>
+        <a href="https://github.com/born-A">
+            <img src="https://avatars.githubusercontent.com/u/93516595?v=4" width="100px" />
+        </a>
+    </td>
+    <td>
+        <a href="https://github.com/HandmadeCloud">
+            <img src="https://avatars.githubusercontent.com/u/77893164?v=4" width="100px" />
+        </a>
+    </td>
+    <td>
+        <a href="https://github.com/hi-june">
+            <img src="https://avatars.githubusercontent.com/u/98803599?v=4" width="100px" />
+        </a>
+    </td>
+    <td>
+        <a href="https://github.com/0923kdh">
+            <img src="https://avatars.githubusercontent.com/u/81504103?v=4" width="100px" />
+        </a>
+    </td>
+    <td>
+        <a href="https://github.com/yuminhwan">
+            <img src="https://avatars.githubusercontent.com/u/65746780?v=4" width="100px" />
+        </a>
+    </td>
+  </tr>
+  <tr>
+    <td><b>신예진</b></td>
+    <td><b>조재현</b></td>
+    <td><b>최준혁</b></td>
+    <td><b>히히</b></td>
+    <td><b>유민환</b></td>
+  </tr>
+</table>
+
+<br/>
+
+---
+
+<h2 align="center"> 🛠 기술 스택 🛠 </>
+
+
+<p align="center">
+<img src="https://img.shields.io/badge/Java 17-008FC7?style=flat-square&logo=Java&logoColor=white"/></img>
+<img src="https://img.shields.io/badge/JUnit5-25A162?style=flat-square&logo=JUnit5&logoColor=white"/></img>
+
+
+<img src="https://img.shields.io/badge/Spring-58CC02?style=flat-square&logo=Spring&logoColor=white"/></img>
+<img src="https://img.shields.io/badge/Spring Boot 2.7.14-6DB33F?style=flat-square&logo=Spring Boot&logoColor=white"/></img>
+<img src="https://img.shields.io/badge/Spring Data JPA-ECD53F?style=flat-square&logo=JPA&logoColor=white"/></img>
+</p>
+
+<p align="center">
+<img src="https://img.shields.io/badge/MySQL 8.0-4479A1?style=flat-square&logo=MySQL&logoColor=white"/></img>
+<img src="https://img.shields.io/badge/Gradle-02303A?style=flat-square&logo=Gradle&logoColor=white"/></img>
+</p>
+
+<p align="center">
+<img src="https://img.shields.io/badge/Amazon aws-232F3E?style=flat-square&logo=amazonaws&logoColor=white"/>
+<img src="https://img.shields.io/badge/Docker-2496ED?style==flat-square&logo=Docker&logoColor=white" />
+  <img src="https://img.shields.io/badge/nginx-009639?style==flat-square&logo=nginx&logoColor=white" />
+</>
+</>
+
+
+<h2 align="center"> ✏️ 문서/협업 ✏️ </>
+<p align="center">
+<img src="https://img.shields.io/badge/Jira Software-0052CC?style=flat-square&logo=Jira Software&logoColor=white"/>
+<img src="https://img.shields.io/badge/Git-F05032.svg?style=flat-square&logo=Git&logoColor=white"/>
+<img src="https://img.shields.io/badge/GitHub-181717.svg?style=flat-square&logo=GitHub&logoColor=white"/>
+<img src="https://img.shields.io/badge/Notion-000000?style=flat-square&logo=Notion&logoColor=white"/>
+<img src="https://img.shields.io/badge/Slack-4A154B?style=flat-square&logo=Slack&logoColor=white"/>
+
+
+<img src="https://img.shields.io/badge/IntelliJ IDEA-000000.svg?style=flat-square&logo=IntelliJ IDEA&logoColor=white"/>
+<img src="https://img.shields.io/badge/Postman-FF6C37.svg?style=flat-square&logo=Postman&logoColor=white"/>
+<img src="https://img.shields.io/badge/Swagger 2.9.2-85EA2D?style=flat-square&logo=Swagger&logoColor=white"/>
+
+
+</p>
+
+---
+## 🍰 ERD
+
+![image](https://github.com/prgrms-be-devcourse/BE-04-WadizLove/assets/93516595/eca83ab5-f63e-4c51-8157-32b04dc57e81)
+
+
+🔗[ERD 보러가기](https://app.quickdatabasediagrams.com/#/d/3KqYJ6)
+
+
+---
+## 🍰 프로젝트 패키지 구조
+```
+├── main
+│   ├── java
+│   │   └── com
+│   │       └── prgrms
+│   │           └── wadiz
+│   │               ├── WadizApplication.java
+│   │               ├── domain
+│   │               │   ├── BaseEntity.java
+│   │               │   ├── funding
+│   │               │   │   ├── FundingCategory.java
+│   │               │   │   ├── FundingStatus.java
+│   │               │   │   ├── controller
+│   │               │   │   │   └── FundingController.java
+│   │               │   │   ├── dto
+│   │               │   │   │   ├── request
+│   │               │   │   │   │   ├── FundingCreateRequestDTO.java
+│   │               │   │   │   │   └── FundingUpdateRequestDTO.java
+│   │               │   │   │   └── response
+│   │               │   │   │       └── FundingResponseDTO.java
+│   │               │   │   ├── entity
+│   │               │   │   │   └── Funding.java
+│   │               │   │   ├── repository
+│   │               │   │   │   └── FundingRepository.java
+│   │               │   │   └── service
+│   │               │   │       └── FundingService.java
+│   │               │   ├── maker
+│   │               │   │   ├── MakerStatus.java
+│   │               │   │   ├── controller
+│   │               │   │   │   └── MakerController.java
+│   │               │   │   ├── dto
+│   │               │   │   │   ├── MakerServiceDTO.java
+│   │               │   │   │   ├── request
+│   │               │   │   │   │   ├── MakerCreateRequestDTO.java
+│   │               │   │   │   │   └── MakerUpdateRequestDTO.java
+│   │               │   │   │   └── response
+│   │               │   │   │       └── MakerResponseDTO.java
+│   │               │   │   ├── entity
+│   │               │   │   │   └── Maker.java
+│   │               │   │   ├── respository
+│   │               │   │   │   └── MakerRepository.java
+│   │               │   │   └── service
+│   │               │   │       └── MakerService.java
+│   │               │   ├── order
+│   │               │   │   ├── OrderStatus.java
+│   │               │   │   ├── controller
+│   │               │   │   │   └── OrderController.java
+│   │               │   │   ├── dto
+│   │               │   │   │   ├── request
+│   │               │   │   │   │   └── OrderCreateRequestDTO.java
+│   │               │   │   │   └── response
+│   │               │   │   │       └── OrderResponseDTO.java
+│   │               │   │   ├── entity
+│   │               │   │   │   └── Order.java
+│   │               │   │   ├── repository
+│   │               │   │   │   └── OrderRepository.java
+│   │               │   │   └── service
+│   │               │   │       └── OrderService.java
+│   │               │   ├── orderReward
+│   │               │   │   ├── dto
+│   │               │   │   │   ├── request
+│   │               │   │   │   │   └── OrderRewardCreateRequestDTO.java
+│   │               │   │   │   └── response
+│   │               │   │   │       └── OrderRewardResponseDTO.java
+│   │               │   │   └── entity
+│   │               │   │       └── OrderReward.java
+│   │               │   ├── post
+│   │               │   │   ├── controller
+│   │               │   │   │   └── PostController.java
+│   │               │   │   ├── dto
+│   │               │   │   │   ├── request
+│   │               │   │   │   │   ├── PostCreateRequestDTO.java
+│   │               │   │   │   │   └── PostUpdateRequestDTO.java
+│   │               │   │   │   └── response
+│   │               │   │   │       └── PostResponseDTO.java
+│   │               │   │   ├── entity
+│   │               │   │   │   └── Post.java
+│   │               │   │   ├── repository
+│   │               │   │   │   └── PostRepository.java
+│   │               │   │   └── service
+│   │               │   │       └── PostService.java
+│   │               │   ├── project
+│   │               │   │   ├── ProjectStatus.java
+│   │               │   │   ├── condition
+│   │               │   │   │   └── ProjectSearchCondition.java
+│   │               │   │   ├── controller
+│   │               │   │   │   └── ProjectController.java
+│   │               │   │   ├── dto
+│   │               │   │   │   ├── ProjectServiceDTO.java
+│   │               │   │   │   └── response
+│   │               │   │   │       ├── PagingDTO.java
+│   │               │   │   │       ├── ProjectPageResponseDTO.java
+│   │               │   │   │       ├── ProjectResponseDTO.java
+│   │               │   │   │       └── ProjectSummaryResponseDTO.java
+│   │               │   │   ├── entity
+│   │               │   │   │   └── Project.java
+│   │               │   │   ├── repository
+│   │               │   │   │   ├── ProjectRepository.java
+│   │               │   │   │   ├── ProjectRepositoryCustom.java
+│   │               │   │   │   └── ProjectRepositoryImpl.java
+│   │               │   │   └── service
+│   │               │   │       └── ProjectUseCase.java
+│   │               │   ├── reward
+│   │               │   │   ├── RewardStatus.java
+│   │               │   │   ├── RewardType.java
+│   │               │   │   ├── controller
+│   │               │   │   │   └── RewardController.java
+│   │               │   │   ├── dto
+│   │               │   │   │   ├── request
+│   │               │   │   │   │   ├── RewardCreateRequestDTO.java
+│   │               │   │   │   │   └── RewardUpdateRequestDTO.java
+│   │               │   │   │   └── response
+│   │               │   │   │       └── RewardResponseDTO.java
+│   │               │   │   ├── entity
+│   │               │   │   │   └── Reward.java
+│   │               │   │   ├── repository
+│   │               │   │   │   └── RewardRepository.java
+│   │               │   │   └── service
+│   │               │   │       └── RewardService.java
+│   │               │   └── supporter
+│   │               │       ├── SupporterStatus.java
+│   │               │       ├── controller
+│   │               │       │   └── SupporterController.java
+│   │               │       ├── dto
+│   │               │       │   ├── request
+│   │               │       │   │   ├── SupporterCreateRequestDTO.java
+│   │               │       │   │   └── SupporterUpdateRequestDTO.java
+│   │               │       │   └── response
+│   │               │       │       └── SupporterResponseDTO.java
+│   │               │       ├── entity
+│   │               │       │   └── Supporter.java
+│   │               │       ├── repository
+│   │               │       │   └── SupporterRepository.java
+│   │               │       └── service
+│   │               │           └── SupporterService.java
+│   │               └── global
+│   │                   ├── annotation
+│   │                   │   ├── ApiErrorCodeExample.java
+│   │                   │   ├── EnumValidator.java
+│   │                   │   └── ValidEnum.java
+│   │                   ├── config
+│   │                   │   ├── CachingConfig.java
+│   │                   │   ├── ExampleHolder.java
+│   │                   │   ├── JpaAuditingConfig.java
+│   │                   │   ├── QueryDSLConfig.java
+│   │                   │   └── SwaggerConfig.java
+│   │                   └── util
+│   │                       ├── exception
+│   │                       │   ├── BaseException.java
+│   │                       │   ├── ErrorCode.java
+│   │                       │   └── GlobalExceptionHandler.java
+│   │                       └── resTemplate
+│   │                           ├── CommonCode.java
+│   │                           ├── ListResult.java
+│   │                           ├── ResponseFactory.java
+│   │                           ├── ResponseTemplate.java
+│   │                           └── SingleResult.java
+│   └── resources
+│       ├── application-dev.yml
+│       ├── application-local.yml
+│       └── application.yml
+└── test
+    └── java
+        └── com
+            └── prgrms
+                └── wadiz
+                    ├── WadizApplicationTests.java
+                    └── domain
+                        ├── funding
+                        │   └── service
+                        │       └── FundingServiceTest.java
+                        ├── maker
+                        │   ├── controller
+                        │   │   └── MakerControllerTest.java
+                        │   └── service
+                        │       └── MakerServiceTest.java
+                        ├── order
+                        │   ├── controller
+                        │   │   └── OrderControllerTest.java
+                        │   └── service
+                        │       └── OrderServiceTest.java
+                        ├── post
+                        │   └── service
+                        │       └── PostServiceTest.java
+                        ├── reward
+                        │   ├── controller
+                        │   │   └── RewardControllerTest.java
+                        │   └── service
+                        │       └── RewardServiceTest.java
+                        └── supporter
+                            ├── controller
+                            │   └── SupporterControllerTest.java
+                            └── service
+                                └── SupporterServiceTest.java
+
+```
+<br>
+
+----
+
+## 🍓 Commit Convention
+ Chore | 빌드 업무 수정, 패키지 매니저 수정 |
+| --- | --- |
+| Feat | 새로운 기능 추가 |
+| Fix | 버그 수정 |
+| Docs | 문서 수정 |
+| Style | 코드 포맷팅, 세미콜론 누락, 코드 변경이 없는 경우 |
+| Refactor | 코드 리펙토링 |
+| Test | 테스트 코드, 리펙토링 테스트 코드 추가 |
