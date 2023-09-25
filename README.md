@@ -7,12 +7,16 @@
 <br/>
 [👬 팀 소개](#-팀-소개)
 <br/>
-[🛠 기술 소개](#-기술-스택)
+[🛠 기술 협업 tool 소개](#-기술-협업-tool-소개)
 <br/>
 [🍰 ERD](#-erd)
 <br/>
 [🍓 Architecture](#-architecture)
-
+<br/>
+[🥝 프로젝트 패키지 구조](#-프로젝트-패키지-구조)
+<br/>
+[🍉 프로젝트 실행 방법](#-프로젝트-실행-방법)
+<br/>
 ---
 
 ## 👟 프로젝트 소개
@@ -89,6 +93,7 @@
 <br/>
 
 ---
+## 🛠 기술 협업 tool 소개
 
 <h2 align="center"> 🛠 기술 스택 🛠 </>
 
@@ -150,7 +155,7 @@
 
 
 ---
-## 🍰 프로젝트 패키지 구조
+## 🥝 프로젝트 패키지 구조
 <details>
     <summary><b>패키지 구조 확인하기</b></summary>
   <div markdown="1">
@@ -358,14 +363,16 @@
 
 ----
 
-## 🍓 프로젝트 실행 방법
+## 🍉 프로젝트 실행 방법
 
 ### using Github Project
 
 1. github에서 프로젝트를 다운받는다.
+<br>
 https://github.com/prgrms-be-devcourse/BE-04-WadizLove.git
+<br>
 
-3. build 후, jar 파일을 실행한다
+2. build 후, jar 파일을 실행한다
 
     ```
     ./gradlew clean build
