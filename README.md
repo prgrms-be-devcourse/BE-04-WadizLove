@@ -65,9 +65,9 @@
 <br>
 
 # 🍋 프로젝트 팀 노션
+https://www.notion.so/Team-6535d86acd9c4843b5f06d4d1d4375de 
 
-
-
+<br>
 
 # 💗 팀 소개
 
