@@ -397,17 +397,10 @@ https://github.com/prgrms-be-devcourse/BE-04-WadizLove.git
 <br>
 
 2. bootjar를 실행한다.
-   
-3. jar 파일을 실행한다.
-
-    ```
-    ./gradlew clean build
-    java -jar build/libs/dining-1.0.0-SNAPSHOT.jar
-    ```
     
-4. Query DSL 컴파일한다.
+3. Query DSL 컴파일한다.
    
-5. 터미널에서 도커 컴포즈 빌드 명령어를 입력한다.
+4. 터미널에서 도커 컴포즈 빌드 명령어를 입력한다.
    
     ```
     docker-compose up --build
