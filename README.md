@@ -1,3 +1,4 @@
+![wadizlove (1)-min](https://github.com/prgrms-be-devcourse/BE-04-WadizLove/assets/93516595/828fac26-d686-4929-a92c-4ff6dc52b591)
 
 # WadizLove
 > 백엔드 히히팀 wadiz 클론코딩
