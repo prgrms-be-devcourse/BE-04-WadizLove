@@ -20,20 +20,22 @@
 
 
 ### 클라우드 펀딩 플랫폼 서비스인 [Wadiz](https://www.wadiz.kr/web/main)
+![image](https://github.com/prgrms-be-devcourse/BE-04-WadizLove/assets/93516595/0fcd7a61-0d55-4fd8-b1eb-f3d2045575a2)
+
+<br>
+서포터는 메이커가 런칭한 펀딩에 참여하고, 펀딩이 프로젝트 마감 일자 전까지 일정 금액 이상을 달성하면 주문이 진행되는 서비스이다 !
+
 <br/>
 
-###  [프로젝트 목표 및 선정 과정]()
+###  [프로젝트 목표]
+와디즈 펀딩 서비스를 클론 코딩하여 스프링,jpa를 적용한다.
+
+###  [프로젝트 기간]
+프로젝트 기간 : 2023/0828 ~ 2023/09/22
 
 ---
 
-## 🍋 프로젝트 문서
-
-- ### 🏀 [노션]()
-
-- ### 🎱 [회고]()
-
-- ### ⚾️ [API 명세서]()
-
+## 🍋 프로젝트 팀 노션
 
 
 
@@ -131,6 +133,13 @@
 
 </p>
 
+----
+
+## 🍓 Architecture
+![image](https://github.com/prgrms-be-devcourse/BE-04-WadizLove/assets/93516595/02ff9df6-50bd-4f01-83df-7bec98265182)
+
+
+
 ---
 ## 🍰 ERD
 
@@ -142,6 +151,10 @@
 
 ---
 ## 🍰 프로젝트 패키지 구조
+<details>
+    <summary><b>패키지 구조 확인하기</b></summary>
+  <div markdown="1">
+
 ```
 ├── main
 │   ├── java
@@ -338,16 +351,11 @@
                                 └── SupporterServiceTest.java
 
 ```
+ </div>
+</details>
 <br>
+
 
 ----
 
-## 🍓 Commit Convention
- Chore | 빌드 업무 수정, 패키지 매니저 수정 |
-| --- | --- |
-| Feat | 새로운 기능 추가 |
-| Fix | 버그 수정 |
-| Docs | 문서 수정 |
-| Style | 코드 포맷팅, 세미콜론 누락, 코드 변경이 없는 경우 |
-| Refactor | 코드 리펙토링 |
-| Test | 테스트 코드, 리펙토링 테스트 코드 추가 |
+## 🍓 프로젝트 실행 방법
