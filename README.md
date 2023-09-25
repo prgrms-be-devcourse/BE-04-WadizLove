@@ -22,7 +22,7 @@
 
 # 👟 프로젝트 소개
 
-<img width="815" alt="image" src="https://github.com/prgrms-be-devcourse/BE-04-WadizLove/assets/93516595/1669a817-3680-42e8-9e1e-0b72a42feb04">
+<img width="515" alt="image" src="https://github.com/prgrms-be-devcourse/BE-04-WadizLove/assets/93516595/1669a817-3680-42e8-9e1e-0b72a42feb04">
 
 
 # 크라우드 펀딩 플랫폼 서비스인 [Wadiz](https://www.wadiz.kr/web/main)
