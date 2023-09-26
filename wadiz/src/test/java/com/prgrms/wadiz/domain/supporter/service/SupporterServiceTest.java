@@ -6,6 +6,8 @@ import com.prgrms.wadiz.domain.supporter.dto.request.SupporterUpdateRequestDTO;
 import com.prgrms.wadiz.domain.supporter.dto.response.SupporterResponseDTO;
 import com.prgrms.wadiz.domain.supporter.entity.Supporter;
 import com.prgrms.wadiz.domain.supporter.repository.SupporterRepository;
+import com.prgrms.wadiz.global.util.exception.BaseException;
+import com.prgrms.wadiz.global.util.exception.ErrorCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -52,10 +55,10 @@ class SupporterServiceTest {
         when(supporterRepository.save(any(Supporter.class))).then(AdditionalAnswers.returnsFirstArg());
 
         //when
-        SupporterResponseDTO supporterResponseDTO = supporterService.signUpSupporter(supporterCreateRequestDTO);
+        Long supporterId = supporterService.signUpSupporter(supporterCreateRequestDTO);
 
         //then
-        assertThat(supporterResponseDTO).isNotNull();
+        assertThat(supporterId).isNotNull();
     }
 
     @Test
@@ -90,19 +93,38 @@ class SupporterServiceTest {
     }
 
     @Test
-    @DisplayName("[예외] 중복된 이메일일 경우 예외가 발생한다.")
+    @DisplayName("[실패] 중복된 이메일일 경우 예외가 발생한다.")
     void duplicatedEmailTest() {
         //given
         when(supporterRepository.existsBySupporterEmail(supporter.getSupporterEmail())).thenReturn(Boolean.TRUE);
 
         SupporterCreateRequestDTO newSupporterCreateRequestDTO = SupporterCreateRequestDTO.builder()
-                .supporterName(supporter.getSupporterName())
+                .supporterName("other")
                 .supporterEmail(supporter.getSupporterEmail())
                 .build();
 
-        when(supporterRepository.save(any(Supporter.class))).then(AdditionalAnswers.returnsFirstArg());
+        //when & then
+        assertThatThrownBy(() -> {
+            supporterService.signUpSupporter(newSupporterCreateRequestDTO);
+        }).isInstanceOf(BaseException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.DUPLICATED_EMAIL);
+    }
+
+    @Test
+    @DisplayName("[실패] 중복된 이름일 경우 예외가 발생한다.")
+    void duplicatedNameTest() {
+        //given
+        when(supporterRepository.existsBySupporterName(supporter.getSupporterName())).thenReturn(Boolean.TRUE);
+
+        SupporterCreateRequestDTO newSupporterCreateRequestDTO = SupporterCreateRequestDTO.builder()
+                .supporterName(supporter.getSupporterName())
+                .supporterEmail("other@naver.com")
+                .build();
 
         //when & then
-        supporterService.signUpSupporter(newSupporterCreateRequestDTO);
+        assertThatThrownBy(() -> {
+            supporterService.signUpSupporter(newSupporterCreateRequestDTO);
+        }).isInstanceOf(BaseException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.DUPLICATED_NAME);
     }
 }

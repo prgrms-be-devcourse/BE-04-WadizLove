@@ -115,7 +115,7 @@ public class RewardService {
         }
 
         if(!isProjectBeforeSetUp(reward.getProject())){
-            log.warn("Project's status is 'before setup'");
+            log.warn("Project's status is 'setup'");
 
             throw new BaseException(ErrorCode.PROJECT_ACCESS_DENY);
         }

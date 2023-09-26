@@ -19,8 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -113,7 +112,7 @@ class MakerServiceTest {
         assertThatThrownBy(() -> {
             makerService.signUpMaker(newMakerCreateRequestDTO);
         }).isInstanceOf(BaseException.class)
-                .hasFieldOrPropertyWithValue("errorCode",ErrorCode.DUPLICATED_EMAIL);
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.DUPLICATED_EMAIL);
 
     }
 
@@ -135,7 +134,6 @@ class MakerServiceTest {
         assertThatThrownBy(() -> {
             makerService.signUpMaker(newMakerCreateRequestDTO);
         }).isInstanceOf(BaseException.class)
-                .hasFieldOrPropertyWithValue("errorCode",ErrorCode.DUPLICATED_NAME);
-
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.DUPLICATED_NAME);
     }
 }
