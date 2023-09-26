@@ -22,8 +22,7 @@ import java.util.List;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(OrderController.class)
@@ -43,28 +42,16 @@ class OrderControllerTest {
     @DisplayName("[성공] : 주문 생성 요청 및 응답에 성공한다.")
     void createOrder() throws Exception {
         //given
-        OrderRewardCreateRequestDTO orderRewardReq1 = new OrderRewardCreateRequestDTO(
-                1L,
-                10);
-        OrderRewardCreateRequestDTO orderRewardReq2 = new OrderRewardCreateRequestDTO(
-                2L,
-                20);
-        List<OrderRewardCreateRequestDTO> orderRewardReq = Arrays.asList(
-                orderRewardReq1,
-                orderRewardReq2
-        );
-        OrderCreateRequestDTO orderCreateReqDTO = new OrderCreateRequestDTO(orderRewardReq);
-
+        OrderCreateRequestDTO orderCreateReq = createOrderCreateRequestDTO();
         OrderResponseDTO orderRes = OrderResponseDTO.of(1L);
-        given(orderService.createOrder(1L,orderCreateReqDTO)).willReturn(orderRes);
-
-        String body = objectMapper.writeValueAsString(orderCreateReqDTO);
+        given(orderService.createOrder(1L, orderCreateReq)).willReturn(orderRes);
 
         // when
+        String body = objectMapper.writeValueAsString(orderCreateReq);
         ResultActions perform = mvc.perform(
-                post(BASE_URL + "supporter/{supporterId}/new",1)
-                .content(body)
-                .contentType(APPLICATION_JSON));
+                post(BASE_URL + "supporter/{supporterId}/new", 1)
+                        .content(body)
+                        .contentType(APPLICATION_JSON));
 
         // then
         perform.andExpect(status().isOk())
@@ -78,27 +65,8 @@ class OrderControllerTest {
     @DisplayName("[성공] : 서포터의 한 주문의 상세 정보를 조회할 수 있다.")
     void getSupporterPurchase() throws Exception {
         //given
-        OrderRewardResponseDTO orderRewardRes1 = OrderRewardResponseDTO.of(
-                "맛깔난 참죽",
-                "참죽으로 사실 안만듦",
-                10000,
-                10
-        );
-
-        List<OrderRewardResponseDTO> orderRewardResponses = Arrays.asList(
-                orderRewardRes1
-        );
-
-        OrderResponseDTO orderResponseDTO = OrderResponseDTO.of(
-                1L,
-                "맛깔난 참죽 펀딩",
-                "씨제이",
-                orderRewardResponses,
-                10000*10,
-                OrderStatus.COMPLETED
-        );
-
-        given(orderService.getSupporterPurchase(1L,2L)).willReturn(orderResponseDTO);
+        OrderResponseDTO orderRes = getOrderResponseDTO();
+        given(orderService.getSupporterPurchase(1L, 2L)).willReturn(orderRes);
 
         // when
         ResultActions perform = mvc.perform(get(
@@ -112,25 +80,20 @@ class OrderControllerTest {
                 .andExpect(content().contentType(APPLICATION_JSON))
                 .andExpect(jsonPath("$.code").isNotEmpty())
                 .andExpect(jsonPath("$.message").isNotEmpty())
-                .andExpect(jsonPath("$.data.orderId").value(orderResponseDTO.orderId()))
-                .andExpect(jsonPath("$.data.postTitle").value(orderResponseDTO.postTitle()))
-                .andExpect(jsonPath("$.data.makerBrand").value(orderResponseDTO.makerBrand()))
+                .andExpect(jsonPath("$.data.orderId").value(orderRes.orderId()))
+                .andExpect(jsonPath("$.data.postTitle").value(orderRes.postTitle()))
+                .andExpect(jsonPath("$.data.makerBrand").value(orderRes.makerBrand()))
                 .andExpect(jsonPath("$.data.orderRewardResponseDTOs[0].rewardName")
-                        .value(orderRewardRes1.rewardName()))
+                        .value(orderRes.orderRewardResponseDTOs().get(0).rewardName()))
                 .andExpect(jsonPath("$.data.orderStatus")
-                        .value(orderResponseDTO.orderStatus().name()));
+                        .value(orderRes.orderStatus().name()));
     }
 
+
     @Test
-    @DisplayName("[성공] : 서포터의 주문 주문한 목록을 조회할 수 있다.")
+    @DisplayName("[성공] : 서포터가 본인이 주문한 주문 요약 목록을 조회할 수 있다.")
     void getSupporterPurchaseHistory() throws Exception {
-        OrderResponseDTO orderRes = OrderResponseDTO.of(
-                1L,
-                "맛깔 참죽",
-                "씨제이",
-                FundingCategory.FOOD,
-                LocalDateTime.now()
-        );
+        OrderResponseDTO orderRes = getOrderSummaryResponseDTO();
 
         // when
         given(orderService.getSupporterPurchaseHistory(1L)).willReturn(Arrays.asList(orderRes));
@@ -152,28 +115,13 @@ class OrderControllerTest {
                         .value(orderRes.fundingCategory().name()));
     }
 
+
     @Test
     @DisplayName("[성공] : 메이커가 런칭한 프로젝트의 주문을 조회할 수 있다.")
     void getMakerProjectOrders() throws Exception {
-        OrderRewardResponseDTO orderRewardRes1 = OrderRewardResponseDTO.of(
-                "맛깔난 참죽",
-                "참죽으로 사실 안만듦",
-                10000,
-                10
-        );
+        OrderResponseDTO orderRes = getOrderResponseDTO();
 
-        List<OrderRewardResponseDTO> orderRewardResponses = Arrays.asList(
-                orderRewardRes1
-        );
-
-        OrderResponseDTO orderRes = OrderResponseDTO.of(
-                1L,
-                orderRewardResponses,
-                10000*10,
-                OrderStatus.REQUESTED
-        );
-
-        given(orderService.getMakerProjectOrders(1L,1L)).willReturn(Arrays.asList(orderRes));
+        given(orderService.getMakerProjectOrders(1L, 1L)).willReturn(Arrays.asList(orderRes));
 
         // when
         ResultActions perform = mvc.perform(get(
@@ -189,16 +137,18 @@ class OrderControllerTest {
                 .andExpect(jsonPath("$.message").isNotEmpty())
                 .andExpect(jsonPath("$.data[0].orderId").value(orderRes.orderId()))
                 .andExpect(jsonPath("$.data[0].orderRewardResponseDTOs[0].rewardName")
-                        .value(orderRewardRes1.rewardName()))
+                        .value(orderRes.orderRewardResponseDTOs().get(0).rewardName()))
                 .andExpect(jsonPath("$.data[0].orderRewardResponseDTOs[0].rewardDescription")
-                        .value(orderRewardRes1.rewardDescription()));
+                        .value(orderRes.orderRewardResponseDTOs().get(0).rewardDescription()));
     }
 
     @Test
     @DisplayName("[성공] : 주문을 취소할 수 있다.")
     void cancelOrder() throws Exception {
+        orderService.cancelOrder(1L, 1L);
+
         // when
-        ResultActions perform = mvc.perform(get(
+        ResultActions perform = mvc.perform(put(
                 BASE_URL + "{orderId}/supporters/{supporterId}",
                 1L,
                 1L
@@ -210,4 +160,59 @@ class OrderControllerTest {
                 .andExpect(jsonPath("$.code").isNotEmpty())
                 .andExpect(jsonPath("$.message").isNotEmpty());
     }
+
+    private static OrderCreateRequestDTO createOrderCreateRequestDTO() {
+        OrderRewardCreateRequestDTO orderRewardReq1 = new OrderRewardCreateRequestDTO(
+                1L,
+                10);
+        OrderRewardCreateRequestDTO orderRewardReq2 = new OrderRewardCreateRequestDTO(
+                2L,
+                20);
+        List<OrderRewardCreateRequestDTO> orderRewardReq = Arrays.asList(
+                orderRewardReq1,
+                orderRewardReq2
+        );
+        OrderCreateRequestDTO orderCreateReq = new OrderCreateRequestDTO(orderRewardReq);
+        return orderCreateReq;
+    }
+
+
+    private static OrderResponseDTO getOrderResponseDTO() {
+        OrderRewardResponseDTO orderRewardRes = getOrderRewardResponseDTO();
+        List<OrderRewardResponseDTO> orderRewardResponses = Arrays.asList(orderRewardRes);
+        OrderResponseDTO orderResponseDTO = OrderResponseDTO.of(
+                1L,
+                "맛깔난 참죽 펀딩",
+                "씨제이",
+                orderRewardResponses,
+                10000 * 10,
+                OrderStatus.COMPLETED
+        );
+
+        return orderResponseDTO;
+    }
+
+    private static OrderRewardResponseDTO getOrderRewardResponseDTO() {
+        OrderRewardResponseDTO orderRewardRes1 = OrderRewardResponseDTO.of(
+                "맛깔난 참죽",
+                "참죽으로 사실 안만듦",
+                10000,
+                10
+        );
+
+        return orderRewardRes1;
+    }
+
+    private static OrderResponseDTO getOrderSummaryResponseDTO() {
+        OrderResponseDTO orderRes = OrderResponseDTO.of(
+                1L,
+                "맛깔 참죽",
+                "씨제이",
+                FundingCategory.FOOD,
+                LocalDateTime.now()
+        );
+        return orderRes;
+    }
+
+
 }
