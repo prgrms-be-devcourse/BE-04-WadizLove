@@ -99,8 +99,8 @@ public class OrderService {
 
                     throw new BaseException(ErrorCode.PROJECT_NOT_FOUND);
                 });
-
         funding.addOrderInfo(order.getTotalOrderPrice());
+
         return OrderResponseDTO.of(orderRepository.save(order).getOrderId());
     }
 
