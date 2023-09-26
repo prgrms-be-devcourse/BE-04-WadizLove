@@ -164,7 +164,7 @@ https://www.notion.so/Team-6535d86acd9c4843b5f06d4d1d4375de
 
 
 # 🍓 Architecture
-![image](https://github.com/prgrms-be-devcourse/BE-04-WadizLove/assets/93516595/02ff9df6-50bd-4f01-83df-7bec98265182)
+![new wadiz 아키텍처](https://github.com/prgrms-be-devcourse/BE-04-WadizLove/assets/98803599/38cdc99b-f468-4e48-abb2-24875c827db8)
 
 
 
