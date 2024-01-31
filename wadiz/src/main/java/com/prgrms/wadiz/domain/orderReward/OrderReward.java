@@ -1,8 +1,8 @@
-package com.prgrms.wadiz.domain.orderReward.entity;
+package com.prgrms.wadiz.domain.orderReward;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.prgrms.wadiz.domain.BaseEntity;
-import com.prgrms.wadiz.domain.order.entity.Order;
+import com.prgrms.wadiz.domain.order.Order;
 import com.prgrms.wadiz.domain.reward.entity.Reward;
 import com.prgrms.wadiz.global.util.exception.BaseException;
 import com.prgrms.wadiz.global.util.exception.ErrorCode;

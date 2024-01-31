@@ -1,4 +1,4 @@
-package com.prgrms.wadiz.domain.post.repository;
+package com.prgrms.wadiz.domain.post;
 
 import com.prgrms.wadiz.domain.post.entity.Post;
 import org.springframework.data.jpa.repository.JpaRepository;

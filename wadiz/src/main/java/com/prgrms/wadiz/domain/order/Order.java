@@ -1,10 +1,9 @@
-package com.prgrms.wadiz.domain.order.entity;
+package com.prgrms.wadiz.domain.order;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.prgrms.wadiz.domain.BaseEntity;
-import com.prgrms.wadiz.domain.order.OrderStatus;
-import com.prgrms.wadiz.domain.orderReward.entity.OrderReward;
-import com.prgrms.wadiz.domain.project.entity.Project;
+import com.prgrms.wadiz.domain.orderReward.OrderReward;
+import com.prgrms.wadiz.domain.project.Project;
 import com.prgrms.wadiz.domain.supporter.entity.Supporter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;

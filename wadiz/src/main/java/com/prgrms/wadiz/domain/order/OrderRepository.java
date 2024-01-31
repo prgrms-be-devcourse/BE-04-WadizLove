@@ -1,6 +1,5 @@
-package com.prgrms.wadiz.domain.order.repository;
+package com.prgrms.wadiz.domain.order;
 
-import com.prgrms.wadiz.domain.order.entity.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

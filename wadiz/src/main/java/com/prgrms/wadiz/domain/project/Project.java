@@ -1,8 +1,7 @@
-package com.prgrms.wadiz.domain.project.entity;
+package com.prgrms.wadiz.domain.project;
 
 import com.prgrms.wadiz.domain.BaseEntity;
 import com.prgrms.wadiz.domain.maker.entity.Maker;
-import com.prgrms.wadiz.domain.project.ProjectStatus;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
