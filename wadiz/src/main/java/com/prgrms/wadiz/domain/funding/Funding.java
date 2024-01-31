@@ -1,8 +1,7 @@
-package com.prgrms.wadiz.domain.funding.entity;
+package com.prgrms.wadiz.domain.funding;
 
 import com.prgrms.wadiz.domain.BaseEntity;
-import com.prgrms.wadiz.domain.funding.FundingCategory;
-import com.prgrms.wadiz.domain.project.entity.Project;
+import com.prgrms.wadiz.domain.project.Project;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

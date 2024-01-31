@@ -1,6 +1,5 @@
-package com.prgrms.wadiz.domain.funding.repository;
+package com.prgrms.wadiz.domain.funding;
 
-import com.prgrms.wadiz.domain.funding.entity.Funding;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
