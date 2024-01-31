@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.prgrms.wadiz.domain.funding.entity.QFunding.funding;
+import static com.prgrms.wadiz.domain.funding.QFunding.funding;
 import static com.prgrms.wadiz.domain.post.entity.QPost.post;
 @Slf4j
 @RequiredArgsConstructor

@@ -2,7 +2,7 @@ package com.prgrms.wadiz.domain.funding.dto.response;
 
 import com.prgrms.wadiz.domain.funding.FundingCategory;
 import com.prgrms.wadiz.domain.funding.FundingStatus;
-import com.prgrms.wadiz.domain.funding.entity.Funding;
+import com.prgrms.wadiz.domain.funding.Funding;
 import lombok.Builder;
 
 import java.time.LocalDateTime;

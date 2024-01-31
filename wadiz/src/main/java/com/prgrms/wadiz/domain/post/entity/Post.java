@@ -1,7 +1,7 @@
 package com.prgrms.wadiz.domain.post.entity;
 
 import com.prgrms.wadiz.domain.BaseEntity;
-import com.prgrms.wadiz.domain.project.entity.Project;
+import com.prgrms.wadiz.domain.project.Project;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

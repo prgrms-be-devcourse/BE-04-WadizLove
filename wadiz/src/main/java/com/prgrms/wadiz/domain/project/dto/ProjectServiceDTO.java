@@ -1,7 +1,7 @@
 package com.prgrms.wadiz.domain.project.dto;
 
 import com.prgrms.wadiz.domain.project.ProjectStatus;
-import com.prgrms.wadiz.domain.project.entity.Project;
+import com.prgrms.wadiz.domain.project.Project;
 import lombok.Builder;
 
 @Builder
