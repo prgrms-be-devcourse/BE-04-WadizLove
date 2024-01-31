@@ -2,11 +2,12 @@ package com.prgrms.wadiz.domain.order.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prgrms.wadiz.domain.funding.FundingCategory;
+import com.prgrms.wadiz.domain.order.OrderController;
 import com.prgrms.wadiz.domain.order.OrderStatus;
 import com.prgrms.wadiz.domain.order.dto.request.OrderCreateRequestDTO;
 import com.prgrms.wadiz.domain.orderReward.dto.request.OrderRewardCreateRequestDTO;
 import com.prgrms.wadiz.domain.order.dto.response.OrderResponseDTO;
-import com.prgrms.wadiz.domain.order.service.OrderService;
+import com.prgrms.wadiz.domain.order.OrderService;
 import com.prgrms.wadiz.domain.orderReward.dto.response.OrderRewardResponseDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

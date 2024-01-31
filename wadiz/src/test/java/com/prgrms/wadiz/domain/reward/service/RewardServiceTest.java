@@ -1,7 +1,7 @@
 package com.prgrms.wadiz.domain.reward.service;
 
 import com.prgrms.wadiz.domain.project.dto.ProjectServiceDTO;
-import com.prgrms.wadiz.domain.project.entity.Project;
+import com.prgrms.wadiz.domain.project.Project;
 import com.prgrms.wadiz.domain.reward.RewardStatus;
 import com.prgrms.wadiz.domain.reward.RewardType;
 import com.prgrms.wadiz.domain.reward.dto.request.RewardCreateRequestDTO;
@@ -18,7 +18,6 @@ import org.mockito.AdditionalAnswers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.TestPropertySource;
 
 import java.util.ArrayList;
 import java.util.List;
